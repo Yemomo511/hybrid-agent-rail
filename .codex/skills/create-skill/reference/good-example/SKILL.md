@@ -1,49 +1,49 @@
 ---
 name: react-native-turbo-module
-description: Create or update a React Native TurboModule for app-local native capabilities. Use when an RN app needs typed JS access to Android/iOS APIs through the New Architecture, including Spec authoring, Codegen wiring, Android Kotlin/Java implementation, and iOS Objective-C++ registration.
+description: 创建或更新 React Native TurboModule，用于 App 内本地原生能力接入。适用于 RN App 需要在新架构下通过类型化 JS 访问 Android/iOS API，并完成 Spec 编写、Codegen 配置、Android Kotlin/Java 实现、iOS Objective-C++ 注册等场景。
 metadata:
-  version: react-native >= 0.74, verified against react-native 0.79 Turbo Native Modules docs
-  env: React Native New Architecture enabled; Android Gradle and iOS CocoaPods available
+  version: react-native >= 0.74，基于 react-native 0.79 Turbo Native Modules 文档校准
+  env: 已启用 React Native 新架构；具备 Android Gradle 与 iOS CocoaPods 环境
 ---
 
 # React Native TurboModule
 
-## When To Invoke
+## 何时调用
 
-Use this Skill when the user asks to add or repair a React Native native module and the target app should use TurboModule instead of the legacy bridge.
+当用户需要新增或修复 React Native 原生模块，且目标 App 应使用 TurboModule 而不是旧桥接时，使用该 Skill。
 
-Prefer this Skill for:
+优先用于以下场景：
 
-- app-local native APIs such as storage, device APIs, SDK wrappers, auth tokens, or native service calls
-- typed TypeScript/Flow Spec design for React Native Codegen
-- Android Kotlin or Java implementation of generated `Native*Spec`
-- iOS Objective-C++ implementation and `modulesProvider` registration
-- build failures around `generateCodegenArtifactsFromSchema`, generated Spec imports, or missing TurboModule registration
+- App 内本地原生 API，例如存储、设备 API、SDK 包装、鉴权 token 或原生服务调用
+- 为 React Native Codegen 设计类型化 TypeScript/Flow Spec
+- 基于生成的 `Native*Spec` 实现 Android Kotlin 或 Java 模块
+- 实现 iOS Objective-C++ 模块，并通过 `modulesProvider` 注册
+- 排查 `generateCodegenArtifactsFromSchema`、生成 Spec 导入失败、TurboModule 注册缺失等构建问题
 
-Do not use it as the default path when the app must support Legacy Architecture and New Architecture with the same module. In that case, first design an explicit backwards-compatibility plan.
+如果同一个模块必须同时支持旧架构和新架构，不要把该 Skill 作为默认实现路径。此时应先设计明确的向后兼容方案。
 
-## Source
+## 来源
 
 - Upstream: https://reactnative.dev/docs/0.79/turbo-native-modules-introduction
 
-## Workflow
+## 工作流
 
-1. Inspect the target app before editing:
-   - `package.json` for React Native version and existing `codegenConfig`
-   - `android/app/build.gradle` or `android/app/build.gradle.kts`
+1. 修改前先检查目标 App：
+   - `package.json`：确认 React Native 版本和现有 `codegenConfig`
+   - `android/app/build.gradle` 或 `android/app/build.gradle.kts`
    - `android/app/src/main/java/.../MainApplication.*`
-   - `ios/Podfile`, `ios/*.xcworkspace`, and existing native source layout
-2. Define the JS typed Spec under `specs/Native<Name>.ts`.
-3. Add or update `codegenConfig` in `package.json`.
-4. Generate Codegen artifacts before native implementation if possible.
-5. Implement Android module and package against the generated Spec.
-6. Implement iOS Objective-C++ module against the generated Spec and register it through `modulesProvider`.
-7. Write JS usage through `TurboModuleRegistry`.
-8. Validate Android, iOS, and JS call paths.
+   - `ios/Podfile`、`ios/*.xcworkspace` 和现有原生源码结构
+2. 在 `specs/Native<Name>.ts` 下定义 JS 类型化 Spec。
+3. 在 `package.json` 中新增或更新 `codegenConfig`。
+4. 条件允许时，在编写原生实现前先生成 Codegen 产物。
+5. 基于生成的 Spec 实现 Android module 和 package。
+6. 基于生成的 Spec 实现 iOS Objective-C++ module，并通过 `modulesProvider` 注册。
+7. 通过 `TurboModuleRegistry` 编写 JS 调用。
+8. 验证 Android、iOS 与 JS 调用链路。
 
-## Typed Spec Rules
+## 类型化 Spec 规则
 
-Create a Spec file whose module name starts with `Native`, for example `specs/NativeDeviceToken.ts`.
+创建以 `Native` 开头的 Spec 文件，例如 `specs/NativeDeviceToken.ts`。
 
 ```ts
 import type { TurboModule } from 'react-native';
@@ -58,13 +58,13 @@ export interface Spec extends TurboModule {
 export default TurboModuleRegistry.getEnforcing<Spec>('NativeDeviceToken');
 ```
 
-Use `getEnforcing` when the module is required and the app should fail fast if registration is broken. Use `get` only when the feature is optional and JS has a fallback.
+当模块是必需能力，且注册错误应快速失败时，使用 `getEnforcing`。只有当能力是可选的，并且 JS 层有降级方案时，才使用 `get`。
 
-Keep the Spec small and platform-neutral. Do not expose Android/iOS object types directly. Prefer strings, numbers, booleans, arrays, records, callbacks, or promises supported by React Native Codegen.
+保持 Spec 小而平台无关。不要直接暴露 Android/iOS 对象类型。优先使用 React Native Codegen 支持的字符串、数字、布尔值、数组、记录类型、回调或 promise。
 
-## Codegen Config
+## Codegen 配置
 
-Update `package.json` with a single app-level `codegenConfig` entry or merge into the existing one.
+在 `package.json` 中新增单个 App 级 `codegenConfig`，或合并到已有配置中。
 
 ```json
 {
@@ -84,7 +84,7 @@ Update `package.json` with a single app-level `codegenConfig` entry or merge int
 }
 ```
 
-Run Codegen:
+运行 Codegen：
 
 ```bash
 cd android
@@ -97,11 +97,11 @@ bundle install
 bundle exec pod install
 ```
 
-Android builds usually run Codegen automatically, but running the Gradle task directly gives a clearer failure surface. iOS Codegen is wired through the CocoaPods script phases, so rerun `pod install` after changing the Spec or `codegenConfig`.
+Android 构建通常会自动运行 Codegen，但直接运行 Gradle 任务能暴露更清晰的失败面。iOS 的 Codegen 通过 CocoaPods script phases 接入，因此修改 Spec 或 `codegenConfig` 后需要重新运行 `pod install`。
 
-## Android Implementation
+## Android 实现
 
-Implement the generated `NativeDeviceTokenSpec` class. Kotlin is preferred when the app already uses Kotlin; otherwise follow the app's current Java/Kotlin style.
+实现生成的 `NativeDeviceTokenSpec` 类。如果 App 已使用 Kotlin，优先使用 Kotlin；否则沿用项目当前的 Java/Kotlin 风格。
 
 ```kotlin
 package com.example.devicetoken
@@ -142,7 +142,7 @@ class NativeDeviceTokenModule(
 }
 ```
 
-Register the module through `BaseReactPackage` and mark `isTurboModule = true`.
+通过 `BaseReactPackage` 注册模块，并标记 `isTurboModule = true`。
 
 ```kotlin
 package com.example.devicetoken
@@ -180,13 +180,13 @@ class NativeDeviceTokenPackage : BaseReactPackage() {
 }
 ```
 
-Add the package in `MainApplication` unless the module is distributed as an autolinked library.
+除非该模块作为可 autolink 的库分发，否则需要在 `MainApplication` 中添加 package。
 
-## iOS Implementation
+## iOS 实现
 
-Use Objective-C++ for the React Native TurboModule adapter because the generated Spec exposes Objective-C++ / C++ integration points. If the app has Swift business logic, call it from this adapter rather than replacing the adapter with pure Swift.
+React Native TurboModule 适配层使用 Objective-C++，因为生成的 Spec 暴露了 Objective-C++ / C++ 集成点。如果 App 内部已有 Swift 业务逻辑，应从该适配层调用 Swift 实现，而不是用纯 Swift 替代适配层。
 
-Create `RCTNativeDeviceToken.h`:
+创建 `RCTNativeDeviceToken.h`：
 
 ```objc
 #import <Foundation/Foundation.h>
@@ -201,7 +201,7 @@ NS_ASSUME_NONNULL_BEGIN
 NS_ASSUME_NONNULL_END
 ```
 
-Create `RCTNativeDeviceToken.mm`:
+创建 `RCTNativeDeviceToken.mm`：
 
 ```objc
 #import "RCTNativeDeviceToken.h"
@@ -254,11 +254,11 @@ static NSString *const RCTNativeDeviceTokenKey = @"token";
 @end
 ```
 
-After adding or renaming the iOS module, update `codegenConfig.ios.modulesProvider`, rerun `bundle exec pod install`, open the generated workspace, and build from Xcode or CLI.
+新增或重命名 iOS 模块后，更新 `codegenConfig.ios.modulesProvider`，重新运行 `bundle exec pod install`，打开生成的 workspace，并通过 Xcode 或 CLI 构建。
 
-## JS Usage
+## JS 使用方式
 
-Keep JS usage behind a small app-level wrapper so the rest of the app does not depend on generated module details.
+在 App 层保留一个轻量包装，避免其他业务代码直接依赖生成模块细节。
 
 ```ts
 import NativeDeviceToken from '../specs/NativeDeviceToken';
@@ -270,9 +270,9 @@ export const deviceTokenStorage = {
 };
 ```
 
-## Validation
+## 验证
 
-Run the narrowest reliable checks first, then build both platforms:
+先运行最窄且可靠的检查，再分别构建两个平台：
 
 ```bash
 cd android
@@ -286,28 +286,28 @@ bundle exec pod install
 xcodebuild -workspace TurboModuleExample.xcworkspace -scheme TurboModuleExample -configuration Debug -sdk iphonesimulator build
 ```
 
-Also run the app's JS typecheck/test command if it exists. For runtime acceptance, prove that JS can call every Spec method on Android and iOS, and capture the exact error if module lookup fails.
+如果 App 存在 JS 类型检查或测试命令，也需要运行。运行时验收需要证明 JS 能在 Android 和 iOS 上调用每个 Spec 方法；如果模块查找失败，必须记录精确错误。
 
-## Troubleshooting
+## 排障
 
-- If JS throws that the module is unavailable, check the Spec module name, `getName()` / `moduleName`, Android package registration, and iOS `modulesProvider`.
-- If Android cannot import `Native*Spec`, rerun Codegen and verify `javaPackageName` matches the native package.
-- If iOS cannot find `Native*Spec/Native*Spec.h`, rerun `bundle exec pod install` and build the `.xcworkspace`, not the `.xcodeproj`.
-- If method signatures do not override generated methods, fix the TS Spec first and regenerate artifacts; do not force native signatures to compile against stale generated code.
+- 如果 JS 报模块不可用，检查 Spec module name、`getName()` / `moduleName`、Android package 注册和 iOS `modulesProvider`。
+- 如果 Android 无法导入 `Native*Spec`，重新运行 Codegen，并确认 `javaPackageName` 与原生 package 匹配。
+- 如果 iOS 找不到 `Native*Spec/Native*Spec.h`，重新运行 `bundle exec pod install`，并构建 `.xcworkspace`，不要构建 `.xcodeproj`。
+- 如果方法签名无法 override 生成方法，先修正 TS Spec 并重新生成产物；不要强行让原生签名适配过期的生成代码。
 
-## Good Example
+## 好例子
 
-User request:
+用户请求：
 
-> Add a TurboModule named `NativeDeviceToken` that stores a device token locally and can get, set, or clear it from JS.
+> 新增一个名为 `NativeDeviceToken` 的 TurboModule，用于在本地存储 device token，并允许 JS 获取、写入或清空该 token。
 
-Good response shape:
+好的响应形态：
 
-1. Inspect RN version, New Architecture status, existing `codegenConfig`, Android package, and iOS workspace.
-2. Add `specs/NativeDeviceToken.ts` with `getToken`, `setToken`, and `clearToken`.
-3. Add `codegenConfig` with `type: "modules"`, `jsSrcsDir: "specs"`, Android `javaPackageName`, and iOS `modulesProvider`.
-4. Run Codegen before writing native code if the project can build locally.
-5. Implement Android `NativeDeviceTokenModule` plus `NativeDeviceTokenPackage`.
-6. Implement iOS `RCTNativeDeviceToken.h/.mm` and rerun Pods.
-7. Add a small JS wrapper and a runtime smoke path.
-8. Verify Codegen, Android build, iOS build, and JS type/test command.
+1. 检查 RN 版本、新架构状态、现有 `codegenConfig`、Android package 和 iOS workspace。
+2. 新增 `specs/NativeDeviceToken.ts`，包含 `getToken`、`setToken` 和 `clearToken`。
+3. 新增 `codegenConfig`，包含 `type: "modules"`、`jsSrcsDir: "specs"`、Android `javaPackageName` 和 iOS `modulesProvider`。
+4. 如果项目能在本地构建，先运行 Codegen，再编写原生代码。
+5. 实现 Android `NativeDeviceTokenModule` 和 `NativeDeviceTokenPackage`。
+6. 实现 iOS `RCTNativeDeviceToken.h/.mm`，并重新运行 Pods。
+7. 增加轻量 JS 包装和运行时冒烟路径。
+8. 验证 Codegen、Android 构建、iOS 构建，以及 JS 类型检查或测试命令。

@@ -163,3 +163,17 @@
 - good-example 作为 create-skill 的参考样板，不额外拆分 reference 文件，保持一个可读的完整 SKILL 示例。
 - TurboModule Skill 默认面向 RN New Architecture；如果项目需要 Legacy Architecture 兼容，要求先走兼容性设计，不把旧桥和 TurboModule 混写成默认路径。
 - iOS 指导以 Objective-C++ 注册和实现为主；Swift 只作为业务实现可被 Objective-C++ 适配层调用的可选内部实现。
+
+---
+
+# RN TurboModule Skill 中文化发现记录
+
+## 当前事实
+
+- RN TurboModule good-example 已是完整 Skill 示例，但说明性内容主要为英文。
+- 用户要求“翻译为中文，不适用英文”，因此本次只翻译自然语言说明，不改代码、命令、API 名称和框架术语。
+
+## 决策
+
+- 技术专有名词如 `TurboModule`、`Codegen`、`Spec`、`TurboModuleRegistry` 保持原样，避免影响 React Native 语义。
+- 示例代码块保持原样，保证后续 Agent 能直接复制和迁移。

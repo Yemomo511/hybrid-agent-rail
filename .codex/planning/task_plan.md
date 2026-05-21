@@ -421,3 +421,27 @@
   - `python3 .codex/skills/create-skill/script/quick_validate.py .codex/skills/create-skill/reference/good-example` 通过或说明脚本为空。
   - `git diff --check` 通过。
   - 使用中文规范提交，提交信息以 `[AI]` 开头。
+
+---
+
+# RN TurboModule Skill 中文化计划
+
+## 总目标
+
+将 `.codex/skills/create-skill/reference/good-example/SKILL.md` 中的 RN TurboModule Skill 说明性内容翻译为中文，避免英文说明影响中文 Skill 示例的一致性。
+
+## 子任务与验收标准
+
+### 子任务 1：翻译 Skill 说明内容
+
+- 产物：`.codex/skills/create-skill/reference/good-example/SKILL.md`
+- 验收标准：
+  - frontmatter description、metadata env、章节标题、流程说明、排障说明和好例子均改为中文。
+  - TurboModule、Codegen、Spec、API、路径、命令和代码标识保持原样。
+
+### 子任务 2：验证并提交
+
+- 验收标准：
+  - `quick_validate.py` 通过。
+  - 文档 diff 无尾随空格。
+  - 使用中文规范提交，提交信息以 `[AI]` 开头。

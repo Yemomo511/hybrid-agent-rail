@@ -102,3 +102,11 @@
 - [x] 重写 good-example SKILL
 - [x] 同步文档系统
 - [x] 运行验证并提交
+
+---
+
+# RN TurboModule Skill 中文化进度
+
+- [x] 读取 RN TurboModule good-example Skill
+- [x] 将说明性内容翻译为中文
+- [x] 运行验证并提交
