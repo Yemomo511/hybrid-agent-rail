@@ -3,7 +3,7 @@ name: <knowledge-name>
 description: <knowledge-description>(精炼简要概括这个文档说明的核心内容，不超过100字。)
 keywords: <keywords-phrase>, <keywords-phrase>(使用一个个简短触发短语，例如: 在终端运行cli命令, 运行npx命令, 初始化Agents环境)
 doc_type: knowledge | contract | decision | usage | workflow | experience | index
-source_path: <relative-source-path>(记录该文档对应的权威来源路径，例如 packages/cli/src 或 skills/create-doc/SKILL.md；无明确来源时填写 none。)
+source_path: <relative-source-path>(记录该文档对应的权威来源路径，例如 packages/cli/src 或 skills/create-doc/SKILL.md；无明确来源时填写 none。文档文件必须位于 docs/<knowledge-name>/doc.md。)
 ---
 # <DocName>
 <--精炼的名称，说明文档的作用-->

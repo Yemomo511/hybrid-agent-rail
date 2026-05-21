@@ -84,7 +84,7 @@
 
 - 当前根目录存在 `config/rollup.package.config.mjs`，两个 package 的 `build` 脚本都通过 `../../config/rollup.package.config.mjs` 使用共享配置。
 - 当前 workspace package 只有 `hyar-adapter` 和 `hyar-cli`。
-- `docs/workspace-package-contract.md` 将共享 Rollup 配置记录为稳定契约，因此迁移后需要同步文档系统。
+- `docs/workspace-package-contract/doc.md` 将共享 Rollup 配置记录为稳定契约，因此迁移后需要同步文档系统。
 - 当前工作区已有用户侧改动：`package/hyar-adapter/AGENTS.md`，本次迁移不触碰该文件。
 
 ## 决策
@@ -100,6 +100,33 @@
 - `pnpm run build` 通过，两个 package 均使用各自 `rollup.config.mjs` 输出 ESM、CJS 与类型声明。
 - `pnpm run test:package-output` 通过，产物验收保持绿色。
 - `pnpm test` 通过，包含 package 代码质量、workspace 测试、构建、产物测试、example smoke 与 example API。
-- `node .codex/skills/create-doc/validate.mjs docs/workspace-package-contract.md` 通过。
-- `node .codex/skills/create-doc/validate-knowlegdge.mjs docs/workspace-package-contract.md` 通过。
+- `node .codex/skills/create-doc/validate.mjs docs/workspace-package-contract/doc.md` 通过。
+- `node .codex/skills/create-doc/validate-knowlegdge.mjs docs/workspace-package-contract/doc.md` 通过。
 - `git diff --check` 通过。
+
+---
+
+# create-doc 文档目录化改造发现记录
+
+## 当前事实
+
+- 当前 `create-doc` Skill、模板和校验命令在改造前仍以扁平 Markdown 文件为目标形态。
+- 当前受治理文档为 8 个 `docs/*.md` 文件，均已登记在 `docs/KNOWLEDGE.md` 的 `## Source` 中。
+- `docs/AGENTS.md` 与 `docs/KNOWLEDGE.md` 是文档系统控制文件，不属于受治理文档，不迁移为 `doc.md`。
+- 当前 `validate.mjs` 只要求路径在 `docs/` 下且以 `.md` 结尾，因此旧扁平路径仍会通过。
+- 当前 `validate-knowlegdge.mjs` 只按 meta 匹配 Source 条目，未校验链接目标是否与传入文档路径一致。
+
+## 决策
+
+- 受治理文档目录名采用 frontmatter `name`，正文固定为 `doc.md`。
+- Knowledge Source 链接目标采用相对 `docs/KNOWLEDGE.md` 的 `<name>/doc.md`。
+- 校验器错误信息需要直接提示期望格式 `docs/<name>/doc.md` 或 `<name>/doc.md`。
+- 本次不新增 npm 依赖，不改 package 构建链路。
+
+## 验证记录
+
+- 隔离 worktree 初始状态下，现有 8 个扁平文档均通过旧版 `validate.mjs` 与 `validate-knowlegdge.mjs`。
+- 红灯测试 `node --test .codex/skills/create-doc/__test__/create-doc-layout.test.mjs` 在旧实现上失败 3 项：旧文档路径被放过、旧 Knowledge 链接被放过、错链 Knowledge 被放过。
+- 改造后红灯测试通过，确认 `validate.mjs` 拒绝旧路径，`validate-knowlegdge.mjs` 会校验 Source 链接目标与传入文档路径一致。
+- 8 个受治理文档迁移到 `docs/<name>/doc.md` 后，逐个通过 `validate.mjs` 与 `validate-knowlegdge.mjs`，全局 Knowledge Source 校验通过。
+- 最终验证中，validator 单测、全量文档校验、旧具体路径引用扫描和 `git diff --check` 均通过。

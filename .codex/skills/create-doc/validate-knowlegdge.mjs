@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 import { existsSync, readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { relative, resolve } from 'node:path';
 
 const KNOWLEDGE_PATH = 'docs/KNOWLEDGE.md';
 const REQUIRED_META = ['name', 'description', 'keywords', 'doc_type'];
 const ALLOWED_META = new Set(REQUIRED_META);
+const DOCUMENT_PATH_PATTERN = /^docs\/([^/]+)\/doc\.md$/;
+const SOURCE_LINK_PATTERN = /^([^/]+)\/doc\.md$/;
 
 class KnowledgeValidator {
   /**
@@ -31,7 +33,7 @@ class KnowledgeValidator {
       const documentMeta = this.readDocumentMeta(documentPath);
       if (documentMeta.errors.length > 0) {
         errors.push(...documentMeta.errors);
-      } else if (!this.hasMatchingEntry(entries, documentMeta.meta)) {
+      } else if (!this.hasMatchingEntry(entries, documentMeta.meta, documentMeta.expectedLinkTarget)) {
         errors.push(`Knowledge Source missing meta for document: ${documentPath}`);
       }
     }
@@ -74,8 +76,10 @@ class KnowledgeValidator {
       }
 
       if (line.startsWith('- ')) {
+        const linkMatch = line.match(/^- \[[^\]]+\]\(([^)]+)\)$/);
         currentEntry = {
           link: line,
+          linkTarget: linkMatch ? linkMatch[1].trim() : null,
           meta: {},
           extraLines: [],
         };
@@ -117,6 +121,8 @@ class KnowledgeValidator {
 
       if (!entry.link || !/^- \[[^\]]+\]\([^)]+\)$/.test(entry.link)) {
         errors.push(`${label} must start with a Markdown link item`);
+      } else if (!SOURCE_LINK_PATTERN.test(entry.linkTarget ?? '')) {
+        errors.push(`${label} link target must match <name>/doc.md: ${entry.linkTarget}`);
       }
 
       for (const line of entry.extraLines) {
@@ -146,10 +152,19 @@ class KnowledgeValidator {
    */
   readDocumentMeta(documentPath) {
     const absolutePath = resolve(process.cwd(), documentPath);
+    const repoRelativePath = relative(process.cwd(), absolutePath).split('\\').join('/');
+    const pathMatch = repoRelativePath.match(DOCUMENT_PATH_PATTERN);
+    const pathErrors = [];
+
+    if (!pathMatch) {
+      pathErrors.push(`Document path must match docs/<name>/doc.md: ${repoRelativePath}`);
+    }
+
     if (!existsSync(absolutePath)) {
       return {
-        errors: [`Document not found: ${documentPath}`],
+        errors: [...pathErrors, `Document not found: ${documentPath}`],
         meta: {},
+        expectedLinkTarget: null,
       };
     }
 
@@ -157,8 +172,9 @@ class KnowledgeValidator {
     const match = content.match(/^---\n([\s\S]*?)\n---/);
     if (!match) {
       return {
-        errors: [`Document must contain frontmatter: ${documentPath}`],
+        errors: [...pathErrors, `Document must contain frontmatter: ${documentPath}`],
         meta: {},
+        expectedLinkTarget: pathMatch ? `${pathMatch[1]}/doc.md` : null,
       };
     }
 
@@ -186,17 +202,25 @@ class KnowledgeValidator {
       }
     }
 
+    if (pathMatch && meta.name && pathMatch[1] !== meta.name) {
+      errors.push(`Document directory name must match frontmatter name: ${pathMatch[1]} !== ${meta.name}`);
+    }
+
     return {
-      errors,
+      errors: [...pathErrors, ...errors],
       meta,
+      expectedLinkTarget: pathMatch ? `${pathMatch[1]}/doc.md` : null,
     };
   }
 
   /**
    * @description 判断 Knowledge Source 是否存在完全匹配的 meta 条目。
    */
-  hasMatchingEntry(entries, meta) {
-    return entries.some((entry) => REQUIRED_META.every((key) => entry.meta[key] === meta[key]));
+  hasMatchingEntry(entries, meta, expectedLinkTarget) {
+    return entries.some(
+      (entry) =>
+        entry.linkTarget === expectedLinkTarget && REQUIRED_META.every((key) => entry.meta[key] === meta[key]),
+    );
   }
 }
 

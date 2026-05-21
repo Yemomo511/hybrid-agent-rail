@@ -22,16 +22,18 @@ source_path: docs/AGENTS.md, .codex/skills/create-doc
 
 每篇长期文档必须包含 frontmatter：`name`、`description`、`keywords`、`doc_type`、`source_path`。正文必须包含：`Purpose`、`Applies To`、`Content`、`Update When`。
 
-`docs/KNOWLEDGE.md` 是扁平索引，只记录文档链接、`name`、`description`、`keywords` 和 `doc_type`。`source_path` 只存在于具体文档 frontmatter 中。
+受治理文档必须使用目录化结构：`docs/<name>/doc.md`。其中 `<name>` 必须和文档 frontmatter 中的 `name` 保持一致；不要再创建 `docs/<name>.md` 形式的长期文档。
+
+`docs/KNOWLEDGE.md` 是扁平索引，只记录文档链接、`name`、`description`、`keywords` 和 `doc_type`。Source 链接目标必须写为 `<name>/doc.md`；`source_path` 只存在于具体文档 frontmatter 中。
 
 新增或修改文档后必须运行：
 
 ```bash
-node .codex/skills/create-doc/validate.mjs docs/<document>.md
-node .codex/skills/create-doc/validate-knowlegdge.mjs docs/<document>.md
+node .codex/skills/create-doc/validate.mjs docs/<name>/doc.md
+node .codex/skills/create-doc/validate-knowlegdge.mjs docs/<name>/doc.md
 ```
 
 ## Update When
 - `docs/AGENTS.md` 的写入边界、禁止事项或元信息规则变化。
 - `.codex/skills/create-doc` 的模板、Knowledge 同步规则或校验器变化。
-- 文档索引从扁平结构迁移为分层结构，或新增文档分类。
+- 文档路径、索引结构或文档分类发生变化。

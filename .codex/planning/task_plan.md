@@ -271,7 +271,7 @@
 
 ### 子任务 3：同步文档系统
 
-- 产物：`docs/workspace-package-contract.md`
+- 产物：`docs/workspace-package-contract/doc.md`
 - 验收标准：
   - 文档中的 Rollup 构建契约改为 package 本地配置
   - `source_path` 不再指向已删除的根 `config` 文件
@@ -286,3 +286,60 @@
   - `pnpm run test:package-output` 通过
   - `git diff --check` 通过或明确说明既有无关问题
   - 使用中文规范提交，提交信息以 `[AI]` 开头
+
+---
+
+# create-doc 文档目录化改造任务计划
+
+## 总目标
+
+将 `create-doc` 的长期文档产物从 `docs/{name}.md` 迁移为 `docs/{name}/doc.md`，同步校验器、Knowledge 索引和现有受治理文档。
+
+## 子任务与验收标准
+
+### 子任务 1：Planning with Files Zh 初始化
+
+- 产物：`.codex/planning/task_plan.md`、`.codex/planning/findings.md`、`.codex/planning/progress.md`
+- 验收标准：
+  - 三个规划文件追加本次任务记录，不覆盖已有历史。
+  - 记录现状事实、子任务验收标准和执行进度。
+
+### 子任务 2：红灯校验设计
+
+- 产物：`.codex/skills/create-doc/__test__/create-doc-layout.test.mjs`
+- 验收标准：
+  - 旧扁平文档路径在新规则下必须失败。
+  - `docs/KNOWLEDGE.md` 若链接旧扁平路径，Knowledge 校验必须失败。
+  - 测试在旧实现上先失败，证明覆盖到行为变化。
+
+### 子任务 3：create-doc 契约与校验器改造
+
+- 产物：`.codex/skills/create-doc/SKILL.md`、`.codex/skills/create-doc/references/TEMPLATE.md`、`.codex/skills/create-doc/validate.mjs`、`.codex/skills/create-doc/validate-knowlegdge.mjs`
+- 验收标准：
+  - Skill 文案、模板和命令示例统一使用 `docs/<name>/doc.md`。
+  - 文档校验器拒绝 `docs/<name>.md`，只接受 `docs/<name>/doc.md`。
+  - Knowledge 校验器要求 Source 链接目标为 `<name>/doc.md`，并与传入文档路径一致。
+
+### 子任务 4：现有文档迁移与索引同步
+
+- 产物：`docs/*/doc.md`、`docs/KNOWLEDGE.md`
+- 验收标准：
+  - 8 个受治理文档全部迁移到对应目录的 `doc.md`。
+  - `docs/KNOWLEDGE.md` 的 8 个 Source 链接全部更新为 `<name>/doc.md`。
+  - 仓库内不再引用旧的 `docs/<name>.md` 路径。
+
+### 子任务 5：文档系统说明同步
+
+- 产物：`docs/AGENTS.md`、`docs/document-system-contract/doc.md`
+- 验收标准：
+  - `docs/AGENTS.md` 说明文档目录名跟随 frontmatter `name`，正文固定为 `doc.md`。
+  - `document-system-contract` 与 `create-doc` Skill 对目录化文档形态描述一致。
+
+### 子任务 6：验证并提交
+
+- 验收标准：
+  - 每个 `docs/*/doc.md` 均通过 `validate.mjs` 和 `validate-knowlegdge.mjs`。
+  - `node .codex/skills/create-doc/validate-knowlegdge.mjs` 通过。
+  - `node --test .codex/skills/create-doc/__test__/create-doc-layout.test.mjs` 通过。
+  - `git diff --check` 通过。
+  - 使用 `[AI]refactor: 将文档系统迁移为目录化结构` 提交。

@@ -65,3 +65,17 @@
 - [x] 同步 workspace package 文档契约
 - [x] 运行测试与构建验证
 - [x] 提交变更
+
+---
+
+# create-doc 文档目录化改造进度
+
+- [x] 创建隔离 worktree `codex/create-doc-dir-doc`
+- [x] 确认旧版文档校验基线通过
+- [x] 追加 Planning with Files Zh 任务记录
+- [x] 编写红灯测试并确认失败
+- [x] 改造 create-doc Skill、模板与校验器
+- [x] 迁移 8 个受治理文档到 `docs/<name>/doc.md`
+- [x] 同步 `docs/KNOWLEDGE.md` 和文档系统说明
+- [x] 运行全量文档校验与 diff 检查
+- [x] 提交变更
