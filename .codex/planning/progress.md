@@ -28,3 +28,17 @@
 - [x] 验证 TypeScript Jest 测试链路
 - [x] 提交 Jest 测试 TypeScript 化
 - [x] 同步测试文档说明
+
+---
+
+# hybrid-written-plan Skill 创建进度
+
+- [x] 读取项目 Skill 与文档系统约定
+- [x] 拆分子任务与验收标准
+- [x] 创建 `skills/hybrid-written-plan`
+- [x] 编写跨端原生影响与桥接形式决策规则
+- [x] 补充 `agents/openai.yaml`
+- [x] 同步文档系统
+- [x] 运行 Skill 与文档校验
+- [x] 运行 diff 检查
+- [x] 提交变更

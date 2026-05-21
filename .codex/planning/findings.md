@@ -27,3 +27,27 @@
 - `pnpm test` 通过，包含 Jest 单测、构建、example smoke 与 example API 验收。
 - 全量 `git diff --check` 被既有 README 未提交尾随空格拦截；本次待提交文件的 scoped `git diff --check` 已通过。
 - TypeScript 测试迁移后，`pnpm run test:workspace`、`pnpm run build`、`pnpm run test:package-output` 与 `pnpm test` 均通过。
+
+---
+
+# hybrid-written-plan Skill 发现记录
+
+## 当前事实
+
+- `skills/AGENTS.md` 约定 Hyar Skill 对上游通用 Skill 做跨端补充。
+- 上游 `superpowers:writing-plans` 要求输出细粒度实现计划、精确文件路径、TDD 步骤、验证命令和执行交接。
+- 本次 Skill 不需要脚本或资产；核心价值是给计划阶段增加跨端原生影响和桥接形式决策。
+
+## 决策
+
+- Skill 命名为 `hybrid-written-plan`，放在仓库 `skills/` 下，作为 repo-local Skill。
+- 不替代 `superpowers:writing-plans`，只要求在任务拆分前新增 `Hybrid Native Impact` 判断。
+- 桥接决策覆盖 React Native old bridge、EventEmitter、TurboModule、Fabric/native component、Flutter MethodChannel、EventChannel、PlatformView、生成桥接和 native-only 路径。
+- 由于该 Skill 是长期计划契约，新增 `docs/hybrid-written-plan-skill.md` 并同步 `docs/KNOWLEDGE.md`。
+
+## 验证记录
+
+- `/usr/bin/python3 /Users/bytedance/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/hybrid-written-plan` 通过。
+- `node .codex/skills/create-doc/validate.mjs docs/hybrid-written-plan-skill.md` 通过。
+- `node .codex/skills/create-doc/validate-knowlegdge.mjs docs/hybrid-written-plan-skill.md` 通过。
+- `git diff --check` 通过。

@@ -96,3 +96,46 @@
   - 文档说明 Jest 测试统一使用 `.test.ts`
   - 文档列出 `test:workspace`、`test:package-output` 与 `pnpm test` 的职责
   - 文档说明 `ts-jest`、ESM VM Modules、`--watchman=false` 和 Rollup package 构建输入范围约定
+
+---
+
+# hybrid-written-plan Skill 创建任务计划
+
+## 总目标
+
+创建一个 repo-local Hybrid Skill，作为上游 `superpowers:writing-plans` 的跨端补充，要求计划阶段显式判断是否涉及原生修改以及应该采用哪种桥接形式。
+
+## 子任务与验收标准
+
+### 子任务 1：确认 Skill 边界与位置
+
+- 产物：`skills/hybrid-written-plan/SKILL.md`
+- 验收标准：
+  - Skill 位于仓库 `skills/` 目录
+  - frontmatter 能触发跨端、React Native、Flutter、原生桥接计划场景
+  - 内容明确其上游为 `superpowers:writing-plans`
+
+### 子任务 2：补充跨端计划决策规则
+
+- 产物：`skills/hybrid-written-plan/SKILL.md`
+- 验收标准：
+  - 计划要求包含 `Hybrid Native Impact`
+  - 明确判断是否涉及 Android/iOS 原生修改
+  - 明确桥接形式选择规则与验证要求
+  - 提供可复用 Good Example
+
+### 子任务 3：同步 Skill 元信息与文档系统
+
+- 产物：`skills/hybrid-written-plan/agents/openai.yaml`、`docs/hybrid-written-plan-skill.md`、`docs/KNOWLEDGE.md`
+- 验收标准：
+  - `agents/openai.yaml` 与 Skill 内容一致
+  - 文档系统记录该 Skill 的职责边界和更新条件
+  - 文档校验通过
+
+### 子任务 4：验证并提交
+
+- 验收标准：
+  - `quick_validate.py` 校验 Skill 通过
+  - `create-doc` 文档校验通过
+  - `git diff --check` 通过或明确说明既有无关问题
+  - 使用中文规范提交，提交信息以 `[AI]` 开头
