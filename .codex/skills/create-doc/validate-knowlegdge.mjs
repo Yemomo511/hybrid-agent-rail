@@ -1,0 +1,219 @@
+#!/usr/bin/env node
+import { existsSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
+const KNOWLEDGE_PATH = 'docs/KNOWLEDGE.md';
+const REQUIRED_META = ['name', 'description', 'keywords', 'doc_type'];
+const ALLOWED_META = new Set(REQUIRED_META);
+
+class KnowledgeValidator {
+  /**
+   * @description 校验 Knowledge Source 是否只记录文档 meta 信息。
+   */
+  validate(documentPath) {
+    const errors = [];
+    const knowledgeAbsolutePath = resolve(process.cwd(), KNOWLEDGE_PATH);
+
+    if (!existsSync(knowledgeAbsolutePath)) {
+      return [`Knowledge file not found: ${KNOWLEDGE_PATH}`];
+    }
+
+    const knowledgeContent = readFileSync(knowledgeAbsolutePath, 'utf8');
+    const sourceContent = this.extractSource(knowledgeContent);
+    if (sourceContent === null) {
+      return [`Knowledge file must contain ## Source: ${KNOWLEDGE_PATH}`];
+    }
+
+    const entries = this.parseEntries(sourceContent);
+    errors.push(...this.validateEntries(entries));
+
+    if (documentPath) {
+      const documentMeta = this.readDocumentMeta(documentPath);
+      if (documentMeta.errors.length > 0) {
+        errors.push(...documentMeta.errors);
+      } else if (!this.hasMatchingEntry(entries, documentMeta.meta)) {
+        errors.push(`Knowledge Source missing meta for document: ${documentPath}`);
+      }
+    }
+
+    return errors;
+  }
+
+  /**
+   * @description 提取 ## Source 章节内容。
+   */
+  extractSource(content) {
+    const lines = content.split(/\r?\n/);
+    const sourceIndex = lines.findIndex((line) => line.trim() === '## Source');
+    if (sourceIndex === -1) {
+      return null;
+    }
+
+    const sourceLines = [];
+    for (let index = sourceIndex + 1; index < lines.length; index += 1) {
+      if (/^##\s+/.test(lines[index])) {
+        break;
+      }
+      sourceLines.push(lines[index]);
+    }
+
+    return sourceLines.join('\n').trim();
+  }
+
+  /**
+   * @description 解析 Source 条目。
+   */
+  parseEntries(sourceContent) {
+    const entries = [];
+    let currentEntry = null;
+
+    for (const rawLine of sourceContent.split(/\r?\n/)) {
+      const line = rawLine.trimEnd();
+      if (!line.trim()) {
+        continue;
+      }
+
+      if (line.startsWith('- ')) {
+        currentEntry = {
+          link: line,
+          meta: {},
+          extraLines: [],
+        };
+        entries.push(currentEntry);
+        continue;
+      }
+
+      if (!currentEntry) {
+        entries.push({
+          link: null,
+          meta: {},
+          extraLines: [line],
+        });
+        continue;
+      }
+
+      const metaMatch = line.match(/^\s+-\s+([^:]+):\s*(.*)$/);
+      if (!metaMatch) {
+        currentEntry.extraLines.push(line);
+        continue;
+      }
+
+      const key = metaMatch[1].trim();
+      const value = metaMatch[2].trim();
+      currentEntry.meta[key] = value;
+    }
+
+    return entries;
+  }
+
+  /**
+   * @description 校验 Source 条目仅包含允许的 meta。
+   */
+  validateEntries(entries) {
+    const errors = [];
+
+    for (const [index, entry] of entries.entries()) {
+      const label = `Source entry ${index + 1}`;
+
+      if (!entry.link || !/^- \[[^\]]+\]\([^)]+\)$/.test(entry.link)) {
+        errors.push(`${label} must start with a Markdown link item`);
+      }
+
+      for (const line of entry.extraLines) {
+        errors.push(`${label} contains non-meta content: ${line.trim()}`);
+      }
+
+      for (const key of Object.keys(entry.meta)) {
+        if (key === 'source_path') {
+          errors.push(`${label} must not include source_path`);
+        } else if (!ALLOWED_META.has(key)) {
+          errors.push(`${label} contains unsupported meta field: ${key}`);
+        }
+      }
+
+      for (const key of REQUIRED_META) {
+        if (!entry.meta[key]) {
+          errors.push(`${label} missing meta field: ${key}`);
+        }
+      }
+    }
+
+    return errors;
+  }
+
+  /**
+   * @description 读取目标文档 frontmatter 中需要同步到 Knowledge 的 meta。
+   */
+  readDocumentMeta(documentPath) {
+    const absolutePath = resolve(process.cwd(), documentPath);
+    if (!existsSync(absolutePath)) {
+      return {
+        errors: [`Document not found: ${documentPath}`],
+        meta: {},
+      };
+    }
+
+    const content = readFileSync(absolutePath, 'utf8');
+    const match = content.match(/^---\n([\s\S]*?)\n---/);
+    if (!match) {
+      return {
+        errors: [`Document must contain frontmatter: ${documentPath}`],
+        meta: {},
+      };
+    }
+
+    const meta = {};
+    for (const rawLine of match[1].split(/\r?\n/)) {
+      const line = rawLine.trim();
+      if (!line) {
+        continue;
+      }
+      const separatorIndex = line.indexOf(':');
+      if (separatorIndex === -1) {
+        continue;
+      }
+      const key = line.slice(0, separatorIndex).trim();
+      const value = line.slice(separatorIndex + 1).trim();
+      if (ALLOWED_META.has(key)) {
+        meta[key] = value;
+      }
+    }
+
+    const errors = [];
+    for (const key of REQUIRED_META) {
+      if (!meta[key]) {
+        errors.push(`Document missing frontmatter field for Knowledge Source: ${key}`);
+      }
+    }
+
+    return {
+      errors,
+      meta,
+    };
+  }
+
+  /**
+   * @description 判断 Knowledge Source 是否存在完全匹配的 meta 条目。
+   */
+  hasMatchingEntry(entries, meta) {
+    return entries.some((entry) => REQUIRED_META.every((key) => entry.meta[key] === meta[key]));
+  }
+}
+
+const main = () => {
+  const documentPath = process.argv[2];
+  const validator = new KnowledgeValidator();
+  const errors = validator.validate(documentPath);
+
+  if (errors.length > 0) {
+    console.error('Knowledge validation failed:');
+    for (const error of errors) {
+      console.error(`- ${error}`);
+    }
+    process.exit(1);
+  }
+
+  console.log(documentPath ? `Knowledge is synchronized: ${documentPath}` : 'Knowledge is valid');
+};
+
+main();
