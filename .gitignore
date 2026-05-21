@@ -32,6 +32,7 @@ yarn-error.log*
 # Local agent/planning artifacts
 .temp/
 .codex/planning/
+.superpowers/
 
 # Editor and OS files
 .DS_Store
