@@ -193,3 +193,19 @@
 - 不替换 `skills/skill-template.md` 的基本模板，只在其基础上补充结构指引。
 - 资源说明沿用 `scripts/`、`references/`、`assets/` 三类，并用中文解释适用场景。
 - 文档系统同步承认 `skills/skill-template.md` 是保留的基础 Skill 作者模板，避免规则漂移。
+
+---
+
+# create-skill 生成与校验标准化发现记录
+
+## 当前事实
+
+- `.codex/skills/create-skill/script/init_skill.py` 仍使用英文模板，并依赖缺失的 `generate_openai_yaml.py` 生成 `agents/openai.yaml`。
+- `.codex/skills/create-skill/script/quick_validate.py` 是空文件，无法验证生成结果。
+- `skills/skill-template.md` 已将 `Source` 改为 `Upstream Skill`，其语义是 Skill 依赖和补充关系，不是文档来源。
+
+## 决策
+
+- 移除 `agents/openai.yaml` 生成链路，生成产物固定为 `SKILL.md` 和可选资源目录。
+- `quick_validate.py` 采用默认/strict 双模式，兼顾刚生成的模板和完成后的 Skill。
+- 校验器显式拒绝将文档、API、模块、页面、参考资料写入 `Upstream Skill`。

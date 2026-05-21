@@ -120,3 +120,14 @@
 - [x] 补充模板结构和资源说明
 - [x] 同步文档系统
 - [x] 运行验证并提交
+
+---
+
+# create-skill 生成与校验标准化进度
+
+- [x] 读取 `skill-template.md`、`init_skill.py`、`quick_validate.py`、create-skill 说明文档
+- [x] 改造 `init_skill.py`
+- [x] 实现 `quick_validate.py`
+- [x] 同步 `Upstream Skill` 模板语义
+- [x] 同步 create-skill 说明和文档系统
+- [x] 运行正反向验证并提交

@@ -470,3 +470,37 @@
 - 验收标准：
   - 文档说明 `skills/skill-template.md` 是保留的基础 Skill 作者模板。
   - 文档校验和 `git diff --check` 通过。
+
+---
+
+# create-skill 生成与校验标准化实现计划
+
+## 总目标
+
+将 `.codex/skills/create-skill` 的生成器和校验器统一到 `skills/skill-template.md` 标准，确保生成结果是 Skill 文件夹，并且 `Upstream Skill` 只用于 Skill-to-Skill 依赖补充关系。
+
+## 子任务与验收标准
+
+### 子任务 1：改造生成器
+
+- 产物：`.codex/skills/create-skill/script/init_skill.py`
+- 验收标准：
+  - 生成 `<output>/<skill-name>/SKILL.md`。
+  - 不再生成 `agents/openai.yaml`。
+  - 支持可选 `scripts/`、`references/`、`assets/`。
+
+### 子任务 2：实现校验器
+
+- 产物：`.codex/skills/create-skill/script/quick_validate.py`
+- 验收标准：
+  - 默认模式校验结构且允许模板占位符。
+  - `--strict` 模式拒绝占位符。
+  - 校验 frontmatter、文件夹名、资源目录和 `Upstream Skill` 语义。
+
+### 子任务 3：同步说明和文档系统
+
+- 产物：`.codex/skills/create-skill/SKILL.md`、`skills/skill-template.md`、`docs/skill-system-contract/doc.md`
+- 验收标准：
+  - 说明 `Upstream Skill` 不是文档/API/模块来源。
+  - 说明默认校验与 strict 校验使用时机。
+  - 文档系统校验通过。

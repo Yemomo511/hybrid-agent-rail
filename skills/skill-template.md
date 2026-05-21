@@ -72,16 +72,17 @@ metadata:
 4. `## Workflow`
 5. `## Validation`
 
-## Source<可选， 如果该 Skill 是对上游的 Skill 的补充>
+## Upstream Skill<可选，只有该 Skill 依赖并补充其他 Skill 时填写>
 
-- Upstream: <Skill Github Url， 请确保该 Skill 可被访问>
+- Upstream: <上游 Skill 名称或 Skill bundle URL。不得填写普通文档、API 页面、模块路径或参考资料。>
 
-## How to use<可选， 如果该 Skill 是对上游的 Skill 的补充>
-该 Skill 是对 Upstream Skill 的补充。因此在使用该Skill前，务必请将上游 Skill bundle 安装到当前活跃 Agent 的 skills 目录中：
+## How to use<可选，只有该 Skill 依赖并补充其他 Skill 时填写>
+该 Skill 是对 Upstream Skill 的补充。因此在使用该 Skill 前，务必请将上游 Skill bundle 安装到当前活跃 Agent 的 skills 目录中：
 ``` bash
-# 查看上游 README，确认准确路径
-open <Upstream Skill Url>
+# 查看上游 Skill README，确认准确路径
+open <Upstream Skill Bundle Url>
 ```
+
 ## <Custom Description>
 
 <!-- 自己的 Skill 描述 -->
