@@ -75,3 +75,31 @@
 - 目标 RN 项目的路径、RN 版本、React 版本、是否启用 New Architecture 尚未提供。
 - 页面是需要“嵌入现有导航栈返回结果”，还是独立页面通过 callback 返回结果，需在实现前确认。
 - 是否需要相册选择、图片压缩、裁剪、水印、扫码、连续拍摄、多图结果，当前计划默认不包含。
+
+---
+
+# Rollup 配置内置到 package 发现记录
+
+## 当前事实
+
+- 当前根目录存在 `config/rollup.package.config.mjs`，两个 package 的 `build` 脚本都通过 `../../config/rollup.package.config.mjs` 使用共享配置。
+- 当前 workspace package 只有 `hyar-adapter` 和 `hyar-cli`。
+- `docs/workspace-package-contract.md` 将共享 Rollup 配置记录为稳定契约，因此迁移后需要同步文档系统。
+- 当前工作区已有用户侧改动：`package/hyar-adapter/AGENTS.md`，本次迁移不触碰该文件。
+
+## 决策
+
+- 每个 package 放置自己的 `rollup.config.mjs`，并让 `build` 脚本直接执行 `rollup -c`。
+- 继续复用根目录 `tsconfig.base.json` 和根 devDependency 中的 Rollup/TypeScript 工具链，避免把构建依赖重复声明到每个 package。
+- 配置逻辑保持与旧共享配置一致，仅将 `packageDir` 从 `process.cwd()` 收敛到配置文件所在目录，保证从根递归构建和 package 目录单独构建都稳定。
+
+## 验证记录
+
+- 红灯阶段 `pnpm run test:workspace` 失败，证明根共享配置仍存在且 package 本地配置尚未落地。
+- `pnpm run test:workspace` 通过，Jest 执行 4 条 workspace 用例。
+- `pnpm run build` 通过，两个 package 均使用各自 `rollup.config.mjs` 输出 ESM、CJS 与类型声明。
+- `pnpm run test:package-output` 通过，产物验收保持绿色。
+- `pnpm test` 通过，包含 package 代码质量、workspace 测试、构建、产物测试、example smoke 与 example API。
+- `node .codex/skills/create-doc/validate.mjs docs/workspace-package-contract.md` 通过。
+- `node .codex/skills/create-doc/validate-knowlegdge.mjs docs/workspace-package-contract.md` 通过。
+- `git diff --check` 通过。

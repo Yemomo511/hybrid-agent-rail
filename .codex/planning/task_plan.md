@@ -241,3 +241,48 @@
   - 文档说明调用方式、权限要求、平台限制。
   - `git diff --check` 通过。
   - 提交信息使用中文规范：`[AI]feat: 完成 RN 拍照页面`。
+
+---
+
+# Rollup 配置内置到 package 任务计划
+
+## 总目标
+
+将共享的根目录 `config/rollup.package.config.mjs` 迁移为各 package 内部配置，确保每个 package 可以从自身目录声明、维护和执行 Rollup 构建。
+
+## 子任务与验收标准
+
+### 子任务 1：补充结构验收测试
+
+- 产物：`test/workspace.test.ts`
+- 验收标准：
+  - 测试断言根目录不再存在共享 Rollup package 配置
+  - 测试断言每个 `package/*` 均存在 `rollup.config.mjs`
+  - 测试断言每个 package 的 `build` 脚本使用本地配置
+
+### 子任务 2：迁移 package Rollup 配置
+
+- 产物：`package/hyar-adapter/rollup.config.mjs`、`package/hyar-cli/rollup.config.mjs`、`package/*/package.json`
+- 验收标准：
+  - 两个 package 的构建入口均为 `src/index.ts`
+  - 输出仍为 `dist/index.mjs`、`dist/index.cjs`、`dist/index.d.ts`
+  - workspace 内部依赖仍作为 external 保留
+  - 根共享配置文件被移除
+
+### 子任务 3：同步文档系统
+
+- 产物：`docs/workspace-package-contract.md`
+- 验收标准：
+  - 文档中的 Rollup 构建契约改为 package 本地配置
+  - `source_path` 不再指向已删除的根 `config` 文件
+  - create-doc 文档校验通过
+
+### 子任务 4：验证并提交
+
+- 验收标准：
+  - 红灯测试先因旧结构失败
+  - 迁移后 `pnpm run test:workspace` 通过
+  - `pnpm run build` 通过
+  - `pnpm run test:package-output` 通过
+  - `git diff --check` 通过或明确说明既有无关问题
+  - 使用中文规范提交，提交信息以 `[AI]` 开头
