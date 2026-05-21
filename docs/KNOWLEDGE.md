@@ -3,6 +3,12 @@
 
 ## Source
 
+- [Create Curated Skill Contract](create-curated-skill-contract.md)
+  - name: create-curated-skill-contract
+  - description: 说明 curated Skill 的创建模板、必选 Source 和严格 How to use 校验契约。
+  - keywords: curated Skill, 精选 Skill, Source 必选, How to use 模板, create-curated-skill
+  - doc_type: contract
+
 - [Hybrid Written Plan Skill](hybrid-written-plan-skill.md)
   - name: hybrid-written-plan-skill
   - description: 说明 hybrid-written-plan Skill 如何补充上游 writing-plans 的跨端原生与桥接决策。
