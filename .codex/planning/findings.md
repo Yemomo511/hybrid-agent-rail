@@ -51,3 +51,27 @@
 - `node .codex/skills/create-doc/validate.mjs docs/hybrid-written-plan-skill.md` 通过。
 - `node .codex/skills/create-doc/validate-knowlegdge.mjs docs/hybrid-written-plan-skill.md` 通过。
 - `git diff --check` 通过。
+
+---
+
+# RN 拍照页面计划发现记录
+
+## 当前事实
+
+- 当前仓库是 `hybrid-agent-rail`，不是业务 RN App；仓库根 `package.json` 使用 `pnpm@10.33.2`，但用户给出的项目规范说明 React Native 项目应优先使用 `yarn` 管理依赖。
+- 当前仓库没有可直接落地拍照页的 `App.tsx`、`android/`、`ios/` RN 工程目录，因此计划需要先落在“目标 RN 项目”中执行。
+- 本仓库 `docs/hybrid-written-plan-skill.md` 明确要求跨端计划先回答是否涉及原生修改、Android/iOS 影响、桥接形式和原生验收路径。
+- 记忆中该项目族的 RN 示例曾从 shell 升级为真实 RN App，验收经验表明不能只停留在 JS 页面，需要检查 native app scaffolding、Pods、Gradle 和真机/构建证据。
+
+## 决策
+
+- 默认方案选择成熟 RN 原生相机包，而不是自研 Android/iOS 相机桥。
+- 默认首选 `react-native-vision-camera`，但必须在目标项目中验证 RN 版本、Android minSdk、iOS deployment target、新架构设置和 Pod 能力后才能锁定版本。
+- 业务层将拍照页封装为页面 + Hook + 类型契约；上传、压缩、OCR、相册保存等后续业务不纳入首轮页面范围，避免把拍照能力和业务流程耦合。
+- 模拟器只能作为 UI 和权限状态验收，真实拍照成功必须使用真机或可用摄像头环境补充验收。
+
+## 开放问题
+
+- 目标 RN 项目的路径、RN 版本、React 版本、是否启用 New Architecture 尚未提供。
+- 页面是需要“嵌入现有导航栈返回结果”，还是独立页面通过 callback 返回结果，需在实现前确认。
+- 是否需要相册选择、图片压缩、裁剪、水印、扫码、连续拍摄、多图结果，当前计划默认不包含。

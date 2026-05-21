@@ -1,7 +1,0 @@
-interface:
-  display_name: "Hybrid Written Plan"
-  short_description: "Adds native and bridge choices to hybrid plans"
-  default_prompt: "Use $hybrid-written-plan with superpowers:writing-plans to plan a cross-platform requirement."
-
-policy:
-  allow_implicit_invocation: true

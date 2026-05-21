@@ -13,4 +13,4 @@
 ## Reference
 - 文档入口: [knowlegde](docs/KNOWLEDGE.md) 
 ## Rules
-- 完成任何**新需求**/**功能修改时/重构**/**功能删除**时，请务必更新文档系统。文档系统的更新请参考`docs/AGENTS.md`
+- **完成任何需求时，请务必进入更新文档系统环节，防止文档漂移**。文档系统的更新部分请参考 `docs/AGENTS.md`。
