@@ -29,8 +29,14 @@
 
 - [Test Validation Contract](test-validation-contract.md)
   - name: test-validation-contract
-  - description: 说明当前测试分层、验收入口和已知环境门禁边界。
-  - keywords: 测试门禁, pnpm test, Jest, ts-jest, package-output, example smoke
+  - description: 说明当前测试分层、package 代码质量门禁和已知环境边界。
+  - keywords: 测试门禁, package 代码质量, pnpm test, ESLint, Prettier, ts-jest
+  - doc_type: contract
+
+- [Package Code Quality Contract](package-code-quality-contract.md)
+  - name: package-code-quality-contract
+  - description: 说明 package 源码的 ESLint、Prettier 门禁和修改验收顺序。
+  - keywords: package 代码规范, ESLint, Prettier, lint:package, format:package:check
   - doc_type: contract
 
 - [Create Curated Skill Contract](create-curated-skill-contract.md)

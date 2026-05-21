@@ -7,7 +7,11 @@
   "packageManager": "pnpm@10.33.2",
   "scripts": {
     "build": "pnpm -r --filter \"./package/*\" build",
-    "test": "pnpm run test:workspace && pnpm run build && pnpm run test:package-output && pnpm run test:smoke && pnpm run test:example-api",
+    "test": "pnpm run check:package-code && pnpm run test:workspace && pnpm run build && pnpm run test:package-output && pnpm run test:smoke && pnpm run test:example-api",
+    "lint:package": "eslint \"package/*/src/**/*.ts\"",
+    "format:package": "prettier --write \"package/*/src/**/*.ts\"",
+    "format:package:check": "prettier --check \"package/*/src/**/*.ts\"",
+    "check:package-code": "pnpm run lint:package && pnpm run format:package:check",
     "test:workspace": "NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/workspace.test.ts --watchman=false",
     "test:package-output": "NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/package-output.test.ts --watchman=false",
     "test:smoke": "pnpm --filter hyar-example smoke",
@@ -24,12 +28,17 @@
   "author": "yemomo511",
   "license": "ISC",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@rollup/plugin-typescript": "^12.1.4",
+    "eslint": "^10.4.0",
+    "eslint-config-prettier": "^10.1.8",
     "jest": "^30.4.2",
+    "prettier": "^3.8.3",
     "rollup": "^4.53.3",
     "ts-jest": "^29.4.10",
     "tslib": "^2.8.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.59.4"
   },
   "bugs": {
     "url": "https://github.com/Yemomo511/hybrid-agent-rail/issues"
