@@ -75,3 +75,30 @@
 - 目标 RN 项目的路径、RN 版本、React 版本、是否启用 New Architecture 尚未提供。
 - 页面是需要“嵌入现有导航栈返回结果”，还是独立页面通过 callback 返回结果，需在实现前确认。
 - 是否需要相册选择、图片压缩、裁剪、水印、扫码、连续拍摄、多图结果，当前计划默认不包含。
+
+---
+
+# create-doc 文档目录化改造发现记录
+
+## 当前事实
+
+- 当前 `create-doc` Skill、模板和校验命令在改造前仍以扁平 Markdown 文件为目标形态。
+- 当前受治理文档为 8 个 `docs/*.md` 文件，均已登记在 `docs/KNOWLEDGE.md` 的 `## Source` 中。
+- `docs/AGENTS.md` 与 `docs/KNOWLEDGE.md` 是文档系统控制文件，不属于受治理文档，不迁移为 `doc.md`。
+- 当前 `validate.mjs` 只要求路径在 `docs/` 下且以 `.md` 结尾，因此旧扁平路径仍会通过。
+- 当前 `validate-knowlegdge.mjs` 只按 meta 匹配 Source 条目，未校验链接目标是否与传入文档路径一致。
+
+## 决策
+
+- 受治理文档目录名采用 frontmatter `name`，正文固定为 `doc.md`。
+- Knowledge Source 链接目标采用相对 `docs/KNOWLEDGE.md` 的 `<name>/doc.md`。
+- 校验器错误信息需要直接提示期望格式 `docs/<name>/doc.md` 或 `<name>/doc.md`。
+- 本次不新增 npm 依赖，不改 package 构建链路。
+
+## 验证记录
+
+- 隔离 worktree 初始状态下，现有 8 个扁平文档均通过旧版 `validate.mjs` 与 `validate-knowlegdge.mjs`。
+- 红灯测试 `node --test .codex/skills/create-doc/__test__/create-doc-layout.test.mjs` 在旧实现上失败 3 项：旧文档路径被放过、旧 Knowledge 链接被放过、错链 Knowledge 被放过。
+- 改造后红灯测试通过，确认 `validate.mjs` 拒绝旧路径，`validate-knowlegdge.mjs` 会校验 Source 链接目标与传入文档路径一致。
+- 8 个受治理文档迁移到 `docs/<name>/doc.md` 后，逐个通过 `validate.mjs` 与 `validate-knowlegdge.mjs`，全局 Knowledge Source 校验通过。
+- 最终验证中，validator 单测、全量文档校验、旧具体路径引用扫描和 `git diff --check` 均通过。
