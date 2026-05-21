@@ -8,8 +8,8 @@
   "scripts": {
     "build": "pnpm -r --filter \"./package/*\" build",
     "test": "pnpm run test:workspace && pnpm run build && pnpm run test:package-output && pnpm run test:smoke && pnpm run test:example-api",
-    "test:workspace": "NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/workspace.test.mjs --watchman=false",
-    "test:package-output": "NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/package-output.test.mjs --watchman=false",
+    "test:workspace": "NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/workspace.test.ts --watchman=false",
+    "test:package-output": "NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/package-output.test.ts --watchman=false",
     "test:smoke": "pnpm --filter hyar-example smoke",
     "test:example-api": "pnpm --filter hyar-example test:api"
   },
@@ -27,6 +27,7 @@
     "@rollup/plugin-typescript": "^12.1.4",
     "jest": "^30.4.2",
     "rollup": "^4.53.3",
+    "ts-jest": "^29.4.10",
     "tslib": "^2.8.1",
     "typescript": "^5.9.3"
   },

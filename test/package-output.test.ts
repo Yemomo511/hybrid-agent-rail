@@ -10,7 +10,7 @@ const packageNames = readdirSync(packageRoot, { withFileTypes: true })
   .map((item) => item.name);
 
 test('all package projects emit rollup esm cjs and declaration outputs', () => {
-  expect(packageNames.toSorted()).toEqual(['hyar-adapter', 'hyar-cli']);
+  expect([...packageNames].sort()).toEqual(['hyar-adapter', 'hyar-cli']);
 
   for (const packageName of packageNames) {
     const distDir = join(packageRoot, packageName, 'dist');

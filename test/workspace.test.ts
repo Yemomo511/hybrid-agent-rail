@@ -4,8 +4,16 @@ import { join } from 'node:path';
 
 const root = process.cwd();
 
-const readJson = (path) => JSON.parse(readFileSync(join(root, path), 'utf8'));
-const readText = (path) => readFileSync(join(root, path), 'utf8');
+type PackageJson = {
+  name: string;
+  private?: boolean;
+  packageManager?: string;
+  scripts: Record<string, string>;
+  dependencies?: Record<string, string>;
+};
+
+const readPackageJson = (path: string): PackageJson => JSON.parse(readFileSync(join(root, path), 'utf8')) as PackageJson;
+const readText = (path: string): string => readFileSync(join(root, path), 'utf8');
 
 test('root pnpm workspace exposes package and example projects', () => {
   expect(existsSync(join(root, 'pnpm-workspace.yaml'))).toBe(true);
@@ -14,30 +22,30 @@ test('root pnpm workspace exposes package and example projects', () => {
   expect(workspace).toMatch(/package\/\*/);
   expect(workspace).toMatch(/example/);
 
-  const rootPackage = readJson('package.json');
-  expect(rootPackage.packageManager.startsWith('pnpm@')).toBe(true);
+  const rootPackage = readPackageJson('package.json');
+  expect(rootPackage.packageManager?.startsWith('pnpm@')).toBe(true);
   expect(rootPackage.scripts.build).toBe('pnpm -r --filter "./package/*" build');
   expect(rootPackage.scripts.test).toBe('pnpm run test:workspace && pnpm run build && pnpm run test:package-output && pnpm run test:smoke && pnpm run test:example-api');
-  expect(rootPackage.scripts['test:workspace']).toBe('NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/workspace.test.mjs --watchman=false');
-  expect(rootPackage.scripts['test:package-output']).toBe('NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/package-output.test.mjs --watchman=false');
+  expect(rootPackage.scripts['test:workspace']).toBe('NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/workspace.test.ts --watchman=false');
+  expect(rootPackage.scripts['test:package-output']).toBe('NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/package-output.test.ts --watchman=false');
   expect(rootPackage.scripts['test:example-api']).toBe('pnpm --filter hyar-example test:api');
 });
 
 test('hyar-cli depends on hyar-adapter through the workspace protocol', () => {
-  const adapterPackage = readJson('package/hyar-adapter/package.json');
-  const cliPackage = readJson('package/hyar-cli/package.json');
+  const adapterPackage = readPackageJson('package/hyar-adapter/package.json');
+  const cliPackage = readPackageJson('package/hyar-cli/package.json');
 
   expect(adapterPackage.name).toBe('hyar-adapter');
   expect(cliPackage.name).toBe('hyar-cli');
-  expect(cliPackage.dependencies['hyar-adapter']).toBe('workspace:*');
+  expect(cliPackage.dependencies?.['hyar-adapter']).toBe('workspace:*');
 });
 
 test('example depends on hyar-cli through the workspace protocol', () => {
-  const examplePackage = readJson('example/package.json');
+  const examplePackage = readPackageJson('example/package.json');
 
   expect(examplePackage.name).toBe('hyar-example');
   expect(examplePackage.private).toBe(true);
-  expect(examplePackage.dependencies['hyar-cli']).toBe('workspace:*');
+  expect(examplePackage.dependencies?.['hyar-cli']).toBe('workspace:*');
   expect(examplePackage.scripts.smoke).toBe('node src/index.mjs');
   expect(examplePackage.scripts['test:api']).toBe('node src/test-api.mjs');
 });

@@ -29,6 +29,7 @@ export default {
   ],
   plugins: [
     typescript({
+      include: [resolve(packageDir, 'src/**/*.ts')],
       tsconfig: resolve(rootDir, 'tsconfig.base.json'),
       compilerOptions: {
         declarationDir: resolve(packageDir, 'dist'),

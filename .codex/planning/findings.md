@@ -15,6 +15,8 @@
 - 单元测试统一切换到 Jest；当前已有测试均为 `.mjs`，因此不引入 `ts-jest` 或 Babel 转译链路。
 - Jest 运行 ESM `.mjs` 测试时通过 `NODE_OPTIONS=--experimental-vm-modules` 显式启用 VM Modules，并追加 `--watchman=false` 避免本机 Watchman 权限噪声影响验收。
 - 原有 `pnpm test` 总流程保持不变，仍按 workspace 测试、构建、产物测试、example smoke、example API 的顺序验收。
+- 用户进一步要求 Jest 测试文件统一使用 TypeScript，因此补充 `ts-jest`，并将已有 `.mjs` 测试迁移为 `.test.ts`。
+- 迁移后 Rollup package 构建需要限制 TypeScript 插件输入范围到当前 package 的 `src/**/*.ts`，避免根目录测试文件影响 package 构建。
 
 ## 验证记录
 
@@ -23,3 +25,4 @@
 - `pnpm run test:package-output` 通过，Jest 执行 1 条产物用例。
 - `pnpm test` 通过，包含 Jest 单测、构建、example smoke 与 example API 验收。
 - 全量 `git diff --check` 被既有 README 未提交尾随空格拦截；本次待提交文件的 scoped `git diff --check` 已通过。
+- TypeScript 测试迁移后，`pnpm run test:workspace`、`pnpm run build`、`pnpm run test:package-output` 与 `pnpm test` 均通过。

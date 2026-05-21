@@ -79,3 +79,12 @@
   - `pnpm test` 成功
   - `git diff --check` 成功
   - 使用中文规范提交，提交信息为 `[AI]test: 接入 Jest 单元测试`
+
+### 子任务 10：统一 Jest 测试文件为 TypeScript
+
+- 产物：`test/workspace.test.ts`、`test/package-output.test.ts`、`jest.config.mjs`
+- 验收标准：
+  - 当前已有 Jest 测试文件均使用 `.ts` 后缀
+  - Jest 配置能通过 `ts-jest` 执行 TypeScript 测试
+  - 根测试脚本指向 `.test.ts` 测试文件
+  - 原有 workspace、脚本、依赖链、构建产物验收语义保持不变
