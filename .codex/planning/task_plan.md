@@ -1,0 +1,47 @@
+# pnpm 项目初始化任务计划
+
+## 总目标
+
+使用 pnpm 初始化 Hybrid Agent Rail monorepo，并建立 `example -> hyar-cli -> hyar-adapter` 的本地 workspace 依赖链。
+
+## 子任务与验收标准
+
+### 子任务 1：建立 workspace 结构验收
+
+- 产物：`test/workspace.test.mjs`
+- 验收标准：
+  - 测试能检查根目录 `pnpm-workspace.yaml`
+  - 测试能检查根包脚本、package 目录、example 目录
+  - 测试能检查 `example` 依赖 `hyar-cli`
+  - 测试能检查 `hyar-cli` 依赖 `hyar-adapter`
+
+### 子任务 2：初始化 pnpm workspace 与包元数据
+
+- 产物：`package.json`、`pnpm-workspace.yaml`、`tsconfig.base.json`
+- 验收标准：
+  - workspace 包含 `package/*` 与 `example`
+  - 根脚本提供 `build`、`test`、`test:workspace`、`test:smoke`
+  - 根开发依赖包含 TypeScript 与 Rollup 构建链
+
+### 子任务 3：实现 hyar-adapter 与 hyar-cli 最小包
+
+- 产物：`package/hyar-adapter/*`、`package/hyar-cli/*`
+- 验收标准：
+  - `hyar-adapter` 可构建 CJS 与 ESM 产物
+  - `hyar-cli` 通过 `workspace:*` 依赖 `hyar-adapter`
+  - `hyar-cli` 导出的运行时描述能包含 adapter 信息
+
+### 子任务 4：实现 example 消费链路
+
+- 产物：`example/package.json`、`example/src/index.mjs`
+- 验收标准：
+  - `example` 通过 `workspace:*` 依赖 `hyar-cli`
+  - 构建后 `pnpm --filter hyar-example smoke` 能从 `hyar-cli` 读到 `hyar-adapter`
+
+### 子任务 5：安装依赖、验证并提交
+
+- 验收标准：
+  - `pnpm install` 成功生成 lockfile
+  - `pnpm test` 成功
+  - `git diff --check` 成功
+  - 使用中文规范提交，提交信息以 `[AI]` 开头
