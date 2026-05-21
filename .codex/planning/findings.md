@@ -130,3 +130,19 @@
 - 改造后红灯测试通过，确认 `validate.mjs` 拒绝旧路径，`validate-knowlegdge.mjs` 会校验 Source 链接目标与传入文档路径一致。
 - 8 个受治理文档迁移到 `docs/<name>/doc.md` 后，逐个通过 `validate.mjs` 与 `validate-knowlegdge.mjs`，全局 Knowledge Source 校验通过。
 - 最终验证中，validator 单测、全量文档校验、旧具体路径引用扫描和 `git diff --check` 均通过。
+
+---
+
+# create-curated-skill metadata 元数据改造发现记录
+
+## 当前事实
+
+- `skills/skill-template.md` 已展示 `metadata.version`、`metadata.env` 的目标形态。
+- `.codex/skills/create-curated-skill/` 的模板、示例和校验器仍使用或允许顶层 `version`、`env`。
+- 当前 `skills/` 下 curated Skill 未出现顶层 `version` 或 `env`，因此本次不需要迁移既有 curated Skill 产物。
+
+## 决策
+
+- `name`、`description` 继续作为 frontmatter 顶层必选字段。
+- `version`、`env` 迁移为 `metadata` 下的一层可选字段，用来展示框架版本兼容和跨端环境要求。
+- 校验器只实现当前模板需要的一层 metadata 解析，不引入 YAML 依赖，避免扩大 npm 环境变更范围。

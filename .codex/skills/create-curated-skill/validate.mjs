@@ -3,7 +3,8 @@ import { existsSync, readFileSync, statSync } from 'node:fs';
 import { basename, dirname, relative, resolve } from 'node:path';
 
 const REQUIRED_META = ['name', 'description'];
-const ALLOWED_META = new Set(['name', 'description', 'version', 'env']);
+const ALLOWED_META = new Set(['name', 'description', 'metadata']);
+const ALLOWED_METADATA = new Set(['version', 'env']);
 const PLACEHOLDER_PATTERNS = [
   /<Skill Name>/,
   /<Skill from>/,
@@ -68,6 +69,7 @@ class CuratedSkillValidator {
 
   /**
    * @description 解析轻量 YAML frontmatter。
+   * 仅支持 curated Skill 模板需要的顶层字段和一层 metadata 对象。
    */
   parseFrontmatter(content) {
     const match = content.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);
@@ -76,11 +78,14 @@ class CuratedSkillValidator {
     }
 
     const frontmatter = {};
+    let currentObjectKey = null;
     for (const rawLine of match[1].split(/\r?\n/)) {
       const line = rawLine.trim();
       if (!line) {
         continue;
       }
+
+      const isNestedLine = /^\s+/.test(rawLine);
       const separatorIndex = line.indexOf(':');
       if (separatorIndex === -1) {
         frontmatter.__invalid = `Invalid frontmatter line: ${rawLine}`;
@@ -88,6 +93,27 @@ class CuratedSkillValidator {
       }
       const key = line.slice(0, separatorIndex).trim();
       const value = line.slice(separatorIndex + 1).trim();
+
+      if (isNestedLine) {
+        if (!currentObjectKey || typeof frontmatter[currentObjectKey] !== 'object') {
+          frontmatter.__invalid = `Nested frontmatter field must belong to metadata: ${rawLine}`;
+          continue;
+        }
+        frontmatter[currentObjectKey][key] = value;
+        continue;
+      }
+
+      currentObjectKey = null;
+      if (key === 'metadata') {
+        if (value) {
+          frontmatter.__invalid = 'metadata must be an object containing optional version/env fields';
+          continue;
+        }
+        frontmatter.metadata = {};
+        currentObjectKey = 'metadata';
+        continue;
+      }
+
       frontmatter[key] = value;
     }
 
@@ -110,6 +136,18 @@ class CuratedSkillValidator {
     for (const key of Object.keys(frontmatter)) {
       if (key !== '__invalid' && !ALLOWED_META.has(key)) {
         errors.push(`Unknown frontmatter field: ${key}`);
+      }
+    }
+
+    if (frontmatter.metadata !== undefined) {
+      if (typeof frontmatter.metadata !== 'object') {
+        errors.push('metadata must be an object containing optional version/env fields');
+      } else {
+        for (const key of Object.keys(frontmatter.metadata)) {
+          if (!ALLOWED_METADATA.has(key)) {
+            errors.push(`Unknown metadata field: ${key}`);
+          }
+        }
       }
     }
 

@@ -79,3 +79,15 @@
 - [x] 同步 `docs/KNOWLEDGE.md` 和文档系统说明
 - [x] 运行全量文档校验与 diff 检查
 - [x] 提交变更
+
+---
+
+# create-curated-skill metadata 元数据改造进度
+
+- [x] 读取 create-curated-skill 技能、模板、示例和校验器
+- [x] 拆分子任务与验收标准
+- [x] 补充 metadata 校验红灯测试
+- [x] 更新模板、示例和 Skill 契约说明
+- [x] 改造校验器 metadata 解析与字段约束
+- [x] 同步文档系统
+- [x] 运行验证并提交

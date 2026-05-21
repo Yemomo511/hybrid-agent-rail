@@ -343,3 +343,42 @@
   - `node --test .codex/skills/create-doc/__test__/create-doc-layout.test.mjs` 通过。
   - `git diff --check` 通过。
   - 使用 `[AI]refactor: 将文档系统迁移为目录化结构` 提交。
+
+---
+
+# create-curated-skill metadata 元数据改造计划
+
+## 总目标
+
+将 curated Skill 的可选兼容信息从 frontmatter 顶层 `version`、`env` 迁移到 `metadata.version`、`metadata.env`，并同步模板、示例、校验器与文档契约。
+
+## 子任务与验收标准
+
+### 子任务 1：补充 metadata 校验红灯
+
+- 产物：`.codex/skills/create-curated-skill/__test__/metadata.test.mjs`
+- 验收标准：
+  - 测试覆盖 `metadata.version` 与 `metadata.env` 的合法样例。
+  - 测试覆盖旧版顶层 `version` / `env` 被拒绝。
+
+### 子任务 2：更新 curated Skill 模板和示例
+
+- 产物：`.codex/skills/create-curated-skill/references/curated-skill-template.md`、`.codex/skills/create-curated-skill/references/curated-skill-example.md`
+- 验收标准：
+  - 模板展示 `metadata:` 下的可选 `version`、`env`。
+  - 示例使用 `metadata.version`，不再使用顶层 `version`。
+
+### 子任务 3：改造校验器 frontmatter 解析与字段约束
+
+- 产物：`.codex/skills/create-curated-skill/validate.mjs`
+- 验收标准：
+  - 校验器能解析一层缩进的 `metadata` 对象。
+  - 仅允许 `metadata.version`、`metadata.env`。
+  - 顶层 `version`、`env` 报错。
+
+### 子任务 4：同步文档系统并验证
+
+- 产物：`.codex/skills/create-curated-skill/SKILL.md`、`docs/create-curated-skill-contract/doc.md`
+- 验收标准：
+  - Skill 说明和文档契约均描述 metadata 元数据形态。
+  - `metadata.test.mjs`、示例 validator、文档 validator、`git diff --check` 均通过。
