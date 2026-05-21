@@ -445,3 +445,28 @@
   - `quick_validate.py` 通过。
   - 文档 diff 无尾随空格。
   - 使用中文规范提交，提交信息以 `[AI]` 开头。
+
+---
+
+# skill-template 基础模板补充计划
+
+## 总目标
+
+保持 `skills/skill-template.md` 的现有基本模板形态，并参考 `.codex/skills/create-skill/script/init_skill.py` 中的 `SKILL_TEMPLATE` 补充 Skill 创建所需的结构指引、资源说明和好例子约束。
+
+## 子任务与验收标准
+
+### 子任务 1：补充模板正文结构
+
+- 产物：`skills/skill-template.md`
+- 验收标准：
+  - 保留原有 frontmatter、`metadata.version/env`、`When To Invoke`、可选 Source/How to use 和自定义描述区域。
+  - 增加 `Overview`、结构选择说明、正文填充提示、可选 Resources 和 Good Example 区域。
+  - 说明内容使用中文，代码路径和目录名保持原样。
+
+### 子任务 2：同步文档系统并验证
+
+- 产物：`docs/skill-system-contract/doc.md`
+- 验收标准：
+  - 文档说明 `skills/skill-template.md` 是保留的基础 Skill 作者模板。
+  - 文档校验和 `git diff --check` 通过。

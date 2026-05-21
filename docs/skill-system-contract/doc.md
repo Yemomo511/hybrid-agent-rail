@@ -32,7 +32,7 @@ skills/<category>/<skill-name>/SKILL.md
 
 文件夹名必须等于 frontmatter `name`。`SKILL.md` 必须保留必选 `Source`，并让 `How to use` 严格遵循 curated 模板，只允许替换发现时机、上游 URL 和 Skill Name。
 
-不要在 `skills/` 根目录保留一次性模板或散落 Markdown 文件。模板和示例应内聚在维护型 Skill 的 `references/` 或既有 `reference/` 资源目录中。
+不要在 `skills/` 根目录保留一次性模板或散落 Markdown 文件。`skills/skill-template.md` 是保留的基础 Skill 作者模板；其他模板和示例应内聚在维护型 Skill 的 `references/` 或既有 `reference/` 资源目录中。
 
 ## Update When
 - `skills/` 的分类、文件夹结构或注入规则变化。

@@ -110,3 +110,13 @@
 - [x] 读取 RN TurboModule good-example Skill
 - [x] 将说明性内容翻译为中文
 - [x] 运行验证并提交
+
+---
+
+# skill-template 基础模板补充进度
+
+- [x] 读取 `skills/skill-template.md`
+- [x] 对照 `init_skill.py` 中的 `SKILL_TEMPLATE`
+- [x] 补充模板结构和资源说明
+- [x] 同步文档系统
+- [x] 运行验证并提交

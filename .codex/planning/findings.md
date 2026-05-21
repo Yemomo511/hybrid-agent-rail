@@ -177,3 +177,19 @@
 
 - 技术专有名词如 `TurboModule`、`Codegen`、`Spec`、`TurboModuleRegistry` 保持原样，避免影响 React Native 语义。
 - 示例代码块保持原样，保证后续 Agent 能直接复制和迁移。
+
+---
+
+# skill-template 基础模板补充发现记录
+
+## 当前事实
+
+- `skills/skill-template.md` 已包含用户要求的基础 frontmatter、`metadata.version/env`、`When To Invoke`、可选 Source/How to use 和自定义描述区域。
+- `.codex/skills/create-skill/script/init_skill.py` 的内置模板包含 `Overview`、结构选择、资源目录说明等更完整的 Skill 创建提示。
+- 当前 `docs/skill-system-contract/doc.md` 仍笼统要求模板内聚到维护型 Skill 中，但仓库实际保留了 `skills/skill-template.md` 作为基础作者模板。
+
+## 决策
+
+- 不替换 `skills/skill-template.md` 的基本模板，只在其基础上补充结构指引。
+- 资源说明沿用 `scripts/`、`references/`、`assets/` 三类，并用中文解释适用场景。
+- 文档系统同步承认 `skills/skill-template.md` 是保留的基础 Skill 作者模板，避免规则漂移。
