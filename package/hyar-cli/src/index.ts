@@ -1,8 +1,20 @@
-import { createAdapter, type HyarAdapterInfo } from 'hyar-adapter';
+import {
+  createAdapter,
+  runAdapterPackageTestApi,
+  type HyarAdapterInfo,
+  type HyarAdapterPackageTestResult
+} from 'hyar-adapter';
 
 export interface HyarCliRuntime {
   name: string;
   adapter: HyarAdapterInfo;
+}
+
+export interface HyarCliPackageTestResult {
+  packageName: string;
+  format: string;
+  dependency: HyarAdapterPackageTestResult;
+  ok: boolean;
 }
 
 /**
@@ -22,4 +34,13 @@ export class HyarCli {
 
 export const describeCliRuntime = (): HyarCliRuntime => {
   return new HyarCli().getRuntime();
+};
+
+export const runCliPackageTestApi = (): HyarCliPackageTestResult => {
+  return {
+    packageName: 'hyar-cli',
+    format: 'rollup',
+    dependency: runAdapterPackageTestApi(),
+    ok: true
+  };
 };

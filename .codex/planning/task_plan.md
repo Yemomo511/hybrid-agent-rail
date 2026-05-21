@@ -45,3 +45,12 @@
   - `pnpm test` 成功
   - `git diff --check` 成功
   - 使用中文规范提交，提交信息以 `[AI]` 开头
+
+### 子任务 6：补齐 package 测试 API 与 example 安装验收
+
+- 产物：`example/src/test-api.mjs`、`package/*/src/index.ts`
+- 验收标准：
+  - 每个 package 均通过 Rollup 输出 `dist/index.mjs`、`dist/index.cjs`、`dist/index.d.ts`
+  - `hyar-adapter` 暴露 `runAdapterPackageTestApi`
+  - `hyar-cli` 暴露 `runCliPackageTestApi`，并在内部调用 `hyar-adapter`
+  - `example` 通过已安装的 `hyar-cli` 运行测试 API，并证明链路来自 `hyar-cli -> hyar-adapter`

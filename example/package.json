@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "smoke": "node src/index.mjs"
+    "smoke": "node src/index.mjs",
+    "test:api": "node src/test-api.mjs"
   },
   "dependencies": {
     "hyar-cli": "workspace:*"

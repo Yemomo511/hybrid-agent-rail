@@ -18,7 +18,9 @@ test('root pnpm workspace exposes package and example projects', () => {
   const rootPackage = readJson('package.json');
   assert.equal(rootPackage.packageManager.startsWith('pnpm@'), true);
   assert.equal(rootPackage.scripts.build, 'pnpm -r --filter "./package/*" build');
-  assert.equal(rootPackage.scripts.test, 'pnpm run test:workspace && pnpm run build && pnpm run test:smoke');
+  assert.equal(rootPackage.scripts.test, 'pnpm run test:workspace && pnpm run build && pnpm run test:package-output && pnpm run test:smoke && pnpm run test:example-api');
+  assert.equal(rootPackage.scripts['test:package-output'], 'node --test test/package-output.test.mjs');
+  assert.equal(rootPackage.scripts['test:example-api'], 'pnpm --filter hyar-example test:api');
 });
 
 test('hyar-cli depends on hyar-adapter through the workspace protocol', () => {
@@ -37,4 +39,5 @@ test('example depends on hyar-cli through the workspace protocol', () => {
   assert.equal(examplePackage.private, true);
   assert.equal(examplePackage.dependencies['hyar-cli'], 'workspace:*');
   assert.equal(examplePackage.scripts.smoke, 'node src/index.mjs');
+  assert.equal(examplePackage.scripts['test:api'], 'node src/test-api.mjs');
 });

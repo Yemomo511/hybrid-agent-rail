@@ -7,9 +7,11 @@
   "packageManager": "pnpm@10.33.2",
   "scripts": {
     "build": "pnpm -r --filter \"./package/*\" build",
-    "test": "pnpm run test:workspace && pnpm run build && pnpm run test:smoke",
+    "test": "pnpm run test:workspace && pnpm run build && pnpm run test:package-output && pnpm run test:smoke && pnpm run test:example-api",
     "test:workspace": "node --test test/workspace.test.mjs",
-    "test:smoke": "pnpm --filter hyar-example smoke"
+    "test:package-output": "node --test test/package-output.test.mjs",
+    "test:smoke": "pnpm --filter hyar-example smoke",
+    "test:example-api": "pnpm --filter hyar-example test:api"
   },
   "repository": {
     "type": "git",
