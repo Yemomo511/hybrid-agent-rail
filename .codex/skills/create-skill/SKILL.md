@@ -331,15 +331,18 @@ scripts/init_skill.py my-skill --path skills/public --resources scripts --exampl
 
 ##### Frontmatter
 
-编写包含 `name` 和 `description` 的 YAML frontmatter：
+编写至少包含 `name` 和 `description` 的 YAML frontmatter：
 
 - `name`：Skill 名称
 - `description`：这是 Skill 的主要触发机制，帮助 Agent 理解何时使用该 Skill。
   - 同时包含 Skill 做什么，以及在什么具体触发条件/上下文中使用它。
   - 把所有“何时使用”的信息都写在这里，而不是正文中。正文只有触发后才会加载，所以正文中的 “When to Use This Skill” 章节对 Agent 触发并无帮助。
   - `docx` Skill 的示例 description："Comprehensive document creation, editing, and analysis with support for tracked changes, comments, formatting preservation, and text extraction. Use when Agent needs to work with professional documents (.docx files) for: (1) Creating new documents, (2) Modifying or editing content, (3) Working with tracked changes, (4) Adding comments, or any other document tasks"
+- `metadata`（可选）：仅在需要时使用，并且只允许受支持的子字段：
+  - `metadata.version`
+  - `metadata.env`
 
-不要在 YAML frontmatter 中包含任何其他字段。
+除 `name`、`description` 以及受支持的 `metadata.version` / `metadata.env` 外，不要在 YAML frontmatter 中包含其他任意字段。
 
 ##### Body
 
