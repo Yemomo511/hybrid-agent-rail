@@ -7,7 +7,7 @@
 
 ## 需求开发流程
 - 涉及多模块修改时， 请 `git worktree` 完成对应工作，需求完成后删除对应的`worktree`
-- 任何针对npm环境，如新增npm依赖，修改package.json, 需要在删除`worktree`后，切换到对应的开发分支，将`worktree`的环境同步到本地后进行之前在`worktree`中同样测试，只有这个测试完成后才能算结束。
+- 任何针对npm环境，如新增npm依赖，修改package.json, 需要在删除`worktree`后，切换到对应的开发分支，将`worktree`的环境同步到本地后进行之前在`worktree`中同样测试，只有这个测试完成后才能算结束。**开发分支测试结束后， 请及时切回主分支**
 
 
 ## Reference
