@@ -9,6 +9,12 @@
   - keywords: curated Skill, 精选 Skill, Source 必选, How to use 模板, create-curated-skill
   - doc_type: contract
 
+- [Flutter Curated Skills](flutter-curated-skills.md)
+  - name: flutter-curated-skills
+  - description: 记录 Flutter 官方 Skills 在 Hybrid Agent Rail 中的精选目录、来源和维护边界。
+  - keywords: Flutter 官方 Skill, flutter/skills, skills/flutter, Flutter 精选 Skill, curated Skill
+  - doc_type: contract
+
 - [Hybrid Written Plan Skill](hybrid-written-plan-skill.md)
   - name: hybrid-written-plan-skill
   - description: 说明 hybrid-written-plan Skill 如何补充上游 writing-plans 的跨端原生与桥接决策。
