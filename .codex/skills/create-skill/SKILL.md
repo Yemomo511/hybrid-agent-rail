@@ -1,11 +1,11 @@
 ---
-name: skill-creator
+name: create-skill
 description: 创建有效 Skill 的指南。当用户想创建新 Skill，或更新现有 Skill，以通过专门知识、工作流或工具集成扩展 Agent 能力时，应使用此 Skill。
 metadata:
   short-description: 创建或更新 Skill
 ---
 
-# Skill Creator
+# Create Skill
 
 这个 Skill 用于指导如何创建有效的 Skill。
 
