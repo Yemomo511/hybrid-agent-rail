@@ -382,3 +382,42 @@
 - 验收标准：
   - Skill 说明和文档契约均描述 metadata 元数据形态。
   - `metadata.test.mjs`、示例 validator、文档 validator、`git diff --check` 均通过。
+
+---
+
+# create-skill good-example TurboModule 完善计划
+
+## 总目标
+
+完善 `.codex/skills/create-skill/reference/good-example/SKILL.md`，让它成为符合 Skill Creator 原则的 React Native TurboModule 好例子，并严格贴合 React Native 0.79 官方 Turbo Native Modules 指导链路。
+
+## 子任务与验收标准
+
+### 子任务 1：读取现有 Skill 形态与官方文档
+
+- 产物：上下文事实记录。
+- 验收标准：
+  - 确认 good-example 当前仍是占位模板。
+  - 确认官方 RN 0.79 TurboModule 关键步骤：TS Spec、Codegen、JS 使用、Android/iOS 原生实现与注册。
+
+### 子任务 2：重写 good-example SKILL
+
+- 产物：`.codex/skills/create-skill/reference/good-example/SKILL.md`
+- 验收标准：
+  - frontmatter 使用 `metadata.version` / `metadata.env`。
+  - 正文包含触发时机、工作流、关键文件、平台实现规则、验证命令和 Good Example。
+  - 不保留 `<Skill Name>`、`<Custom Description>` 等模板占位符。
+
+### 子任务 3：同步文档系统
+
+- 产物：`docs/skill-system-contract/doc.md`
+- 验收标准：
+  - 文档说明 `.codex/skills/create-skill/reference/good-example` 是 create-skill 内聚的好例子资源。
+  - 文档校验与 Knowledge 同步校验通过。
+
+### 子任务 4：验证并提交
+
+- 验收标准：
+  - `python3 .codex/skills/create-skill/script/quick_validate.py .codex/skills/create-skill/reference/good-example` 通过或说明脚本为空。
+  - `git diff --check` 通过。
+  - 使用中文规范提交，提交信息以 `[AI]` 开头。

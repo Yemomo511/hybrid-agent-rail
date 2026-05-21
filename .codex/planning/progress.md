@@ -91,3 +91,14 @@
 - [x] 改造校验器 metadata 解析与字段约束
 - [x] 同步文档系统
 - [x] 运行验证并提交
+
+---
+
+# create-skill good-example TurboModule 完善进度
+
+- [x] 使用 Skill Creator 并读取 create-skill 现状
+- [x] 查阅 React Native 0.79 Turbo Native Modules 官方文档
+- [x] 拆分子任务与验收标准
+- [x] 重写 good-example SKILL
+- [x] 同步文档系统
+- [x] 运行验证并提交

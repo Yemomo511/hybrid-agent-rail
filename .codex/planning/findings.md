@@ -146,3 +146,20 @@
 - `name`、`description` 继续作为 frontmatter 顶层必选字段。
 - `version`、`env` 迁移为 `metadata` 下的一层可选字段，用来展示框架版本兼容和跨端环境要求。
 - 校验器只实现当前模板需要的一层 metadata 解析，不引入 YAML 依赖，避免扩大 npm 环境变更范围。
+
+---
+
+# create-skill good-example TurboModule 完善发现记录
+
+## 当前事实
+
+- `.codex/skills/create-skill/reference/good-example/SKILL.md` 存在但仍保留 `<Skill Name>`、`<Skill Github Url>`、`<Custom Description>` 等模板占位内容。
+- React Native 0.79 官方 Turbo Native Modules 文档把实现链路拆为：声明 typed JS/TS Spec、配置 Codegen、用 Spec 写 JS 业务调用、用生成接口实现并接入原生平台。
+- RN 0.79 文档示例强调 Spec 文件名应以 `Native` 前缀命名，`codegenConfig.type` 使用 `modules`，Android 可通过 Gradle `generateCodegenArtifactsFromSchema` 生成产物，iOS 通过 CocoaPods script phase 运行 Codegen。
+- 官方 0.79 iOS 示例使用 Objective-C++ 类实现 generated Spec，并通过 `codegenConfig.ios.modulesProvider` 绑定 JS module name 到原生实现类。
+
+## 决策
+
+- good-example 作为 create-skill 的参考样板，不额外拆分 reference 文件，保持一个可读的完整 SKILL 示例。
+- TurboModule Skill 默认面向 RN New Architecture；如果项目需要 Legacy Architecture 兼容，要求先走兼容性设计，不把旧桥和 TurboModule 混写成默认路径。
+- iOS 指导以 Objective-C++ 注册和实现为主；Swift 只作为业务实现可被 Objective-C++ 适配层调用的可选内部实现。
