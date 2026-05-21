@@ -16,7 +16,7 @@ source_path: skills/flutter
 - 当审核 `skills/flutter/` 是否仍与官方 README 的 Available Skills 保持一致时。
 
 ## Content
-`skills/flutter/` 存放从 Flutter 官方 `flutter/skills` 精选的 Skill Markdown。每个文件只保留触发描述、上游来源和严格的安装/调用说明，不复制完整上游 bundle 的脚本、资源或参考资料。
+`skills/flutter/` 存放从 Flutter 官方 `flutter/skills` 精选的 Skill 文件夹。每个文件夹以 Skill 名称命名，并包含一个 `SKILL.md`，只保留触发描述、上游来源和严格的安装/调用说明，不复制完整上游 bundle 的脚本、资源或参考资料。
 
 当前目录覆盖 Flutter 官方 README 中列出的 10 个 Available Skills：
 
@@ -34,7 +34,7 @@ source_path: skills/flutter
 新增或更新文件时必须使用 `.codex/skills/create-curated-skill/` 的内部模板，并运行：
 
 ```bash
-node .codex/skills/create-curated-skill/validate.mjs skills/flutter/<skill-name>.md
+node .codex/skills/create-curated-skill/validate.mjs skills/flutter/<skill-name>
 ```
 
 如果需要完整上游工作流，应根据每个 curated Skill 的 `Source` URL 安装或查看 Flutter 官方 bundle，而不是在本仓库重复维护上游脚本。

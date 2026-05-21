@@ -11,7 +11,7 @@ source_path: .codex/skills/create-curated-skill/SKILL.md, .codex/skills/create-c
 说明精选外部 Skill 进入 `skills/` 时必须遵循的模板和校验规则，避免 curated Skill 格式漂移。
 
 ## Applies To
-- 当需要把外部 Skill、上游 Skill bundle 或框架官方 Skill 精选为 `skills/<name>.md` 时。
+- 当需要把外部 Skill、上游 Skill bundle 或框架官方 Skill 精选为 `skills/<category>/<name>/SKILL.md` 时。
 - 当修改 `.codex/skills/create-curated-skill/` 的模板、示例、校验器或输出规则时。
 - 当审核 `skills/` 下 curated Skill 是否符合仓库约定时。
 
@@ -20,19 +20,20 @@ source_path: .codex/skills/create-curated-skill/SKILL.md, .codex/skills/create-c
 
 curated Skill 的稳定契约包括：
 
-1. 文件必须位于 `skills/`，文件名与 frontmatter `name` 保持一致。
-2. frontmatter 必须包含 `name` 和 `description`，只允许按需补充 `version`、`env`。
-3. 正文必须包含 `## <name>`、`> Curated from ...`、`## Source`、`## How to use`。
-4. `## Source` 是必选章节，必须写 `- Upstream: http(s)://...`，不允许继续使用 `## Source<可选>`。
-5. `## How to use` 必须严格遵循模板句式，只允许替换发现时机简述、上游 URL 和 Skill Name。
+1. 产物必须是 Skill 文件夹，入口文件必须是 `skills/<category>/<name>/SKILL.md`。
+2. Skill 文件夹名必须与 frontmatter `name` 保持一致。
+3. frontmatter 必须包含 `name` 和 `description`，只允许按需补充 `version`、`env`。
+4. 正文必须包含 `## <name>`、`> Curated from ...`、`## Source`、`## How to use`。
+5. `## Source` 是必选章节，必须写 `- Upstream: http(s)://...`，不允许继续使用 `## Source<可选>`。
+6. `## How to use` 必须严格遵循模板句式，只允许替换发现时机简述、上游 URL 和 Skill Name。
 
 完成 curated Skill 后，必须运行：
 
 ```bash
-node .codex/skills/create-curated-skill/validate.mjs skills/<name>.md
+node .codex/skills/create-curated-skill/validate.mjs skills/<category>/<name>
 ```
 
-该校验器只审核 curated Skill Markdown 的结构、字段、模板残留和跨字段一致性，不判断上游 Skill 内容质量。上游是否真的适合精选，仍需要开发者基于来源可信度和跨端场景价值判断。
+该校验器只审核 curated Skill 文件夹、`SKILL.md` 结构、字段、模板残留和跨字段一致性，不判断上游 Skill 内容质量。上游是否真的适合精选，仍需要开发者基于来源可信度和跨端场景价值判断。
 
 ## Update When
 - curated Skill 的模板、示例、必选章节或 frontmatter 字段变化。

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { existsSync, readFileSync } from 'node:fs';
-import { basename, relative, resolve } from 'node:path';
+import { existsSync, readFileSync, statSync } from 'node:fs';
+import { basename, dirname, relative, resolve } from 'node:path';
 
 const REQUIRED_META = ['name', 'description'];
 const ALLOWED_META = new Set(['name', 'description', 'version', 'env']);
@@ -17,23 +17,24 @@ const PLACEHOLDER_PATTERNS = [
 
 class CuratedSkillValidator {
   /**
-   * @description 校验 curated Skill Markdown 是否符合精选模板契约。
+   * @description 校验 curated Skill 文件夹是否符合精选模板契约。
    */
-  validate(filePath) {
+  validate(inputPath) {
     const errors = [];
-    const absolutePath = resolve(process.cwd(), filePath);
+    const resolvedInputPath = resolve(process.cwd(), inputPath);
+    const absolutePath = this.resolveSkillFile(resolvedInputPath);
     const repoRelativePath = relative(process.cwd(), absolutePath);
 
     if (!existsSync(absolutePath)) {
-      return [`Curated Skill not found: ${filePath}`];
+      return [`Curated Skill not found: ${inputPath}`];
     }
 
     if (!repoRelativePath.startsWith('skills/')) {
       errors.push(`Curated Skill must be under skills/: ${repoRelativePath}`);
     }
 
-    if (!filePath.endsWith('.md')) {
-      errors.push(`Curated Skill must be a Markdown file: ${filePath}`);
+    if (basename(repoRelativePath) !== 'SKILL.md') {
+      errors.push(`Curated Skill entrypoint must be SKILL.md: ${repoRelativePath}`);
     }
 
     const content = readFileSync(absolutePath, 'utf8');
@@ -48,6 +49,21 @@ class CuratedSkillValidator {
     errors.push(...this.validateNoPlaceholders(content));
 
     return errors;
+  }
+
+  /**
+   * @description 兼容传入 Skill 文件夹或 SKILL.md 文件路径。
+   */
+  resolveSkillFile(inputPath) {
+    if (!existsSync(inputPath)) {
+      return inputPath;
+    }
+
+    if (statSync(inputPath).isDirectory()) {
+      return resolve(inputPath, 'SKILL.md');
+    }
+
+    return inputPath;
   }
 
   /**
@@ -107,10 +123,10 @@ class CuratedSkillValidator {
       errors.push(`name must use lowercase letters, digits, and hyphens: ${frontmatter.name}`);
     }
 
-    if (frontmatter.name && repoRelativePath !== 'skills/curated-skill-example.md') {
-      const expectedFileName = `${frontmatter.name}.md`;
-      if (basename(repoRelativePath) !== expectedFileName) {
-        errors.push(`File name must match frontmatter name: expected ${expectedFileName}`);
+    if (frontmatter.name) {
+      const skillFolderName = basename(dirname(repoRelativePath));
+      if (skillFolderName !== frontmatter.name) {
+        errors.push(`Skill folder name must match frontmatter name: expected ${frontmatter.name}`);
       }
     }
 
@@ -237,7 +253,7 @@ class CuratedSkillValidator {
 }
 
 const printUsage = () => {
-  console.error('Usage: node .codex/skills/create-curated-skill/validate.mjs skills/<skill-name>.md');
+  console.error('Usage: node .codex/skills/create-curated-skill/validate.mjs skills/<category>/<skill-name>');
 };
 
 const main = () => {
