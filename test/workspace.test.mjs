@@ -1,6 +1,5 @@
-import assert from 'node:assert/strict';
+import { expect, test } from '@jest/globals';
 import { existsSync, readFileSync } from 'node:fs';
-import test from 'node:test';
 import { join } from 'node:path';
 
 const root = process.cwd();
@@ -9,35 +8,36 @@ const readJson = (path) => JSON.parse(readFileSync(join(root, path), 'utf8'));
 const readText = (path) => readFileSync(join(root, path), 'utf8');
 
 test('root pnpm workspace exposes package and example projects', () => {
-  assert.equal(existsSync(join(root, 'pnpm-workspace.yaml')), true);
+  expect(existsSync(join(root, 'pnpm-workspace.yaml'))).toBe(true);
 
   const workspace = readText('pnpm-workspace.yaml');
-  assert.match(workspace, /package\/\*/);
-  assert.match(workspace, /example/);
+  expect(workspace).toMatch(/package\/\*/);
+  expect(workspace).toMatch(/example/);
 
   const rootPackage = readJson('package.json');
-  assert.equal(rootPackage.packageManager.startsWith('pnpm@'), true);
-  assert.equal(rootPackage.scripts.build, 'pnpm -r --filter "./package/*" build');
-  assert.equal(rootPackage.scripts.test, 'pnpm run test:workspace && pnpm run build && pnpm run test:package-output && pnpm run test:smoke && pnpm run test:example-api');
-  assert.equal(rootPackage.scripts['test:package-output'], 'node --test test/package-output.test.mjs');
-  assert.equal(rootPackage.scripts['test:example-api'], 'pnpm --filter hyar-example test:api');
+  expect(rootPackage.packageManager.startsWith('pnpm@')).toBe(true);
+  expect(rootPackage.scripts.build).toBe('pnpm -r --filter "./package/*" build');
+  expect(rootPackage.scripts.test).toBe('pnpm run test:workspace && pnpm run build && pnpm run test:package-output && pnpm run test:smoke && pnpm run test:example-api');
+  expect(rootPackage.scripts['test:workspace']).toBe('NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/workspace.test.mjs --watchman=false');
+  expect(rootPackage.scripts['test:package-output']).toBe('NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/package-output.test.mjs --watchman=false');
+  expect(rootPackage.scripts['test:example-api']).toBe('pnpm --filter hyar-example test:api');
 });
 
 test('hyar-cli depends on hyar-adapter through the workspace protocol', () => {
   const adapterPackage = readJson('package/hyar-adapter/package.json');
   const cliPackage = readJson('package/hyar-cli/package.json');
 
-  assert.equal(adapterPackage.name, 'hyar-adapter');
-  assert.equal(cliPackage.name, 'hyar-cli');
-  assert.equal(cliPackage.dependencies['hyar-adapter'], 'workspace:*');
+  expect(adapterPackage.name).toBe('hyar-adapter');
+  expect(cliPackage.name).toBe('hyar-cli');
+  expect(cliPackage.dependencies['hyar-adapter']).toBe('workspace:*');
 });
 
 test('example depends on hyar-cli through the workspace protocol', () => {
   const examplePackage = readJson('example/package.json');
 
-  assert.equal(examplePackage.name, 'hyar-example');
-  assert.equal(examplePackage.private, true);
-  assert.equal(examplePackage.dependencies['hyar-cli'], 'workspace:*');
-  assert.equal(examplePackage.scripts.smoke, 'node src/index.mjs');
-  assert.equal(examplePackage.scripts['test:api'], 'node src/test-api.mjs');
+  expect(examplePackage.name).toBe('hyar-example');
+  expect(examplePackage.private).toBe(true);
+  expect(examplePackage.dependencies['hyar-cli']).toBe('workspace:*');
+  expect(examplePackage.scripts.smoke).toBe('node src/index.mjs');
+  expect(examplePackage.scripts['test:api']).toBe('node src/test-api.mjs');
 });
