@@ -12,11 +12,12 @@
 - 包名采用用户给出的无 scope 名称：`hyar-cli`、`hyar-adapter`。
 - `example` 包命名为 `hyar-example`，通过 workspace 协议依赖 `hyar-cli`。
 - 包构建使用 Rollup，符合仓库前端开发规范中 npm package 打包工具要求。
-- 单元测试统一切换到 Jest；当前已有测试均为 `.mjs`，因此不引入 `ts-jest` 或 Babel 转译链路。
-- Jest 运行 ESM `.mjs` 测试时通过 `NODE_OPTIONS=--experimental-vm-modules` 显式启用 VM Modules，并追加 `--watchman=false` 避免本机 Watchman 权限噪声影响验收。
+- 单元测试统一切换到 Jest；当前已有测试均为 `.test.ts`，通过 `ts-jest` 转译执行。
+- Jest 运行 ESM TypeScript 测试时通过 `NODE_OPTIONS=--experimental-vm-modules` 显式启用 VM Modules，并追加 `--watchman=false` 避免本机 Watchman 权限噪声影响验收。
 - 原有 `pnpm test` 总流程保持不变，仍按 workspace 测试、构建、产物测试、example smoke、example API 的顺序验收。
 - 用户进一步要求 Jest 测试文件统一使用 TypeScript，因此补充 `ts-jest`，并将已有 `.mjs` 测试迁移为 `.test.ts`。
 - 迁移后 Rollup package 构建需要限制 TypeScript 插件输入范围到当前 package 的 `src/**/*.ts`，避免根目录测试文件影响 package 构建。
+- 测试文档入口使用 `test/AGENTS.md`，用于沉淀 Jest TypeScript 测试文件规范、脚本职责与验收命令。
 
 ## 验证记录
 

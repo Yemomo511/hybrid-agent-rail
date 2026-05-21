@@ -27,3 +27,4 @@
 - [x] 更新 Jest 配置与根测试脚本指向 TypeScript 测试
 - [x] 验证 TypeScript Jest 测试链路
 - [x] 提交 Jest 测试 TypeScript 化
+- [x] 同步测试文档说明

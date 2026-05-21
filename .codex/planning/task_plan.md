@@ -8,7 +8,7 @@
 
 ### 子任务 1：建立 workspace 结构验收
 
-- 产物：`test/workspace.test.mjs`
+- 产物：`test/workspace.test.ts`
 - 验收标准：
   - 测试能检查根目录 `pnpm-workspace.yaml`
   - 测试能检查根包脚本、package 目录、example 目录
@@ -60,12 +60,12 @@
 - 产物：`package.json`、`pnpm-lock.yaml`、`jest.config.mjs`
 - 验收标准：
   - 根开发依赖包含 `jest`
-  - Jest 配置使用 Node 测试环境并匹配 `test/**/*.test.mjs`
+  - Jest 配置使用 Node 测试环境并匹配 `test/**/*.test.ts`
   - 根测试脚本不再使用 `node --test`
 
 ### 子任务 8：迁移已有单元测试到 Jest 断言风格
 
-- 产物：`test/workspace.test.mjs`、`test/package-output.test.mjs`
+- 产物：`test/workspace.test.ts`、`test/package-output.test.ts`
 - 验收标准：
   - 测试用例从 `node:test` 与 `node:assert/strict` 迁移到 `@jest/globals`
   - 原有 workspace、脚本、依赖链、构建产物验收语义保持不变
@@ -88,3 +88,11 @@
   - Jest 配置能通过 `ts-jest` 执行 TypeScript 测试
   - 根测试脚本指向 `.test.ts` 测试文件
   - 原有 workspace、脚本、依赖链、构建产物验收语义保持不变
+
+### 子任务 11：同步测试文档
+
+- 产物：`test/AGENTS.md`
+- 验收标准：
+  - 文档说明 Jest 测试统一使用 `.test.ts`
+  - 文档列出 `test:workspace`、`test:package-output` 与 `pnpm test` 的职责
+  - 文档说明 `ts-jest`、ESM VM Modules、`--watchman=false` 和 Rollup package 构建输入范围约定
