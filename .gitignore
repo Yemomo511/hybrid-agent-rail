@@ -1,5 +1,39 @@
+# Dependencies
 node_modules/
+**/node_modules/
+
+# Build output
 dist/
 package/*/dist/
+coverage/
+*.tsbuildinfo
 
+# Package manager caches
+.pnpm-store/
+.npm/
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# Runtime logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local environment
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Local agent/planning artifacts
+.temp/
+.codex/planning/
+
+# Editor and OS files
 .DS_Store
+.idea/
+.vscode/
