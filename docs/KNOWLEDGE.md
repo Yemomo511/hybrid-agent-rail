@@ -3,6 +3,36 @@
 
 ## Source
 
+- [Document System Contract](document-system-contract.md)
+  - name: document-system-contract
+  - description: 说明 Hybrid Agent Rail 文档系统的写入边界、索引规则和校验要求。
+  - keywords: 文档系统, 文档治理, KNOWLEDGE, create-doc, 防止漂移
+  - doc_type: contract
+
+- [Hybrid Agent Rail Architecture](hybrid-agent-rail-architecture.md)
+  - name: hybrid-agent-rail-architecture
+  - description: 说明 Hybrid Agent Rail 当前模块架构、资源分层和主要数据流。
+  - keywords: 项目架构, Hybrid Agent Rail, 模块分层, package, Skill 系统
+  - doc_type: knowledge
+
+- [Workspace Package Contract](workspace-package-contract.md)
+  - name: workspace-package-contract
+  - description: 说明 pnpm workspace、Rollup package 构建和跨包依赖契约。
+  - keywords: pnpm workspace, package 构建, Rollup, hyar-cli, hyar-adapter
+  - doc_type: contract
+
+- [Skill System Contract](skill-system-contract.md)
+  - name: skill-system-contract
+  - description: 说明 Hyar Skill 资源、维护型 Skill 和 curated Skill 文件夹的组织契约。
+  - keywords: Skill 系统, curated Skill, .codex/skills, skills/flutter, Agent 能力资源
+  - doc_type: contract
+
+- [Test Validation Contract](test-validation-contract.md)
+  - name: test-validation-contract
+  - description: 说明当前测试分层、验收入口和已知环境门禁边界。
+  - keywords: 测试门禁, pnpm test, Jest, ts-jest, package-output, example smoke
+  - doc_type: contract
+
 - [Create Curated Skill Contract](create-curated-skill-contract.md)
   - name: create-curated-skill-contract
   - description: 说明 curated Skill 的创建模板、必选 Source 和严格 How to use 校验契约。
@@ -13,10 +43,4 @@
   - name: flutter-curated-skills
   - description: 记录 Flutter 官方 Skills 在 Hybrid Agent Rail 中的精选目录、来源和维护边界。
   - keywords: Flutter 官方 Skill, flutter/skills, skills/flutter, Flutter 精选 Skill, curated Skill
-  - doc_type: contract
-
-- [Hybrid Written Plan Skill](hybrid-written-plan-skill.md)
-  - name: hybrid-written-plan-skill
-  - description: 说明 hybrid-written-plan Skill 如何补充上游 writing-plans 的跨端原生与桥接决策。
-  - keywords: 跨端计划, 原生修改判断, 桥接形式选择, writing-plans补充, hybrid-written-plan
   - doc_type: contract
