@@ -131,3 +131,13 @@
 - [x] 同步 `Upstream Skill` 模板语义
 - [x] 同步 create-skill 说明和文档系统
 - [x] 运行正反向验证并提交
+
+---
+
+# create-skill curated Skill 防误改进度
+
+- [x] 确认 `skills/flutter/*` curated Skill 包含 `> Curated from ...`
+- [x] 在 `init_skill.py` 增加 curated 路径防护
+- [x] 在 `quick_validate.py` 增加 curated 路径和内容防护
+- [x] 同步 create-skill 说明与文档系统
+- [x] 运行验证并提交

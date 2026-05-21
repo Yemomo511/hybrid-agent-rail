@@ -209,3 +209,18 @@
 - 移除 `agents/openai.yaml` 生成链路，生成产物固定为 `SKILL.md` 和可选资源目录。
 - `quick_validate.py` 采用默认/strict 双模式，兼顾刚生成的模板和完成后的 Skill。
 - 校验器显式拒绝将文档、API、模块、页面、参考资料写入 `Upstream Skill`。
+
+---
+
+# create-skill curated Skill 防误改发现记录
+
+## 当前事实
+
+- `skills/flutter/*/SKILL.md` 是 curated Skill，正文包含 `> Curated from ...`，并保留严格 `Source` 与 `How to use` 模板。
+- `create-skill` 生成的是普通 repo-local Skill 模板，不能套用到 curated Skill。
+
+## 决策
+
+- 将 `skills/flutter` 作为当前仓库的 curated Skill 路径防护。
+- `quick_validate.py` 同时用路径和 `> Curated from ...` 内容识别 curated Skill。
+- 遇到 curated Skill 时统一提示使用 `create-curated-skill`。

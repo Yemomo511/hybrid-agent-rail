@@ -79,6 +79,13 @@ skill-name/
 - 普通文档、API 页面、模块说明、框架资料应放入 `references/` 或正文参考说明，**不得**写入 `Upstream Skill`。
 - 请假设上游 Skill 很强大，能够控制基础流程；补充知识时反问自己缺失这些内容时上游 Skill 是否仍能正常运行。
 
+#### Curated Skill 禁止修改
+`create-skill` 不能创建、修改或校验 curated Skill。curated Skill 的模板非常严格，通常包含 `> Curated from ...`，例如 `skills/flutter/*/SKILL.md`。
+
+- 遇到 curated Skill 时，改用 `create-curated-skill`。
+- 不要把 curated Skill 改写成普通 repo-local Skill 模板。
+- 不要删除或改写 curated Skill 的 `> Curated from ...`、`## Source`、严格 `## How to use` 结构。
+
 #### 捆绑资源（可选）
 
 ##### Scripts（`scripts/`）
@@ -280,6 +287,8 @@ Skill 创建包含以下步骤：
 
 从零创建新 Skill 时，始终运行 `init_skill.py` 脚本。该脚本会生成一个标准 Skill 文件夹，包含必需的 `SKILL.md`，并按需创建 `scripts/`、`references/`、`assets/` 资源目录。
 
+不要使用 `init_skill.py` 在 curated Skill 目录中创建 Skill，例如 `skills/flutter/*`。这些目录由 `create-curated-skill` 维护。
+
 用法：
 
 ```bash
@@ -357,6 +366,7 @@ scripts/quick_validate.py --strict <path/to/skill-folder>
 - Skill 文件夹名必须等于 frontmatter `name`
 - 可选资源目录只能是 `scripts/`、`references/`、`assets/`
 - `Upstream Skill` 只能表示 Skill-to-Skill 依赖和补充关系，不能指向普通文档、API、模块或页面
+- curated Skill 会被拒绝；检测到 `> Curated from ...` 或 `skills/flutter/*` 时，应改用 `create-curated-skill`
 - strict 模式会拒绝模板占位符和未完成内容
 
 如果验证失败，修复报告的问题并再次运行命令。

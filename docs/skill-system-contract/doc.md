@@ -24,11 +24,11 @@ source_path: skills/AGENTS.md, skills/README.md, .codex/skills, skills
 - `create-curated-skill`：把外部 Skill 精选为 Hyar 规范下的 Skill 文件夹。
 - `create-skill`：创建 repo-local Skill，并在 `reference/good-example` 内维护可对照的完整好例子。
 
-`create-skill` 的标准产物是一个 Skill 文件夹，至少包含 `SKILL.md`，并且只允许按需补充 `scripts/`、`references/`、`assets/` 三类资源目录。`skills/skill-template.md` 是基础 Skill 作者模板，也是 `create-skill` 生成模板的权威参考。
+`create-skill` 的标准产物是一个 Skill 文件夹，至少包含 `SKILL.md`，并且只允许按需补充 `scripts/`、`references/`、`assets/` 三类资源目录。`skills/skill-template.md` 是基础 Skill 作者模板，也是 `create-skill` 生成模板的权威参考。`create-skill` 不得创建、修改或校验 curated Skill。
 
 `Upstream Skill` 只表示当前 Skill 依赖并补充另一个 Skill。普通文档、API 页面、模块路径或参考资料不能写入 `Upstream Skill`，应放入 `references/` 或正文参考说明。
 
-curated Skill 必须是文件夹形态：
+curated Skill 必须是文件夹形态，通常包含 `> Curated from ...`，例如 `skills/flutter/*/SKILL.md`：
 
 ```text
 skills/<category>/<skill-name>/SKILL.md

@@ -15,6 +15,7 @@ ALLOWED_FRONTMATTER = {"name", "description", "metadata"}
 ALLOWED_METADATA = {"version", "env"}
 ALLOWED_RESOURCE_DIRS = {"scripts", "references", "assets"}
 DISALLOWED_RESOURCE_DIRS = {"script", "reference", "asset"}
+CURATED_SKILL_PATH_PARTS = [("skills", "flutter")]
 PLACEHOLDER_PATTERNS = [
     re.compile(r"<[^>\n]+>"),
     re.compile(r"\bTODO\b", re.IGNORECASE),
@@ -52,6 +53,9 @@ class SkillValidator:
             return [f"SKILL.md must be a file: {skill_file}"]
 
         content = skill_file.read_text(encoding="utf-8")
+        curated_errors = self.validate_not_curated_skill(resolved, content)
+        if curated_errors:
+            return curated_errors
         parsed = self.parse_frontmatter(content)
         if not parsed:
             return ["SKILL.md must start with YAML frontmatter delimited by ---"]
@@ -64,6 +68,14 @@ class SkillValidator:
         if strict:
             errors.extend(self.validate_no_placeholders(content))
 
+        return errors
+
+    def validate_not_curated_skill(self, skill_dir, content):
+        errors = []
+        if self.is_curated_skill_path(skill_dir):
+            errors.append("create-skill must not validate or modify curated Skills; use create-curated-skill instead")
+        if re.search(r"^>\s*Curated from\s+\S.+$", content, re.MULTILINE):
+            errors.append("Curated Skill format detected: > Curated from ...; use create-curated-skill instead")
         return errors
 
     def parse_frontmatter(self, content):
@@ -224,6 +236,14 @@ class SkillValidator:
 
     def title_case(self, skill_name):
         return " ".join(word.capitalize() for word in skill_name.split("-"))
+
+    def is_curated_skill_path(self, path):
+        parts = path.resolve().parts
+        for curated_parts in CURATED_SKILL_PATH_PARTS:
+            for index in range(0, len(parts) - len(curated_parts) + 1):
+                if parts[index : index + len(curated_parts)] == curated_parts:
+                    return True
+        return False
 
 
 def main():

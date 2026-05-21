@@ -504,3 +504,28 @@
   - 说明 `Upstream Skill` 不是文档/API/模块来源。
   - 说明默认校验与 strict 校验使用时机。
   - 文档系统校验通过。
+
+---
+
+# create-skill curated Skill 防误改计划
+
+## 总目标
+
+补充 `create-skill` 的 curated Skill 防误改约束，确保它不能创建、修改或校验 `skills/flutter/*` 这类严格 curated Skill。
+
+## 子任务与验收标准
+
+### 子任务 1：增加脚本防护
+
+- 产物：`.codex/skills/create-skill/script/init_skill.py`、`.codex/skills/create-skill/script/quick_validate.py`
+- 验收标准：
+  - `init_skill.py --path skills/flutter` 失败，并提示使用 `create-curated-skill`。
+  - `quick_validate.py skills/flutter/<name>` 失败。
+  - `quick_validate.py` 检测到 `> Curated from ...` 失败。
+
+### 子任务 2：同步说明与文档系统
+
+- 产物：`.codex/skills/create-skill/SKILL.md`、`docs/skill-system-contract/doc.md`
+- 验收标准：
+  - 明确 curated Skill 通常包含 `> Curated from ...`。
+  - 明确 `create-skill` 不得修改 curated Skill。

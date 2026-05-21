@@ -18,6 +18,7 @@ from pathlib import Path
 
 MAX_SKILL_NAME_LENGTH = 64
 ALLOWED_RESOURCES = {"scripts", "references", "assets"}
+CURATED_SKILL_PATH_PARTS = [("skills", "flutter")]
 
 SKILL_TEMPLATE = """---
 name: {skill_name}
@@ -222,11 +223,26 @@ def create_resource_dirs(skill_dir, skill_name, skill_title, resources, include_
                 print("[OK] Created assets/")
 
 
+def is_curated_skill_path(path):
+    parts = path.resolve().parts
+    for curated_parts in CURATED_SKILL_PATH_PARTS:
+        for index in range(0, len(parts) - len(curated_parts) + 1):
+            if parts[index : index + len(curated_parts)] == curated_parts:
+                return True
+    return False
+
+
 def init_skill(skill_name, path, resources, include_examples):
     """
     Initialize a new skill directory with SKILL.md and optional resources.
     """
-    skill_dir = Path(path).resolve() / skill_name
+    output_dir = Path(path).resolve()
+    if is_curated_skill_path(output_dir):
+        print("[ERROR] create-skill must not create or modify curated Skills.")
+        print("        Use create-curated-skill for curated folders such as skills/flutter/*.")
+        return None
+
+    skill_dir = output_dir / skill_name
 
     if skill_dir.exists():
         print(f"[ERROR] Skill directory already exists: {skill_dir}")
