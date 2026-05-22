@@ -186,3 +186,15 @@
 - [x] 运行 Skill 校验、文档校验和门禁检查
 - [x] 运行 diff 检查
 - [x] 提交变更
+
+---
+
+# react-native Skill 精简优化进度
+
+- [x] 读取 create-skill、skills/AGENTS、docs/AGENTS 和现有 React Native Skill
+- [x] 拆分子任务与验收标准
+- [x] 精简 `rn-create-app`
+- [x] 精简 `rn-newarch-modules-create`
+- [x] 记录文档治理判断
+- [x] 运行 Skill 校验与 diff 检查
+- [x] 提交变更

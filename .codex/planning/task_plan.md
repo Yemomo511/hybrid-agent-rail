@@ -664,3 +664,36 @@
   - `rg` 验证“不确定架构禁止创建”类门禁存在。
   - `git diff --check` 通过。
   - 使用中文规范提交，提交信息以 `[AI]` 开头。
+
+---
+
+# react-native Skill 精简优化任务计划
+
+## 总目标
+
+压缩 `skills/react-native` 下已有 Skill 正文，删除教程式和重复描述，只保留触发、停止、执行、参考路由和反模式等必要指令。
+
+## 子任务与验收标准
+
+### 子任务 1：精简 `rn-create-app`
+
+- 产物：`skills/react-native/rn-create-app/SKILL.md`
+- 验收标准：
+  - 保留创建 RN App 前必须确认的初始化路径、架构、版本、平台和包管理器。
+  - 保留 Expo、Community CLI、既有原生 App 集成三条路径的必要分流。
+  - 删除冗长示例和重复解释。
+
+### 子任务 2：精简 `rn-newarch-modules-create`
+
+- 产物：`skills/react-native/rn-newarch-modules-create/SKILL.md`
+- 验收标准：
+  - 保留 RN 版本、模块形态、平台范围、架构目标、JS spec、原生依赖的停止规则。
+  - 保留 Android/iOS/C++ 的 reference 路由和最小验收要求。
+  - 保留 RN `0.74+` 未明确新架构时需要先确认的门禁。
+
+### 子任务 3：验证和文档治理判断
+
+- 验收标准：
+  - 两个 Skill 的 strict 校验通过。
+  - `git diff --check` 通过。
+  - 根据 `docs/AGENTS.md` 判断本次只修改单个 Skill 说明，不进入长期文档系统。

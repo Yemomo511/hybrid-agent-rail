@@ -316,3 +316,19 @@
 - `python3 .codex/skills/create-skill/script/quick_validate.py .temp/create-skill-test/skills/root-skill` 按预期失败，拒绝根层普通 Skill。
 - `python3 .codex/skills/create-skill/script/quick_validate.py skills/flutter/flutter-add-widget-test` 按预期失败，保持 curated Skill 防误改。
 - `git diff --check` 通过。
+
+---
+
+# react-native Skill 精简优化发现记录
+
+## 当前事实
+
+- `skills/react-native/rn-create-app/SKILL.md` 原正文包含较多解释性段落、命令展开和 Good Example，核心门禁可用更短清单表达。
+- `skills/react-native/rn-newarch-modules-create/SKILL.md` 原正文同时描述 Overview、Workflow 和 Good Example，存在与 Stop Rule/Reference Routing 重复的信息。
+- `docs/AGENTS.md` 说明单个 Skill 的说明不需要记录长期文档，只记录整个 Skill 模块和 Agents 模块。
+
+## 决策
+
+- 两个 React Native Skill 保留 frontmatter、When To Invoke、Stop Rule、Workflow、References/Reference Routing、Anti-Patterns。
+- 删除 Good Example 和教程式解释，把详细版本/平台内容交给已有 references 文件按需加载。
+- 本次不修改受治理文档；只在 Planning with Files Zh 中记录任务过程。
