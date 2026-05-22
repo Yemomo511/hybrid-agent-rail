@@ -45,6 +45,18 @@
 
 ---
 
+# create-skill metadata 约束收紧进度
+
+- [x] 读取 create-skill、hyar-framework-check 和文档系统现状
+- [x] 删除 `hyar-framework-check` 的 metadata
+- [x] 更新 create-skill 说明和生成模板
+- [x] 更新 `skills/skill-template.md`
+- [x] 同步文档系统
+- [x] 运行验证
+- [x] 提交变更
+
+---
+
 # RN 拍照页面计划进度
 
 - [x] 读取 `hybrid-written-plan` 与上游 `writing-plans` 约束

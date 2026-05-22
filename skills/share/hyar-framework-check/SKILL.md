@@ -1,9 +1,6 @@
 ---
 name: hyar-framework-check
 description: 选择跨端框架前使用。适用于用户要求在 KMP、React Native、Flutter、uni-app 之间做技术选型、比较跨端框架、判断小程序/App/Web/桌面/鸿蒙/存量原生 App 适合方案，或需要根据团队技术栈、UI 策略、原生能力和交付约束推荐框架时；信息不足时必须先询问，禁止直接推荐。
-metadata:
-    version: KMP official docs current, React Native 0.85 docs, Flutter 3.44 docs, uni-app official docs 2025-2026
-    env: Kotlin Multiplatform, React Native, Flutter, uni-app, Android, iOS, Web, Mini Program, Desktop, HarmonyOS
 ---
 
 ## Hyar Framework Check

@@ -424,6 +424,48 @@
 
 ---
 
+# create-skill metadata 约束收紧任务计划
+
+## 总目标
+
+删除 `hyar-framework-check` 中不具备真实版本/环境边界的 `metadata.version/env`，并收紧 `create-skill` 规则，避免通用知识和选型类 Skill 被模板诱导写入无意义 metadata。
+
+## 子任务与验收标准
+
+### 子任务 1：修正既有 Skill metadata
+
+- 产物：`skills/share/hyar-framework-check/SKILL.md`
+- 验收标准：
+  - frontmatter 只保留 `name` 和 `description`。
+  - Skill strict 校验通过。
+
+### 子任务 2：收紧 create-skill 模板和说明
+
+- 产物：`.codex/skills/create-skill/SKILL.md`、`.codex/skills/create-skill/script/init_skill.py`、`skills/skill-template.md`
+- 验收标准：
+  - 默认模板不再生成 `metadata`。
+  - 明确 `metadata.version` 只用于跨端框架版本或版本区间约束。
+  - 明确 `metadata.env` 只用于项目强配置或特定环境要求。
+  - 通用知识、选型指南、流程方法论明确不写 metadata。
+
+### 子任务 3：同步文档系统
+
+- 产物：`docs/skill-system-contract/doc.md`、`docs/KNOWLEDGE.md`
+- 验收标准：
+  - 文档记录普通 Skill 默认不写 metadata 的稳定契约。
+  - `docs/KNOWLEDGE.md` 与文档 frontmatter 同步。
+
+### 子任务 4：验证并提交
+
+- 验收标准：
+  - hyar-framework-check strict 校验通过。
+  - create-doc 文档校验通过。
+  - 生成临时 Skill 时 frontmatter 不含 metadata。
+  - `git diff --check` 通过。
+  - 使用中文规范提交，提交信息以 `[AI]` 开头。
+
+---
+
 # hyar-framework-check Skill 创建任务计划
 
 ## 总目标

@@ -81,6 +81,31 @@
 
 ---
 
+# create-skill metadata 约束收紧发现记录
+
+## 当前事实
+
+- `hyar-framework-check` 是通用跨端框架选型 Skill，不只针对某个跨端框架版本，也不要求当前项目开启某个强配置。
+- `create-skill` 生成模板和 `skills/skill-template.md` 默认带 `metadata.version/env`，容易诱导通用知识、选型指南和流程方法论写入无意义 metadata。
+
+## 决策
+
+- 删除 `hyar-framework-check` 的 `metadata.version/env`。
+- `create-skill` 默认模板不再生成 metadata。
+- `metadata.version` 只表达跨端框架版本或版本区间适用边界；`metadata.env` 只表达项目强配置或特定环境前提。
+- 通用知识、选型指南、流程方法论默认不写 metadata。
+
+## 验证记录
+
+- `python3 .codex/skills/create-skill/script/quick_validate.py --strict skills/share/hyar-framework-check` 通过。
+- `node .codex/skills/create-doc/validate.mjs docs/skill-system-contract/doc.md` 通过。
+- `node .codex/skills/create-doc/validate-knowlegdge.mjs docs/skill-system-contract/doc.md` 通过。
+- `python3 .codex/skills/create-skill/script/init_skill.py demo-metadata-contract --path /private/tmp/hyar-skill-metadata-test --resources references` 通过。
+- `rg -n "metadata:|version:|env:" /private/tmp/hyar-skill-metadata-test/demo-metadata-contract/SKILL.md` 无命中，确认新模板不默认生成 metadata。
+- `git diff --check` 通过。
+
+---
+
 # RN 拍照页面计划发现记录
 
 ## 当前事实

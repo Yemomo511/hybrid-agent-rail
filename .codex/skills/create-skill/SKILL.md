@@ -68,8 +68,9 @@ skill-name/
 
 #### 元数据（推荐）
 元数据作为 Skill 描述的补足，**不要对 Skill Description 本身做不必要的补充**，更多的应该描述其更多的使用场景，以确保智能体能准确的调用该 Skill。
-- 目前支持 `version` 和 `env`。务必注意这两个字段，跨端很多场景都需要 跨端框架版本，Android/iOS 版本做支撑，当某个技术涉及到只有特定环境和特定版本才能完成时，务必说清楚。
-示例: RN 原生模块从 RN 0.74 之后官方就不建议使用，而是建议使用最新的 TurboModule ，因此在介绍 RN 原生模块时应该限制其版本 >= 0.74，高于该版本推荐使用 RN Turbo Module。
+- 默认不要写 `metadata`。只有存在明确版本适用边界或强环境前提时才写，通用知识、选型指南、流程方法论不要写。
+- `metadata.version`：只用于说明当前 Skill 的知识只针对某个跨端框架的特定版本或版本区间。例如 RN 原生模块从 RN 0.74 之后官方更推荐 TurboModule，因此介绍 TurboModule 的 Skill 可以写 `React Native >= 0.74`。
+- `metadata.env`：只用于说明当前 Skill 要求项目已经具备某个强配置或环境前提。例如“已启用 React Native New Architecture”“已配置 Expo CNG”。如果 Skill 不要求项目开启某个配置，不要写此项。
 
 #### Upstream Skill（用户明确说明依赖其他 Skill 时才书写）
 `Upstream Skill` 只表示当前 Skill 依赖并补充另一个 Skill。它不是普通文档、API 页面、模块路径或参考资料来源。
@@ -351,9 +352,9 @@ scripts/init_skill.py kotlin-api-style --path skills/kotlin --resources referenc
   - 同时包含 Skill 做什么，以及在什么具体触发条件/上下文中使用它。
   - 把所有“何时使用”的信息都写在这里，而不是正文中。正文只有触发后才会加载，所以正文中的 “When to Use This Skill” 章节对 Agent 触发并无帮助。
   - `docx` Skill 的示例 description："Comprehensive document creation, editing, and analysis with support for tracked changes, comments, formatting preservation, and text extraction. Use when Agent needs to work with professional documents (.docx files) for: (1) Creating new documents, (2) Modifying or editing content, (3) Working with tracked changes, (4) Adding comments, or any other document tasks"
-- `metadata`（可选）：仅在需要时使用，并且只允许受支持的子字段：
-  - `metadata.version`
-  - `metadata.env`
+- `metadata`（可选）：默认不写；仅在 Skill 知识具有明确跨端框架版本适用边界或项目强环境配置要求时使用，并且只允许受支持的子字段：
+  - `metadata.version`：只写跨端框架版本或版本区间约束。
+  - `metadata.env`：只写项目必须满足的强配置或环境前提。
 
 除 `name`、`description` 以及受支持的 `metadata.version` / `metadata.env` 外，不要在 YAML frontmatter 中包含其他任意字段。
 

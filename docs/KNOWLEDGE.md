@@ -30,7 +30,7 @@
 - [Skill System Contract](skill-system-contract/doc.md)
   - name: skill-system-contract
   - description: 说明 Hyar Skill 资源、维护型 Skill、curated Skill 和选择门禁的组织契约。
-  - keywords: Skill 系统, curated Skill, .codex/skills, skills/flutter, Agent 能力资源, 框架选择门禁
+  - keywords: Skill 系统, curated Skill, .codex/skills, skills/flutter, Agent 能力资源, 框架选择门禁, metadata 约束
   - doc_type: contract
 
 - [Test Validation Contract](test-validation-contract/doc.md)

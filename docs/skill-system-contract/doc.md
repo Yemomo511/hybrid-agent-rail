@@ -1,7 +1,7 @@
 ---
 name: skill-system-contract
 description: 说明 Hyar Skill 资源、维护型 Skill、curated Skill 和选择门禁的组织契约。
-keywords: Skill 系统, curated Skill, .codex/skills, skills/flutter, Agent 能力资源, 框架选择门禁
+keywords: Skill 系统, curated Skill, .codex/skills, skills/flutter, Agent 能力资源, 框架选择门禁, metadata 约束
 doc_type: contract
 source_path: skills/AGENTS.md, skills/README.md, .codex/skills, skills
 ---
@@ -32,6 +32,8 @@ source_path: skills/AGENTS.md, skills/README.md, .codex/skills, skills
 
 `create-skill` 的标准产物是一个分类目录下的 Skill 文件夹，至少包含 `SKILL.md`，并且只允许按需补充 `scripts/`、`references/`、`assets/` 三类资源目录。`skills/skill-template.md` 是基础 Skill 作者模板，也是 `create-skill` 生成模板的权威参考。`create-skill` 不得创建、修改或校验 curated Skill。
 
+普通 Skill 默认不写 `metadata`。只有当 Skill 知识只适用于某个跨端框架的特定版本或版本区间时，才写 `metadata.version`；只有当 Skill 要求项目已经开启某个强配置或具备某个特定环境时，才写 `metadata.env`。通用知识、选型指南和流程方法论不应为了补足描述而写 metadata。
+
 `Upstream Skill` 只表示当前 Skill 依赖并补充另一个 Skill。普通文档、API 页面、模块路径或参考资料不能写入 `Upstream Skill`，应放入 `references/` 或正文参考说明。
 
 curated Skill 必须是文件夹形态，通常包含 `> Curated from ...`，例如 `skills/flutter/*/SKILL.md`：
@@ -47,5 +49,6 @@ skills/<category>/<skill-name>/SKILL.md
 ## Update When
 - `skills/` 的分类、文件夹结构或注入规则变化。
 - 跨端框架选择门禁、框架官方资料来源或推荐输出契约变化。
+- 普通 Skill 的 metadata 使用约束变化。
 - `.codex/skills/` 新增维护型 Skill 或已有维护 Skill 的职责变化。
 - curated Skill 模板、curated `Source` 规则、repo-local `Upstream Skill` 规则或 `How to use` 严格格式变化。
