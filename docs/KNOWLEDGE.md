@@ -21,6 +21,12 @@
   - keywords: pnpm workspace, package 构建, Rollup, hyar-cli, hyar-adapter
   - doc_type: contract
 
+- [Adapter CLI Injection Contract](adapter-cli-injection-contract/doc.md)
+  - name: adapter-cli-injection-contract
+  - description: 说明 hyar init 项目级 Skill 注入的资源来源、平台目录和写入事务边界。
+  - keywords: hyar init, 项目级 Skill 注入, Adapter CLI, .agents/skills, .hyar rollback
+  - doc_type: contract
+
 - [Skill System Contract](skill-system-contract/doc.md)
   - name: skill-system-contract
   - description: 说明 Hyar Skill 资源、维护型 Skill 和 curated Skill 文件夹的组织契约。

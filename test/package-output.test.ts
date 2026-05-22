@@ -19,4 +19,7 @@ test('all package projects emit rollup esm cjs and declaration outputs', () => {
     expect(existsSync(join(distDir, 'index.cjs'))).toBe(true);
     expect(existsSync(join(distDir, 'index.d.ts'))).toBe(true);
   }
+
+  expect(existsSync(join(packageRoot, 'hyar-cli/dist/bin.mjs'))).toBe(true);
+  expect(existsSync(join(packageRoot, 'hyar-adapter/dist/skills/react-native/rn-create-app/SKILL.md'))).toBe(true);
 });

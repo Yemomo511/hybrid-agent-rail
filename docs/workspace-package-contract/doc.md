@@ -25,13 +25,15 @@ hyar-cli depends on hyar-adapter through workspace:*
 hyar-example depends on hyar-cli through workspace:*
 ```
 
-package 构建由各 package 内部的 `rollup.config.mjs` 声明。每个 package 以 `src/index.ts` 为入口，输出 ESM、CJS 和 declaration 文件到 `dist/`。workspace 内部依赖应作为 external 保留，由 workspace 协议连接，而不是被 Rollup 打包进下游产物。
+package 构建由各 package 内部的 `rollup.config.mjs` 和 package-local `tsconfig.build.json` 声明。每个 package 以 `src/index.ts` 为库入口，输出 ESM、CJS 和 declaration 文件到 `dist/`；如果 package 提供 bin，例如 `hyar-cli` 的 `hyar`，还需要输出对应可执行入口。workspace 内部依赖、Node 内建模块和 package dependencies 应作为 external 保留，由 workspace 或 npm 依赖连接，而不是被 Rollup 打包进下游产物。
+
+当前 package 构建先使用 `tsc --emitDeclarationOnly` 生成声明文件，再使用 Rollup 生成 JS 产物。`hyar-adapter` 构建还负责把仓库根 `skills/` 复制到 `package/hyar-adapter/dist/skills`，确保 npm 包运行时能读取内置 Skill 资源。
 
 新增 package 时，应同步检查：
 
 1. `pnpm-workspace.yaml` 是否能覆盖该包。
 2. package `exports` 是否提供 ESM/CJS/types 入口。
-3. package 内部 `rollup.config.mjs` 是否能正确读取根 `tsconfig.base.json` 并保留 workspace 内部依赖。
+3. package 内部 `rollup.config.mjs` 和 `tsconfig.build.json` 是否能正确读取根 `tsconfig.base.json` 并保留 workspace 内部依赖。
 4. `test/package-output.test.ts` 是否需要覆盖新的产物要求。
 
 ## Update When

@@ -30,8 +30,13 @@ test('root pnpm workspace exposes package and example projects', () => {
   const rootPackage = readPackageJson('package.json');
   expect(rootPackage.packageManager?.startsWith('pnpm@')).toBe(true);
   expect(rootPackage.scripts.build).toBe('pnpm -r --filter "./package/*" build');
-  expect(rootPackage.scripts.test).toBe('pnpm run check:package-code && pnpm run test:workspace && pnpm run build && pnpm run test:package-output && pnpm run test:smoke && pnpm run test:example-api');
+  expect(rootPackage.scripts.test).toBe(
+    'pnpm run check:package-code && pnpm run test:workspace && pnpm run test:adapter-cli && pnpm run build && pnpm run test:package-output && pnpm run test:smoke && pnpm run test:example-api'
+  );
   expect(rootPackage.scripts['test:workspace']).toBe('NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/workspace.test.ts --watchman=false');
+  expect(rootPackage.scripts['test:adapter-cli']).toBe(
+    'NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/adapter-cli.test.ts --watchman=false'
+  );
   expect(rootPackage.scripts['test:package-output']).toBe('NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/package-output.test.ts --watchman=false');
   expect(rootPackage.scripts['test:example-api']).toBe('pnpm --filter hyar-example test:api');
 });
@@ -52,7 +57,8 @@ test('package projects own their rollup config locally', () => {
     const packageJson = readPackageJson(`package/${packageName}/package.json`);
 
     expect(existsSync(join(packageRoot, packageName, 'rollup.config.mjs'))).toBe(true);
-    expect(packageJson.scripts.build).toBe('rollup -c');
+    expect(existsSync(join(packageRoot, packageName, 'tsconfig.build.json'))).toBe(true);
+    expect(packageJson.scripts.build).toBe('tsc -p tsconfig.build.json && rollup -c');
   }
 });
 

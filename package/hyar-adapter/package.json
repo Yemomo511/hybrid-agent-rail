@@ -18,7 +18,10 @@
     "src"
   ],
   "scripts": {
-    "build": "rollup -c"
+    "build": "tsc -p tsconfig.build.json && rollup -c"
   },
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "yaml": "^2.9.0"
+  }
 }

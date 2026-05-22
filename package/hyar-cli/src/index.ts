@@ -5,6 +5,10 @@ import {
   type HyarAdapterPackageTestResult
 } from 'hyar-adapter';
 
+export { HyarCliProgram } from './cli';
+export { InitCommandRunner, runInitCommand } from './parse';
+export type { InitCommandOptions, InitCommandResult } from './parse';
+
 export interface HyarCliRuntime {
   name: string;
   adapter: HyarAdapterInfo;
