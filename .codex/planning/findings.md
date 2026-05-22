@@ -54,6 +54,33 @@
 
 ---
 
+# hyar-framework-check Skill 创建发现记录
+
+## 当前事实
+
+- KMP 官方说明其可跨 Android、iOS、desktop、web、server 共享代码，同时保留原生开发优势；可选择共享逻辑、共享 UI 或渐进式共享局部逻辑。
+- React Native 官方说明其使用 React 和平台原生能力构建 Android/iOS 应用，JS 描述 UI 和访问平台 API，运行时创建 Android/iOS 对应 Native Components。
+- Flutter 官方说明其用单代码库构建 natively compiled multi-platform 应用，覆盖 mobile、web、desktop、embedded，并通过插件或平台特定代码处理原生集成。
+- uni-app 官方说明其基于 Vue.js 一套代码发布到 iOS、Android、鸿蒙 Next、Web 和多家小程序，并通过编译器与各端 runtime 实现多端运行。
+
+## 决策
+
+- Skill 命名为 `hyar-framework-check`，放在 `skills/share/`，属于跨端通用 Hybrid Info Skill。
+- `SKILL.md` 只保留选择门禁、问题流、决策规则和输出格式；官网依据沉淀到 `references/`。
+- 选择门禁固定为：用户画像、目标平台、团队技术栈、原生能力、UI 策略和交付约束。前五项未确认时禁止推荐框架。
+- 文档系统只记录门禁属于稳定 Skill 契约和官方资料来源要求，不重复单个 reference 文件内容。
+
+## 验证记录
+
+- `python3 .codex/skills/create-skill/script/quick_validate.py skills/share/hyar-framework-check` 通过。
+- `python3 .codex/skills/create-skill/script/quick_validate.py --strict skills/share/hyar-framework-check` 通过。
+- `rg -n "Selection Gate|禁止|不能推荐|用户画像|目标平台|团队技术栈|原生能力|UI 策略" skills/share/hyar-framework-check` 命中选择门禁。
+- `rg -n "帮我选跨端框架|完全小白|React|Vue|Kotlin|Flutter|Mini Program first|冲突|二次确认|不能直接推荐" skills/share/hyar-framework-check` 命中使用场景。
+- `node .codex/skills/create-doc/validate.mjs docs/skill-system-contract/doc.md` 通过。
+- `node .codex/skills/create-doc/validate-knowlegdge.mjs docs/skill-system-contract/doc.md` 通过。
+
+---
+
 # RN 拍照页面计划发现记录
 
 ## 当前事实

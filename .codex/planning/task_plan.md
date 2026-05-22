@@ -420,6 +420,48 @@
 - 验收标准：
   - `python3 .codex/skills/create-skill/script/quick_validate.py .codex/skills/create-skill/reference/good-example` 通过或说明脚本为空。
   - `git diff --check` 通过。
+- 使用中文规范提交，提交信息以 `[AI]` 开头。
+
+---
+
+# hyar-framework-check Skill 创建任务计划
+
+## 总目标
+
+创建一个跨端通用 Hybrid Info Skill，用于在推荐 KMP、React Native、Flutter、uni-app 前强制完成用户画像、目标平台、团队技术栈、原生能力、UI 策略和交付约束确认，防止 Agent 凭印象直接选型。
+
+## 子任务与验收标准
+
+### 子任务 1：创建 Skill 与 references 结构
+
+- 产物：`skills/share/hyar-framework-check/SKILL.md`、`skills/share/hyar-framework-check/references/*`
+- 验收标准：
+  - Skill 位于 `skills/share/` 分类目录。
+  - references 拆分 KMP、React Native、Flutter、uni-app 和决策矩阵。
+  - `SKILL.md` 保持流程和门禁，框架细节放入 references。
+
+### 子任务 2：写入选择门禁和输出契约
+
+- 产物：`skills/share/hyar-framework-check/SKILL.md`
+- 验收标准：
+  - 未确认用户画像、目标平台、团队技术栈、原生能力和 UI 策略前，禁止直接推荐框架。
+  - 每次追问最多 1-3 个问题，并覆盖小白用户的通俗提问方式。
+  - 推荐输出包含首选方案、备选方案、不推荐方案、取舍理由和二次确认问题。
+
+### 子任务 3：同步文档系统
+
+- 产物：`docs/skill-system-contract/doc.md`、`docs/KNOWLEDGE.md`
+- 验收标准：
+  - 文档记录跨端框架选择门禁属于稳定 Skill 契约。
+  - `docs/KNOWLEDGE.md` 与文档 frontmatter 同步。
+
+### 子任务 4：验证并提交
+
+- 验收标准：
+  - `quick_validate.py` default 与 strict 校验通过。
+  - `rg` 能命中选择门禁和场景测试关键词。
+  - create-doc 文档校验通过。
+  - `git diff --check` 通过。
   - 使用中文规范提交，提交信息以 `[AI]` 开头。
 
 ---

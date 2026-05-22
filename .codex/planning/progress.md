@@ -159,3 +159,18 @@
 - [x] 运行 Skill 校验与内容门禁检查
 - [x] 运行 diff 检查
 - [x] 提交变更
+
+---
+
+# hyar-framework-check Skill 创建进度
+
+- [x] 读取 create-skill、create-doc 与仓库 Skill/文档治理约束
+- [x] 查阅 KMP、React Native、Flutter、uni-app 官方资料
+- [x] 拆分子任务与验收标准
+- [x] 创建 `skills/share/hyar-framework-check`
+- [x] 编写 Skill 主工作流与选择门禁
+- [x] 编写四个框架 reference 和决策矩阵
+- [x] 同步文档系统
+- [x] 运行 Skill 校验、文档校验和门禁检查
+- [x] 运行 diff 检查
+- [x] 提交变更
