@@ -10,7 +10,7 @@ const root = process.cwd();
 const exampleRoot = join(root, 'example');
 
 test('example can run npx hyar init and receive project skills', async () => {
-  await rm(join(exampleRoot, '.agents'), {
+  await rm(join(exampleRoot, '.codex'), {
     force: true,
     recursive: true
   });
@@ -24,9 +24,9 @@ test('example can run npx hyar init and receive project skills', async () => {
   });
 
   const skillPaths = [
-    join(exampleRoot, '.agents/skills/hyar-framework-check/SKILL.md'),
-    join(exampleRoot, '.agents/skills/rn-create-app/SKILL.md'),
-    join(exampleRoot, '.agents/skills/rn-newarch-modules-create/SKILL.md')
+    join(exampleRoot, '.codex/skills/hyar-framework-check/SKILL.md'),
+    join(exampleRoot, '.codex/skills/rn-create-app/SKILL.md'),
+    join(exampleRoot, '.codex/skills/rn-newarch-modules-create/SKILL.md')
   ];
 
   for (const skillPath of skillPaths) {

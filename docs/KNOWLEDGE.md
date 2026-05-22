@@ -24,7 +24,7 @@
 - [Adapter CLI Injection Contract](adapter-cli-injection-contract/doc.md)
   - name: adapter-cli-injection-contract
   - description: 说明 hyar init 项目级 Skill 注入的资源来源、平台目录和写入事务边界。
-  - keywords: hyar init, 项目级 Skill 注入, Adapter CLI, .agents/skills, .hyar rollback
+  - keywords: hyar init, 项目级 Skill 注入, Adapter CLI, .codex/skills, .hyar rollback
   - doc_type: contract
 
 - [Skill System Contract](skill-system-contract/doc.md)

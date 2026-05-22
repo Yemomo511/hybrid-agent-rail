@@ -11,7 +11,7 @@ import type {
 const PLATFORM_ROOTS: Record<HyarAgentPlatform, string> = {
   antigravity: '.agents/skills',
   claude: '.claude/skills',
-  codex: '.agents/skills',
+  codex: '.codex/skills',
   cursor: '.cursor/skills',
   trae: '.trae/skills'
 };

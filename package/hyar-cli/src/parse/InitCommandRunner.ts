@@ -270,7 +270,10 @@ export class InitCommandRunner {
   }
 
   private getAgentRoot(agent: HyarAgentPlatform): string {
-    if (agent === 'codex' || agent === 'antigravity') {
+    if (agent === 'codex') {
+      return '.codex/skills';
+    }
+    if (agent === 'antigravity') {
       return '.agents/skills';
     }
     return `.${agent}/skills`;

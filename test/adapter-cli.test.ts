@@ -163,8 +163,8 @@ description: Create RN app.
   await mkdir(join(resourceRoot, 'react-native/rn-create-app/references'), { recursive: true });
   await writeFile(join(resourceRoot, 'react-native/rn-create-app/references/ref.md'), '# ref\n', 'utf8');
   await writeFile(join(resourceRoot, 'react-native/rn-create-app/README.md'), '# ignored\n', 'utf8');
-  await mkdir(join(cwd, '.agents/skills/rn-create-app'), { recursive: true });
-  await writeFile(join(cwd, '.agents/skills/rn-create-app/old.txt'), 'old', 'utf8');
+  await mkdir(join(cwd, '.codex/skills/rn-create-app'), { recursive: true });
+  await writeFile(join(cwd, '.codex/skills/rn-create-app/old.txt'), 'old', 'utf8');
 
   const service = new HyarAdapterService({ resourceRoot });
   const result = await service.injectProjectSkills({
@@ -177,20 +177,20 @@ description: Create RN app.
   if (!result.ok) {
     throw new Error(result.error.message);
   }
-  expect(result.plan.overwrites).toEqual([join(cwd, '.agents/skills/rn-create-app')]);
+  expect(result.plan.overwrites).toEqual([join(cwd, '.codex/skills/rn-create-app')]);
   expect(result.plan.targets).toEqual(
     expect.arrayContaining([
       expect.objectContaining({
-        agents: ['codex', 'antigravity'],
-        relativeRoot: '.agents/skills',
-        shared: true
+        agents: ['codex'],
+        relativeRoot: '.codex/skills',
+        shared: false
       })
     ])
   );
-  await expect(stat(join(cwd, '.agents/skills/rn-create-app/old.txt'))).rejects.toThrow();
-  expect(await readText(join(cwd, '.agents/skills/rn-create-app/SKILL.md'))).toContain('name: rn-create-app');
-  expect(await readText(join(cwd, '.agents/skills/rn-create-app/references/ref.md'))).toBe('# ref\n');
-  await expect(stat(join(cwd, '.agents/skills/rn-create-app/README.md'))).rejects.toThrow();
+  await expect(stat(join(cwd, '.codex/skills/rn-create-app/old.txt'))).rejects.toThrow();
+  expect(await readText(join(cwd, '.codex/skills/rn-create-app/SKILL.md'))).toContain('name: rn-create-app');
+  expect(await readText(join(cwd, '.codex/skills/rn-create-app/references/ref.md'))).toBe('# ref\n');
+  await expect(stat(join(cwd, '.codex/skills/rn-create-app/README.md'))).rejects.toThrow();
   expect(await readText(join(cwd, '.gitignore'))).toContain('.hyar/tmp/');
   expect(await readText(join(cwd, '.gitignore'))).toContain('.hyar/rollback/');
 });
@@ -219,7 +219,7 @@ description: Create RN app.
   });
 
   expect(success.ok).toBe(true);
-  expect(await readText(join(cwd, '.agents/skills/rn-create-app/SKILL.md'))).toContain('Create RN app.');
+  expect(await readText(join(cwd, '.codex/skills/rn-create-app/SKILL.md'))).toContain('Create RN app.');
   expect(await readText(join(cwd, '.claude/skills/rn-create-app/SKILL.md'))).toContain('Create RN app.');
 
   const failure = await runInitCommand({
