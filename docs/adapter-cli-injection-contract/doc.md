@@ -1,7 +1,7 @@
 ---
 name: adapter-cli-injection-contract
 description: 说明 hyar init 项目级 Skill 注入的资源来源、平台目录和写入事务边界。
-keywords: hyar init, 项目级 Skill 注入, Adapter CLI, .codex/skills, .hyar rollback
+keywords: hyar init, 项目级 Skill 注入, Adapter CLI, .codex/skills, .hyar rollback, dist skills 软链
 doc_type: contract
 source_path: package/hyar-adapter/src, package/hyar-cli/src, skills
 ---
@@ -18,7 +18,7 @@ source_path: package/hyar-adapter/src, package/hyar-cli/src, skills
 ## Content
 `hyar init` 只写目标项目内的项目级 Skill 目录，不写任何用户级或全局目录。`--cwd` 决定所有目标路径、`.hyar/tmp` 和 `.hyar/rollback` 的根目录；不传时使用当前工作目录。
 
-源 Skill 只来自 Hyar 包自带资源。开发态以仓库根 `skills/` 为源码，包态以 `hyar-adapter/dist/skills` 为内置资源；构建时必须把根 `skills/` 复制到 adapter 的 `dist/skills`。目标项目自己的 `skills/` 不参与扫描。
+源 Skill 只来自 Hyar 包自带资源。开发态以仓库根 `skills/` 为源码，普通构建会把 `hyar-adapter/dist/skills` 建成指向根 `skills/` 的软链；包态以 `hyar-adapter/dist/skills` 为内置资源，正式发版构建必须把根 `skills/` 复制成 adapter `dist/skills` 内的真实目录。目标项目自己的 `skills/` 不参与扫描。
 
 平台写入目录固定为：
 
@@ -42,4 +42,4 @@ Emitter 使用事务目录替换目标 Skill 文件夹。临时产物写入 `<cw
 - 平台目录、共享关系、资源复制白名单或事务目录变化。
 - Scanner 校验边界、框架过滤规则或公共 `SKILL.md` frontmatter 字段变化。
 - `hyar-cli` 包名、bin 命令、交互/非交互参数或 `--cwd` 语义变化。
-- package 构建不再把根 `skills/` 复制到 `hyar-adapter/dist/skills`。
+- package 开发构建不再把根 `skills/` 软链到 `hyar-adapter/dist/skills`，或 release 构建不再把根 `skills/` 复制成真实目录。

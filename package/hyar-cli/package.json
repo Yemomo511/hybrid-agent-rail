@@ -22,7 +22,8 @@
     "src"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json && rollup -c"
+    "build": "tsc -p tsconfig.build.json && rollup -c",
+    "build:release": "pnpm run build"
   },
   "dependencies": {
     "@clack/prompts": "^1.4.0",

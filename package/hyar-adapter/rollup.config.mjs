@@ -1,6 +1,6 @@
 import typescript from '@rollup/plugin-typescript';
-import { cpSync, existsSync, readFileSync, rmSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { cpSync, existsSync, readFileSync, rmSync, symlinkSync } from 'node:fs';
+import { dirname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const packageDir = dirname(fileURLToPath(import.meta.url));
@@ -10,24 +10,36 @@ const workspacePackagePrefix = ['hyar-'];
 const packageDependencies = Object.keys(packageJson.dependencies ?? {});
 
 const isExternal = (id) => {
-  return id.startsWith('node:') || packageDependencies.includes(id) || workspacePackagePrefix.some((prefix) => id.startsWith(prefix));
+  return (
+    id.startsWith('node:') ||
+    packageDependencies.includes(id) ||
+    workspacePackagePrefix.some((prefix) => id.startsWith(prefix))
+  );
 };
 
-const copySkills = () => ({
-  name: 'copy-skills',
+const shouldCopySkills = process.env.HYAR_BUILD_RELEASE === '1';
+
+const linkOrCopySkills = () => ({
+  name: shouldCopySkills ? 'copy-skills' : 'link-skills',
   writeBundle() {
     const source = resolve(rootDir, 'skills');
     const target = resolve(packageDir, 'dist/skills');
+    const targetParent = dirname(target);
 
     rmSync(target, {
       force: true,
       recursive: true
     });
 
-    if (existsSync(source)) {
+    if (existsSync(source) && shouldCopySkills) {
       cpSync(source, target, {
         recursive: true
       });
+      return;
+    }
+
+    if (existsSync(source)) {
+      symlinkSync(relative(targetParent, source), target, 'dir');
     }
   }
 });
@@ -57,17 +69,17 @@ export default {
     }
   ],
   plugins: [
-  typescript({
-    include: [resolve(packageDir, 'src/**/*.ts')],
-    noForceEmit: true,
-    tsconfig: resolve(rootDir, 'tsconfig.base.json'),
+    typescript({
+      include: [resolve(packageDir, 'src/**/*.ts')],
+      noForceEmit: true,
+      tsconfig: resolve(rootDir, 'tsconfig.base.json'),
       compilerOptions: {
         declaration: false,
         declarationMap: false,
         rootDir: resolve(packageDir, 'src')
       }
     }),
-    copySkills(),
+    linkOrCopySkills(),
     exitAfterBundle()
   ]
 };
