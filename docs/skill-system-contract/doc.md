@@ -16,9 +16,11 @@ source_path: skills/AGENTS.md, skills/README.md, .codex/skills, skills
 - 当从外部仓库精选 Skill 到 Hyar 的跨端知识集合时。
 
 ## Content
-`skills/` 是 Agent 能力资源目录，承载跨端开发所需的 Workflow Skill 和 Hybrid Info Skill。当前 Flutter 官方 curated Skills 位于 `skills/flutter/<skill-name>/SKILL.md`。
+`skills/` 是 Agent 能力资源目录，承载跨端开发所需的 Workflow Skill 和 Hybrid Info Skill。普通 repo-local Skill 必须位于 `skills/<category>/<skill-name>/SKILL.md`，不能直接放在 `skills/<skill-name>/SKILL.md`。
 
-Hybrid Info Skill 可以直接位于 `skills/<skill-name>/SKILL.md`。例如 React Native App 创建类 Skill 负责在创建项目前确认 Expo / Community CLI / 既有原生 App 集成路径、New Architecture / Legacy Architecture、RN 版本和 Android/iOS 平台范围；当用户架构不明确时，必须先询问而不是直接创建项目。
+分类目录按能力归属决定：React Native 专属 Skill 放在 `skills/react-native/`；跨端通用知识放在 `skills/share/`；语言专属 Skill 放在 `skills/dart/`、`skills/kotlin/` 等语言目录；新的单独框架在 `skills/<framework>/` 下建立目录。React Native App 创建类 Skill 位于 `skills/react-native/rn-create-app/SKILL.md`，用于在创建项目前确认 Expo / Community CLI / 既有原生 App 集成路径、New Architecture / Legacy Architecture、RN 版本和 Android/iOS 平台范围；当用户架构不明确时，必须先询问而不是直接创建项目。
+
+当前 Flutter 官方 curated Skills 位于 `skills/flutter/<skill-name>/SKILL.md`，继续由 `create-curated-skill` 维护。
 
 `.codex/skills/` 是仓库维护型 Skill 目录，服务于本仓库自身治理，例如：
 
@@ -26,7 +28,7 @@ Hybrid Info Skill 可以直接位于 `skills/<skill-name>/SKILL.md`。例如 Rea
 - `create-curated-skill`：把外部 Skill 精选为 Hyar 规范下的 Skill 文件夹。
 - `create-skill`：创建 repo-local Skill，并在 `reference/good-example` 内维护可对照的完整好例子。
 
-`create-skill` 的标准产物是一个 Skill 文件夹，至少包含 `SKILL.md`，并且只允许按需补充 `scripts/`、`references/`、`assets/` 三类资源目录。`skills/skill-template.md` 是基础 Skill 作者模板，也是 `create-skill` 生成模板的权威参考。`create-skill` 不得创建、修改或校验 curated Skill。
+`create-skill` 的标准产物是一个分类目录下的 Skill 文件夹，至少包含 `SKILL.md`，并且只允许按需补充 `scripts/`、`references/`、`assets/` 三类资源目录。`skills/skill-template.md` 是基础 Skill 作者模板，也是 `create-skill` 生成模板的权威参考。`create-skill` 不得创建、修改或校验 curated Skill。
 
 `Upstream Skill` 只表示当前 Skill 依赖并补充另一个 Skill。普通文档、API 页面、模块路径或参考资料不能写入 `Upstream Skill`，应放入 `references/` 或正文参考说明。
 

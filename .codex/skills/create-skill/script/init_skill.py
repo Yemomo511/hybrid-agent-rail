@@ -3,12 +3,12 @@
 Skill Initializer - Creates a repo-local Skill folder from the standard template.
 
 Usage:
-    init_skill.py <skill-name> --path <path> [--resources scripts,references,assets] [--examples]
+    init_skill.py <skill-name> --path <path> [--category <category>] [--resources scripts,references,assets] [--examples]
 
 Examples:
-    init_skill.py my-new-skill --path skills/public
-    init_skill.py my-new-skill --path skills/public --resources scripts,references
-    init_skill.py my-api-helper --path skills/private --resources scripts --examples
+    init_skill.py my-rn-skill --path skills --category react-native
+    init_skill.py my-shared-skill --path skills --category share --resources references
+    init_skill.py my-api-helper --path skills/kotlin --resources scripts --examples
 """
 
 import argparse
@@ -19,6 +19,7 @@ from pathlib import Path
 MAX_SKILL_NAME_LENGTH = 64
 ALLOWED_RESOURCES = {"scripts", "references", "assets"}
 CURATED_SKILL_PATH_PARTS = [("skills", "flutter")]
+CATEGORY_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 SKILL_TEMPLATE = """---
 name: {skill_name}
@@ -171,6 +172,16 @@ def normalize_skill_name(skill_name):
     return normalized
 
 
+def normalize_category(category):
+    if not category:
+        return ""
+    normalized = category.strip().lower()
+    normalized = re.sub(r"[^a-z0-9]+", "-", normalized)
+    normalized = normalized.strip("-")
+    normalized = re.sub(r"-{2,}", "-", normalized)
+    return normalized
+
+
 def title_case_skill_name(skill_name):
     """Convert hyphenated skill name to Title Case for display."""
     return " ".join(word.capitalize() for word in skill_name.split("-"))
@@ -232,11 +243,28 @@ def is_curated_skill_path(path):
     return False
 
 
-def init_skill(skill_name, path, resources, include_examples):
+def is_skills_root(path):
+    return path.name == "skills"
+
+
+def resolve_output_dir(path, category):
+    output_dir = Path(path).resolve()
+    if is_skills_root(output_dir) and not category:
+        print("[ERROR] Creating a Skill directly under skills/ is not allowed.")
+        print("        Pass --category, for example: --category react-native, --category share, or --category kotlin.")
+        return None
+    if category and output_dir.name != category:
+        output_dir = output_dir / category
+    return output_dir
+
+
+def init_skill(skill_name, path, category, resources, include_examples):
     """
     Initialize a new skill directory with SKILL.md and optional resources.
     """
-    output_dir = Path(path).resolve()
+    output_dir = resolve_output_dir(path, category)
+    if not output_dir:
+        return None
     if is_curated_skill_path(output_dir):
         print("[ERROR] create-skill must not create or modify curated Skills.")
         print("        Use create-curated-skill for curated folders such as skills/flutter/*.")
@@ -295,6 +323,11 @@ def main():
     parser.add_argument("skill_name", help="Skill name (normalized to hyphen-case)")
     parser.add_argument("--path", required=True, help="Output directory for the Skill")
     parser.add_argument(
+        "--category",
+        default="",
+        help="Skill category folder when creating under skills/, for example react-native, share, dart, or kotlin",
+    )
+    parser.add_argument(
         "--resources",
         default="",
         help="Comma-separated list: scripts,references,assets",
@@ -320,6 +353,17 @@ def main():
     if skill_name != raw_skill_name:
         print(f"Note: Normalized skill name from '{raw_skill_name}' to '{skill_name}'.")
 
+    raw_category = args.category
+    category = normalize_category(raw_category)
+    if raw_category and not category:
+        print("[ERROR] Category must include at least one letter or digit.")
+        sys.exit(1)
+    if category and not CATEGORY_PATTERN.match(category):
+        print(f"[ERROR] Category must use lowercase letters, digits, and hyphens: {category}")
+        sys.exit(1)
+    if raw_category and category != raw_category:
+        print(f"Note: Normalized category from '{raw_category}' to '{category}'.")
+
     resources = parse_resources(args.resources)
     if args.examples and not resources:
         print("[ERROR] --examples requires --resources to be set.")
@@ -327,6 +371,8 @@ def main():
 
     print(f"Initializing skill: {skill_name}")
     print(f"   Location: {args.path}")
+    if category:
+        print(f"   Category: {category}")
     if resources:
         print(f"   Resources: {', '.join(resources)}")
         if args.examples:
@@ -335,7 +381,7 @@ def main():
         print("   Resources: none")
     print()
 
-    result = init_skill(skill_name, args.path, resources, args.examples)
+    result = init_skill(skill_name, args.path, category, resources, args.examples)
     sys.exit(0 if result else 1)
 
 

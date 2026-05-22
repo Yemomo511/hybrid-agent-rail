@@ -532,17 +532,17 @@
 
 ---
 
-# create-react-native-app Skill 创建任务计划
+# rn-create-app Skill 创建与分类迁移任务计划
 
 ## 总目标
 
-创建一个 repo-local Hybrid Info Skill，用于在 React Native App 初始化前强制完成架构确认、版本分层、Expo 与原生 CLI 路径选择，并在信息不明确时禁止直接创建项目。
+创建一个 repo-local Hybrid Info Skill，用于在 React Native App 初始化前强制完成架构确认、版本分层、Expo 与原生 CLI 路径选择，并在信息不明确时禁止直接创建项目；同时把普通 repo-local Skill 迁移为 `skills/<category>/<skill-name>` 分类目录规则。
 
 ## 子任务与验收标准
 
 ### 子任务 1：确认官方版本事实与 Skill 边界
 
-- 产物：`skills/create-react-native-app/SKILL.md`、`skills/create-react-native-app/references/rn-version-architecture.md`
+- 产物：`skills/react-native/rn-create-app/SKILL.md`、`skills/react-native/rn-create-app/references/rn-version-architecture.md`
 - 验收标准：
   - 记录 RN 0.74、0.76、0.85 的关键架构变化。
   - 明确 0.85 之前版本与 0.85 当前稳定版本的差异。
@@ -550,24 +550,33 @@
 
 ### 子任务 2：创建 Skill 主工作流
 
-- 产物：`skills/create-react-native-app/SKILL.md`
+- 产物：`skills/react-native/rn-create-app/SKILL.md`
 - 验收标准：
   - frontmatter 能触发创建 RN App、选择 Expo/CLI、判断新旧架构、初始化 Android/iOS 工程等场景。
   - 工作流第一步必须询问并确认目标架构，无法确认时停止。
   - 包含 Expo、原生 Android、原生 iOS 模块差异和选择规则。
   - 包含创建命令、依赖管理、平台验证和失败停止条件。
 
-### 子任务 3：同步 Skill 目录说明与文档治理判断
+### 子任务 3：升级 create-skill 分类门禁
+
+- 产物：`.codex/skills/create-skill/SKILL.md`、`.codex/skills/create-skill/script/init_skill.py`、`.codex/skills/create-skill/script/quick_validate.py`
+- 验收标准：
+  - `init_skill.py --path skills` 缺少 `--category` 时失败。
+  - `init_skill.py --path skills --category share` 生成到 `skills/share/<skill-name>`。
+  - `init_skill.py --path <temp> --category react-native` 生成到 `<temp>/react-native/<skill-name>`。
+  - `quick_validate.py` 拒绝普通 Skill 位于 `skills/<skill-name>` 根层级。
+
+### 子任务 4：同步 Skill 目录说明与文档治理判断
 
 - 产物：`skills/AGENTS.md`
 - 验收标准：
-  - `skills/AGENTS.md` 能体现 React Native App 创建 Skill 属于 Hybrid Info Skill。
+  - `skills/AGENTS.md` 能体现 React Native App 创建 Skill 属于 `skills/react-native/`。
   - 根据 `docs/AGENTS.md` 判断单个 Skill 说明不写入长期文档系统，如修改模块级规则则同步受治理文档。
 
-### 子任务 4：验证并提交
+### 子任务 5：验证并提交
 
 - 验收标准：
-  - `.codex/skills/create-skill/script/quick_validate.py --strict skills/create-react-native-app` 通过。
+  - `.codex/skills/create-skill/script/quick_validate.py --strict skills/react-native/rn-create-app` 通过。
   - `rg` 验证“不确定架构禁止创建”类门禁存在。
   - `git diff --check` 通过。
   - 使用中文规范提交，提交信息以 `[AI]` 开头。

@@ -86,6 +86,17 @@ skill-name/
 - 不要把 curated Skill 改写成普通 repo-local Skill 模板。
 - 不要删除或改写 curated Skill 的 `> Curated from ...`、`## Source`、严格 `## How to use` 结构。
 
+#### Skill 分类目录
+普通 repo-local Skill 不直接放在 `skills/` 根目录，必须先判断它属于哪个分类目录：
+
+- React Native 专属：放在 `skills/react-native/<skill-name>/`。
+- 语言专属：放在对应语言目录，例如 `skills/dart/<skill-name>/`、`skills/kotlin/<skill-name>/`。
+- 跨端通用知识：放在 `skills/share/<skill-name>/`。
+- 新的单独框架：在 `skills/<framework>/` 下新建分类目录，再放入该 Skill。
+- Flutter 官方 curated Skill 仍由 `create-curated-skill` 维护；不要用 `create-skill` 写入 `skills/flutter/*`。
+
+当 `init_skill.py --path skills` 时必须传入 `--category`，避免把普通 Skill 误放到根目录。
+
 #### 捆绑资源（可选）
 
 ##### Scripts（`scripts/`）
@@ -287,25 +298,27 @@ Skill 创建包含以下步骤：
 
 从零创建新 Skill 时，始终运行 `init_skill.py` 脚本。该脚本会生成一个标准 Skill 文件夹，包含必需的 `SKILL.md`，并按需创建 `scripts/`、`references/`、`assets/` 资源目录。
 
+在创建前先判断分类目录。框架或语言专属 Skill 放入对应目录；跨端通用 Skill 放入 `skills/share/`；新框架先创建新的 `skills/<framework>/` 分类。
+
 不要使用 `init_skill.py` 在 curated Skill 目录中创建 Skill，例如 `skills/flutter/*`。这些目录由 `create-curated-skill` 维护。
 
 用法：
 
 ```bash
-scripts/init_skill.py <skill-name> --path <output-directory> [--resources scripts,references,assets] [--examples]
+scripts/init_skill.py <skill-name> --path <output-directory> [--category <category>] [--resources scripts,references,assets] [--examples]
 ```
 
 示例：
 
 ```bash
-scripts/init_skill.py my-skill --path skills/public
-scripts/init_skill.py my-skill --path skills/public --resources scripts,references
-scripts/init_skill.py my-skill --path skills/public --resources scripts --examples
+scripts/init_skill.py rn-create-app --path skills --category react-native
+scripts/init_skill.py hybrid-checklist --path skills --category share --resources references
+scripts/init_skill.py kotlin-api-style --path skills/kotlin --resources references
 ```
 
 该脚本会：
 
-- 在指定路径创建 Skill 目录
+- 在分类目录下创建 Skill 目录；当 `--path skills` 时必须使用 `--category`
 - 生成带有正确 frontmatter 和模板占位符的 `SKILL.md`
 - 根据 `--resources` 可选创建资源目录
 - 当设置 `--examples` 时，在所选资源目录中添加示例文件
@@ -367,6 +380,7 @@ scripts/quick_validate.py --strict <path/to/skill-folder>
 - 输入必须是 Skill 文件夹，且包含 `SKILL.md`
 - frontmatter 必须包含 `name` 和 `description`，可选 `metadata.version/env`
 - Skill 文件夹名必须等于 frontmatter `name`
+- 普通 repo-local Skill 必须位于 `skills/<category>/<skill-name>`，不能位于 `skills/<skill-name>`
 - 可选资源目录只能是 `scripts/`、`references/`、`assets/`
 - `Upstream Skill` 只能表示 Skill-to-Skill 依赖和补充关系，不能指向普通文档、API、模块或页面
 - curated Skill 会被拒绝；检测到 `> Curated from ...` 或 `skills/flutter/*` 时，应改用 `create-curated-skill`

@@ -144,15 +144,18 @@
 
 ---
 
-# create-react-native-app Skill 创建进度
+# rn-create-app Skill 创建与分类迁移进度
 
 - [x] 读取 create-skill 与仓库 Skill/文档治理约束
 - [x] 查阅 React Native 与 Expo 官方资料
 - [x] 拆分子任务与验收标准
-- [x] 创建 `skills/create-react-native-app`
+- [x] 创建并迁移 `skills/react-native/rn-create-app`
 - [x] 编写 RN 版本架构参考资料
 - [x] 编写 Skill 主工作流与禁止条件
 - [x] 同步 `skills/AGENTS.md`
+- [x] 更新 `create-skill` 分类目录说明
+- [x] 更新 `init_skill.py` 分类生成门禁
+- [x] 更新 `quick_validate.py` 分类校验门禁
 - [x] 运行 Skill 校验与内容门禁检查
 - [x] 运行 diff 检查
 - [x] 提交变更

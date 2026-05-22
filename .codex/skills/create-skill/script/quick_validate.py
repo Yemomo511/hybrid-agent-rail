@@ -61,6 +61,7 @@ class SkillValidator:
             return ["SKILL.md must start with YAML frontmatter delimited by ---"]
 
         frontmatter, body = parsed
+        errors.extend(self.validate_category_path(resolved))
         errors.extend(self.validate_frontmatter(frontmatter, resolved.name))
         errors.extend(self.validate_body(body, frontmatter, strict))
         errors.extend(self.validate_resource_dirs(resolved))
@@ -77,6 +78,14 @@ class SkillValidator:
         if re.search(r"^>\s*Curated from\s+\S.+$", content, re.MULTILINE):
             errors.append("Curated Skill format detected: > Curated from ...; use create-curated-skill instead")
         return errors
+
+    def validate_category_path(self, skill_dir):
+        if skill_dir.parent.name == "skills" and skill_dir.parent.parent.name != ".codex":
+            return [
+                "Repo-local Skills must live under skills/<category>/<skill-name>, "
+                "for example skills/react-native/rn-create-app or skills/share/<skill-name>."
+            ]
+        return []
 
     def parse_frontmatter(self, content):
         match = re.match(r"^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$", content)

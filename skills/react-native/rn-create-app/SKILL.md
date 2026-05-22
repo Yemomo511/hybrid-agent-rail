@@ -1,12 +1,12 @@
 ---
-name: create-react-native-app
+name: rn-create-app
 description: 创建或初始化 React Native 应用前使用。适用于用户要求新建 RN App、选择 Expo 或 React Native Community CLI、判断 New Architecture 或 Legacy Architecture、配置 Android/iOS 原生工程、接入原生模块、从 0.74 到 0.85 选择版本时；若用户没有明确目标架构和平台范围，必须先询问，禁止直接创建项目。
 metadata:
     version: React Native 0.74-0.85, legacy versions before 0.74
     env: Expo, React Native Community CLI, Android, iOS, New Architecture, Legacy Architecture
 ---
 
-## Create React Native App
+## Rn Create App
 
 ## Overview
 

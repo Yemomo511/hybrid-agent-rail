@@ -227,7 +227,7 @@
 
 ---
 
-# create-react-native-app Skill 创建发现记录
+# rn-create-app Skill 创建与分类迁移发现记录
 
 ## 当前事实
 
@@ -240,7 +240,7 @@
 
 ## 决策
 
-- Skill 命名为 `create-react-native-app`，放在 `skills/` 根目录，属于 Hybrid Info Skill。
+- Skill 命名为 `rn-create-app`，放在 `skills/react-native/` 分类目录，属于 Hybrid Info Skill。
 - Skill 的核心门禁是“先确认架构再创建”：必须确认 Expo managed/CNG、React Native Community CLI 新应用、已有 Android/iOS 集成、Legacy Architecture 兼容需求、目标 RN 版本和平台范围。
 - 默认推荐路径按官方当前口径选择 Expo Framework 或 RN Community CLI，但不在用户架构不明确时自行决定。
 - 版本分层采用：
@@ -248,12 +248,19 @@
   - RN 0.74-0.75：新架构能力增强但不是所有新项目默认启用，需确认 `newArchEnabled`。
   - RN 0.76-0.84：新架构默认启用，但 0.85 之前仍按对应版本模板和依赖矩阵锁定。
   - RN 0.85：当前稳定版本，Node 需要符合 0.85 release 要求，Jest preset 迁移到 `@react-native/jest-preset`。
-- 单个 Skill 的说明根据 `docs/AGENTS.md` 不写入长期文档系统；只补充 `skills/AGENTS.md` 的 Hybrid Info Skill 分类说明。
+- 普通 repo-local Skill 采用 `skills/<category>/<skill-name>` 分类目录；React Native 放 `skills/react-native/`，跨端通用放 `skills/share/`，语言专属放 `skills/dart/`、`skills/kotlin/` 等目录，新框架新建 `skills/<framework>/`。
+- `create-skill` 生成器和校验器都执行分类门禁：`--path skills` 必须指定 `--category`，普通 Skill 不允许直接位于 `skills/<skill-name>` 根层级。
+- 单个 Skill 的说明根据 `docs/AGENTS.md` 不写入长期文档系统；修改了 Skill 分类模块规则，因此同步 `skills/AGENTS.md` 与 `docs/skill-system-contract/doc.md`。
 
 ## 验证记录
 
-- `python3 .codex/skills/create-skill/script/quick_validate.py --strict skills/create-react-native-app` 通过。
-- `rg -n "禁止直接创建|停止创建|不要用|用户架构不明确|Stop Rule|references/rn-version-architecture" skills/create-react-native-app skills/AGENTS.md` 命中 Skill 门禁与参考资料入口。
+- `python3 .codex/skills/create-skill/script/quick_validate.py --strict skills/react-native/rn-create-app` 通过。
+- `rg -n "禁止直接创建|停止创建|不要用|用户架构不明确|Stop Rule|references/rn-version-architecture" skills/react-native/rn-create-app skills/AGENTS.md` 命中 Skill 门禁与参考资料入口。
 - `node .codex/skills/create-doc/validate.mjs docs/skill-system-contract/doc.md` 通过。
 - `node .codex/skills/create-doc/validate-knowlegdge.mjs docs/skill-system-contract/doc.md` 通过。
+- `python3 .codex/skills/create-skill/script/init_skill.py demo-rn-final --path .temp/create-skill-test-final --category react-native --resources references` 通过，生成到 `.temp/create-skill-test-final/react-native/demo-rn-final`。
+- `python3 .codex/skills/create-skill/script/init_skill.py demo-root-final --path skills` 按预期失败，提示必须指定 `--category`。
+- `python3 .codex/skills/create-skill/script/init_skill.py demo-share-final --path skills --category share` 通过，验证后删除生成的临时 `skills/share/demo-share-final/SKILL.md`。
+- `python3 .codex/skills/create-skill/script/quick_validate.py .temp/create-skill-test/skills/root-skill` 按预期失败，拒绝根层普通 Skill。
+- `python3 .codex/skills/create-skill/script/quick_validate.py skills/flutter/flutter-add-widget-test` 按预期失败，保持 curated Skill 防误改。
 - `git diff --check` 通过。
