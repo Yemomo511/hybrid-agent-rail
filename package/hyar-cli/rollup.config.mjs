@@ -56,7 +56,7 @@ export default [
     external: isExternal,
     input: resolve(packageDir, 'src/bin.ts'),
     output: {
-      file: resolve(packageDir, packageJson.bin.hyar),
+      file: resolve(packageDir, 'dist/bin.mjs'),
       format: 'esm',
       sourcemap: true
     },

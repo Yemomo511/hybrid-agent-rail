@@ -31,11 +31,14 @@ test('root pnpm workspace exposes package and example projects', () => {
   expect(rootPackage.packageManager?.startsWith('pnpm@')).toBe(true);
   expect(rootPackage.scripts.build).toBe('pnpm -r --filter "./package/*" build');
   expect(rootPackage.scripts.test).toBe(
-    'pnpm run check:package-code && pnpm run test:workspace && pnpm run test:adapter-cli && pnpm run build && pnpm run test:package-output && pnpm run test:smoke && pnpm run test:example-api'
+    'pnpm run check:package-code && pnpm run test:workspace && pnpm run test:adapter-cli && pnpm run build && pnpm run test:package-output && pnpm run test:smoke && pnpm run test:example-api && pnpm run test:example-hyar-init'
   );
   expect(rootPackage.scripts['test:workspace']).toBe('NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/workspace.test.ts --watchman=false');
   expect(rootPackage.scripts['test:adapter-cli']).toBe(
     'NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/adapter-cli.test.ts --watchman=false'
+  );
+  expect(rootPackage.scripts['test:example-hyar-init']).toBe(
+    'NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/example-hyar-init.test.ts --watchman=false'
   );
   expect(rootPackage.scripts['test:package-output']).toBe('NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/package-output.test.ts --watchman=false');
   expect(rootPackage.scripts['test:example-api']).toBe('pnpm --filter hyar-example test:api');
@@ -68,6 +71,7 @@ test('example depends on hyar-cli through the workspace protocol', () => {
   expect(examplePackage.name).toBe('hyar-example');
   expect(examplePackage.private).toBe(true);
   expect(examplePackage.dependencies?.['hyar-cli']).toBe('workspace:*');
+  expect(examplePackage.scripts['init:skills']).toBe('hyar init --agents codex --frameworks react-native');
   expect(examplePackage.scripts.smoke).toBe('node src/index.mjs');
   expect(examplePackage.scripts['test:api']).toBe('node src/test-api.mjs');
 });

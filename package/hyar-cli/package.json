@@ -14,9 +14,10 @@
     }
   },
   "bin": {
-    "hyar": "./dist/bin.mjs"
+    "hyar": "./bin/hyar.mjs"
   },
   "files": [
+    "bin",
     "dist",
     "src"
   ],

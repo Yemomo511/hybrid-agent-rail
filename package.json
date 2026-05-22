@@ -7,13 +7,14 @@
   "packageManager": "pnpm@10.33.2",
   "scripts": {
     "build": "pnpm -r --filter \"./package/*\" build",
-    "test": "pnpm run check:package-code && pnpm run test:workspace && pnpm run test:adapter-cli && pnpm run build && pnpm run test:package-output && pnpm run test:smoke && pnpm run test:example-api",
+    "test": "pnpm run check:package-code && pnpm run test:workspace && pnpm run test:adapter-cli && pnpm run build && pnpm run test:package-output && pnpm run test:smoke && pnpm run test:example-api && pnpm run test:example-hyar-init",
     "lint:package": "eslint \"package/*/src/**/*.ts\"",
     "format:package": "prettier --write \"package/*/src/**/*.ts\"",
     "format:package:check": "prettier --check \"package/*/src/**/*.ts\"",
     "check:package-code": "pnpm run lint:package && pnpm run format:package:check",
     "test:workspace": "NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/workspace.test.ts --watchman=false",
     "test:adapter-cli": "NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/adapter-cli.test.ts --watchman=false",
+    "test:example-hyar-init": "NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/example-hyar-init.test.ts --watchman=false",
     "test:package-output": "NODE_OPTIONS=--experimental-vm-modules jest --runTestsByPath test/package-output.test.ts --watchman=false",
     "test:smoke": "pnpm --filter hyar-example smoke",
     "test:example-api": "pnpm --filter hyar-example test:api"
