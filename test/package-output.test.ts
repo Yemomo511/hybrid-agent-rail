@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals';
-import { existsSync, readdirSync } from 'node:fs';
+import { existsSync, lstatSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 const root = process.cwd();
@@ -19,4 +19,10 @@ test('all package projects emit rollup esm cjs and declaration outputs', () => {
     expect(existsSync(join(distDir, 'index.cjs'))).toBe(true);
     expect(existsSync(join(distDir, 'index.d.ts'))).toBe(true);
   }
+
+  expect(existsSync(join(packageRoot, 'hyar-cli/bin/hyar.mjs'))).toBe(true);
+  expect(existsSync(join(packageRoot, 'hyar-cli/dist/bin.mjs'))).toBe(true);
+  const adapterSkillsRoot = join(packageRoot, 'hyar-adapter/dist/skills');
+  expect(lstatSync(adapterSkillsRoot).isSymbolicLink()).toBe(true);
+  expect(existsSync(join(adapterSkillsRoot, 'react-native/rn-create-app/SKILL.md'))).toBe(true);
 });

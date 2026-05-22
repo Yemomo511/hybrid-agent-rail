@@ -7,34 +7,59 @@ const packageDir = dirname(fileURLToPath(import.meta.url));
 const rootDir = resolve(packageDir, '../..');
 const packageJson = JSON.parse(readFileSync(resolve(packageDir, 'package.json'), 'utf8'));
 const workspacePackagePrefix = ['hyar-'];
+const packageDependencies = Object.keys(packageJson.dependencies ?? {});
 
 const isExternal = (id) => {
-  return workspacePackagePrefix.some((prefix) => id.startsWith(prefix));
+  return id.startsWith('node:') || packageDependencies.includes(id) || workspacePackagePrefix.some((prefix) => id.startsWith(prefix));
 };
 
-export default {
-  input: resolve(packageDir, 'src/index.ts'),
-  external: isExternal,
-  output: [
-    {
-      file: resolve(packageDir, packageJson.exports['.'].import),
+const typescriptPlugin = () =>
+  typescript({
+    include: [resolve(packageDir, 'src/**/*.ts')],
+    noForceEmit: true,
+    tsconfig: resolve(rootDir, 'tsconfig.base.json'),
+    compilerOptions: {
+      declaration: false,
+      declarationMap: false,
+      rootDir: resolve(packageDir, 'src')
+    }
+  });
+
+const exitAfterBundle = () => ({
+  closeBundle() {
+    setImmediate(() => {
+      process.exit(0);
+    });
+  },
+  name: 'exit-after-bundle'
+});
+
+export default [
+  {
+    external: isExternal,
+    input: resolve(packageDir, 'src/index.ts'),
+    output: [
+      {
+        file: resolve(packageDir, packageJson.exports['.'].import),
+        format: 'esm',
+        sourcemap: true
+      },
+      {
+        file: resolve(packageDir, packageJson.exports['.'].require),
+        format: 'cjs',
+        sourcemap: true
+      }
+    ],
+    plugins: [typescriptPlugin()]
+  },
+  {
+    external: isExternal,
+    input: resolve(packageDir, 'src/bin.ts'),
+    output: {
+      file: resolve(packageDir, 'dist/bin.mjs'),
       format: 'esm',
       sourcemap: true
     },
-    {
-      file: resolve(packageDir, packageJson.exports['.'].require),
-      format: 'cjs',
-      sourcemap: true
-    }
-  ],
-  plugins: [
-    typescript({
-      include: [resolve(packageDir, 'src/**/*.ts')],
-      tsconfig: resolve(rootDir, 'tsconfig.base.json'),
-      compilerOptions: {
-        declarationDir: resolve(packageDir, 'dist'),
-        rootDir: resolve(packageDir, 'src')
-      }
-    })
-  ]
-};
+    plugins: [typescriptPlugin(), exitAfterBundle()]
+  }
+];

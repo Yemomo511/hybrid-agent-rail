@@ -28,7 +28,7 @@ Hybrid Agent Rail 当前由三类资源组成：
 example -> hyar-cli -> hyar-adapter
 ```
 
-`hyar-adapter` 表达 Agent Harness 与工作区之间的最小适配信息；`hyar-cli` 组合 CLI 运行时和 adapter 信息；`example` 作为 workspace 消费方验证包导出和依赖链。
+`hyar-adapter` 负责 Hyar 包内 Skill 资源的扫描、公共格式转换、项目级目录写入和失败回滚；`hyar-cli` 负责 `hyar init` 命令解析、交互选择、平台探测和调用 Adapter；`example` 作为 workspace 消费方验证包导出和依赖链。
 
 `skills/` 与 `.codex/skills/` 的边界不同：前者是面向 Agent 运行时的能力资源，后者是维护本仓库资源的治理 Skill，例如文档创建和 curated Skill 创建。
 

@@ -26,10 +26,24 @@ Skill 是模块化、自包含的文件夹，用于通过专门知识、工作�
 
 上下文窗口是一种公共资源。Skill 会和 Agent 所需的其他所有内容共享上下文窗口：系统提示、对话历史、其他 Skill 的元数据，以及用户当前的实际请求。
 
-**默认假设：Agent 已经非常聪明。** 只添加 Agent 尚不具备的上下文。审视创建的 Skill 的每一段信息：“Agent 真的需要这段解释吗？”以及“这段内容值得占用这些 token 吗？”
+**默认假设：Agent 已经非常聪明。只需要一点指点就能完成工作!!!!** 只添加 Agent 尚不具备的上下文。审视创建的 Skill 的每一段信息：“Agent 真的需要这段解释吗？”以及“这段内容值得占用这些 token 吗？”
 
-**务必优先使用简洁示例，而不是冗长解释。**
+- **务必优先使用简洁示例，而不是冗长解释。**
 
+- **禁止将同一份描述在 Skill 重复多次**
+``` markdown
+Bad Example:
+
+使用这个 Skill 创建 React Native New Architecture TurboModule。先确认 RN 版本、模块边界和平台范围，再选择 Android/iOS 平台实现或纯 C++ 跨端实现，避免把旧桥 NativeModule 模板套进新架构项目。
+
+## Stop Rule
+1. RN 版本：精确版本或版本范围，至少要能判断是否属于 `0.82+`、`0.76-0.81`、`0.74-0.75`、`0.68-0.73`。
+
+## Good Example:
+为 React Native 创建新架构支持的 TurboModule
+## Stop Rule
+1. RN 版本: `0.82+`、`0.76-0.81`、`0.74-0.75`、`0.68-0.73`。
+```
 ### 设置合适的自由度
 
 根据任务的脆弱程度和变化空间，匹配说明的具体程度：
@@ -68,8 +82,9 @@ skill-name/
 
 #### 元数据（推荐）
 元数据作为 Skill 描述的补足，**不要对 Skill Description 本身做不必要的补充**，更多的应该描述其更多的使用场景，以确保智能体能准确的调用该 Skill。
-- 目前支持 `version` 和 `env`。务必注意这两个字段，跨端很多场景都需要 跨端框架版本，Android/iOS 版本做支撑，当某个技术涉及到只有特定环境和特定版本才能完成时，务必说清楚。
-示例: RN 原生模块从 RN 0.74 之后官方就不建议使用，而是建议使用最新的 TurboModule ，因此在介绍 RN 原生模块时应该限制其版本 >= 0.74，高于该版本推荐使用 RN Turbo Module。
+- 默认不要写 `metadata`。只有存在明确版本适用边界或强环境前提时才写，通用知识、选型指南、流程方法论不要写。
+- `metadata.version`：只用于说明当前 Skill 的知识只针对某个跨端框架的特定版本或版本区间。例如 RN 原生模块从 RN 0.74 之后官方更推荐 TurboModule，因此介绍 TurboModule 的 Skill 可以写 `React Native >= 0.74`。
+- `metadata.env`：只用于说明当前 Skill 要求项目已经具备某个强配置或环境前提。例如“已启用 React Native New Architecture”“已配置 Expo CNG”。如果 Skill 不要求项目开启某个配置，不要写此项。
 
 #### Upstream Skill（用户明确说明依赖其他 Skill 时才书写）
 `Upstream Skill` 只表示当前 Skill 依赖并补充另一个 Skill。它不是普通文档、API 页面、模块路径或参考资料来源。
@@ -85,6 +100,17 @@ skill-name/
 - 遇到 curated Skill 时，改用 `create-curated-skill`。
 - 不要把 curated Skill 改写成普通 repo-local Skill 模板。
 - 不要删除或改写 curated Skill 的 `> Curated from ...`、`## Source`、严格 `## How to use` 结构。
+
+#### Skill 分类目录
+普通 repo-local Skill 不直接放在 `skills/` 根目录，必须先判断它属于哪个分类目录：
+
+- React Native 专属：放在 `skills/react-native/<skill-name>/`。
+- 语言专属：放在对应语言目录，例如 `skills/dart/<skill-name>/`、`skills/kotlin/<skill-name>/`。
+- 跨端通用知识：放在 `skills/share/<skill-name>/`。
+- 新的单独框架：在 `skills/<framework>/` 下新建分类目录，再放入该 Skill。
+- Flutter 官方 curated Skill 仍由 `create-curated-skill` 维护；不要用 `create-skill` 写入 `skills/flutter/*`。
+
+当 `init_skill.py --path skills` 时必须传入 `--category`，避免把普通 Skill 误放到根目录。
 
 #### 捆绑资源（可选）
 
@@ -287,25 +313,27 @@ Skill 创建包含以下步骤：
 
 从零创建新 Skill 时，始终运行 `init_skill.py` 脚本。该脚本会生成一个标准 Skill 文件夹，包含必需的 `SKILL.md`，并按需创建 `scripts/`、`references/`、`assets/` 资源目录。
 
+在创建前先判断分类目录。框架或语言专属 Skill 放入对应目录；跨端通用 Skill 放入 `skills/share/`；新框架先创建新的 `skills/<framework>/` 分类。
+
 不要使用 `init_skill.py` 在 curated Skill 目录中创建 Skill，例如 `skills/flutter/*`。这些目录由 `create-curated-skill` 维护。
 
 用法：
 
 ```bash
-scripts/init_skill.py <skill-name> --path <output-directory> [--resources scripts,references,assets] [--examples]
+scripts/init_skill.py <skill-name> --path <output-directory> [--category <category>] [--resources scripts,references,assets] [--examples]
 ```
 
 示例：
 
 ```bash
-scripts/init_skill.py my-skill --path skills/public
-scripts/init_skill.py my-skill --path skills/public --resources scripts,references
-scripts/init_skill.py my-skill --path skills/public --resources scripts --examples
+scripts/init_skill.py rn-create-app --path skills --category react-native
+scripts/init_skill.py hybrid-checklist --path skills --category share --resources references
+scripts/init_skill.py kotlin-api-style --path skills/kotlin --resources references
 ```
 
 该脚本会：
 
-- 在指定路径创建 Skill 目录
+- 在分类目录下创建 Skill 目录；当 `--path skills` 时必须使用 `--category`
 - 生成带有正确 frontmatter 和模板占位符的 `SKILL.md`
 - 根据 `--resources` 可选创建资源目录
 - 当设置 `--examples` 时，在所选资源目录中添加示例文件
@@ -338,9 +366,9 @@ scripts/init_skill.py my-skill --path skills/public --resources scripts --exampl
   - 同时包含 Skill 做什么，以及在什么具体触发条件/上下文中使用它。
   - 把所有“何时使用”的信息都写在这里，而不是正文中。正文只有触发后才会加载，所以正文中的 “When to Use This Skill” 章节对 Agent 触发并无帮助。
   - `docx` Skill 的示例 description："Comprehensive document creation, editing, and analysis with support for tracked changes, comments, formatting preservation, and text extraction. Use when Agent needs to work with professional documents (.docx files) for: (1) Creating new documents, (2) Modifying or editing content, (3) Working with tracked changes, (4) Adding comments, or any other document tasks"
-- `metadata`（可选）：仅在需要时使用，并且只允许受支持的子字段：
-  - `metadata.version`
-  - `metadata.env`
+- `metadata`（可选）：默认不写；仅在 Skill 知识具有明确跨端框架版本适用边界或项目强环境配置要求时使用，并且只允许受支持的子字段：
+  - `metadata.version`：只写跨端框架版本或版本区间约束。
+  - `metadata.env`：只写项目必须满足的强配置或环境前提。
 
 除 `name`、`description` 以及受支持的 `metadata.version` / `metadata.env` 外，不要在 YAML frontmatter 中包含其他任意字段。
 
@@ -367,6 +395,7 @@ scripts/quick_validate.py --strict <path/to/skill-folder>
 - 输入必须是 Skill 文件夹，且包含 `SKILL.md`
 - frontmatter 必须包含 `name` 和 `description`，可选 `metadata.version/env`
 - Skill 文件夹名必须等于 frontmatter `name`
+- 普通 repo-local Skill 必须位于 `skills/<category>/<skill-name>`，不能位于 `skills/<skill-name>`
 - 可选资源目录只能是 `scripts/`、`references/`、`assets/`
 - `Upstream Skill` 只能表示 Skill-to-Skill 依赖和补充关系，不能指向普通文档、API、模块或页面
 - curated Skill 会被拒绝；检测到 `> Curated from ...` 或 `skills/flutter/*` 时，应改用 `create-curated-skill`

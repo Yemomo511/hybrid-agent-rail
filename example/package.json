@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "init:skills": "hyar init --agents codex --frameworks react-native",
     "smoke": "node src/index.mjs",
     "test:api": "node src/test-api.mjs"
   },

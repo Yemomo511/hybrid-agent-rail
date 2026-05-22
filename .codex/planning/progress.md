@@ -45,6 +45,18 @@
 
 ---
 
+# create-skill metadata 约束收紧进度
+
+- [x] 读取 create-skill、hyar-framework-check 和文档系统现状
+- [x] 删除 `hyar-framework-check` 的 metadata
+- [x] 更新 create-skill 说明和生成模板
+- [x] 更新 `skills/skill-template.md`
+- [x] 同步文档系统
+- [x] 运行验证
+- [x] 提交变更
+
+---
+
 # RN 拍照页面计划进度
 
 - [x] 读取 `hybrid-written-plan` 与上游 `writing-plans` 约束
@@ -141,3 +153,60 @@
 - [x] 在 `quick_validate.py` 增加 curated 路径和内容防护
 - [x] 同步 create-skill 说明与文档系统
 - [x] 运行验证并提交
+
+---
+
+# rn-create-app Skill 创建与分类迁移进度
+
+- [x] 读取 create-skill 与仓库 Skill/文档治理约束
+- [x] 查阅 React Native 与 Expo 官方资料
+- [x] 拆分子任务与验收标准
+- [x] 创建并迁移 `skills/react-native/rn-create-app`
+- [x] 编写 RN 版本架构参考资料
+- [x] 编写 Skill 主工作流与禁止条件
+- [x] 同步 `skills/AGENTS.md`
+- [x] 更新 `create-skill` 分类目录说明
+- [x] 更新 `init_skill.py` 分类生成门禁
+- [x] 更新 `quick_validate.py` 分类校验门禁
+- [x] 运行 Skill 校验与内容门禁检查
+- [x] 运行 diff 检查
+- [x] 提交变更
+
+---
+
+# hyar-framework-check Skill 创建进度
+
+- [x] 读取 create-skill、create-doc 与仓库 Skill/文档治理约束
+- [x] 查阅 KMP、React Native、Flutter、uni-app 官方资料
+- [x] 拆分子任务与验收标准
+- [x] 创建 `skills/share/hyar-framework-check`
+- [x] 编写 Skill 主工作流与选择门禁
+- [x] 编写四个框架 reference 和决策矩阵
+- [x] 同步文档系统
+- [x] 运行 Skill 校验、文档校验和门禁检查
+- [x] 运行 diff 检查
+- [x] 提交变更
+
+---
+
+# react-native Skill 精简优化进度
+
+- [x] 读取 create-skill、skills/AGENTS、docs/AGENTS 和现有 React Native Skill
+- [x] 拆分子任务与验收标准
+- [x] 精简 `rn-create-app`
+- [x] 精简 `rn-newarch-modules-create`
+- [x] 记录文档治理判断
+- [x] 运行 Skill 校验与 diff 检查
+- [x] 提交变更
+
+---
+
+# hyar-framework-check 单问题提问优化进度
+
+- [x] 读取 create-skill、记忆规则和 hyar-framework-check 现状
+- [x] 拆分子任务与验收标准
+- [x] 修改 Selection Gate 为单问题循环
+- [x] 增加单问题模板并修正 Good Example
+- [x] 记录文档治理判断
+- [x] 运行 Skill 校验与内容检查
+- [x] 提交变更

@@ -54,6 +54,58 @@
 
 ---
 
+# hyar-framework-check Skill 创建发现记录
+
+## 当前事实
+
+- KMP 官方说明其可跨 Android、iOS、desktop、web、server 共享代码，同时保留原生开发优势；可选择共享逻辑、共享 UI 或渐进式共享局部逻辑。
+- React Native 官方说明其使用 React 和平台原生能力构建 Android/iOS 应用，JS 描述 UI 和访问平台 API，运行时创建 Android/iOS 对应 Native Components。
+- Flutter 官方说明其用单代码库构建 natively compiled multi-platform 应用，覆盖 mobile、web、desktop、embedded，并通过插件或平台特定代码处理原生集成。
+- uni-app 官方说明其基于 Vue.js 一套代码发布到 iOS、Android、鸿蒙 Next、Web 和多家小程序，并通过编译器与各端 runtime 实现多端运行。
+
+## 决策
+
+- Skill 命名为 `hyar-framework-check`，放在 `skills/share/`，属于跨端通用 Hybrid Info Skill。
+- `SKILL.md` 只保留选择门禁、问题流、决策规则和输出格式；官网依据沉淀到 `references/`。
+- 选择门禁固定为：用户画像、目标平台、团队技术栈、原生能力、UI 策略和交付约束。前五项未确认时禁止推荐框架。
+- 文档系统只记录门禁属于稳定 Skill 契约和官方资料来源要求，不重复单个 reference 文件内容。
+
+## 验证记录
+
+- `python3 .codex/skills/create-skill/script/quick_validate.py skills/share/hyar-framework-check` 通过。
+- `python3 .codex/skills/create-skill/script/quick_validate.py --strict skills/share/hyar-framework-check` 通过。
+- `rg -n "Selection Gate|禁止|不能推荐|用户画像|目标平台|团队技术栈|原生能力|UI 策略" skills/share/hyar-framework-check` 命中选择门禁。
+- `rg -n "帮我选跨端框架|完全小白|React|Vue|Kotlin|Flutter|Mini Program first|冲突|二次确认|不能直接推荐" skills/share/hyar-framework-check` 命中使用场景。
+- `node .codex/skills/create-doc/validate.mjs docs/skill-system-contract/doc.md` 通过。
+- `node .codex/skills/create-doc/validate-knowlegdge.mjs docs/skill-system-contract/doc.md` 通过。
+
+---
+
+# create-skill metadata 约束收紧发现记录
+
+## 当前事实
+
+- `hyar-framework-check` 是通用跨端框架选型 Skill，不只针对某个跨端框架版本，也不要求当前项目开启某个强配置。
+- `create-skill` 生成模板和 `skills/skill-template.md` 默认带 `metadata.version/env`，容易诱导通用知识、选型指南和流程方法论写入无意义 metadata。
+
+## 决策
+
+- 删除 `hyar-framework-check` 的 `metadata.version/env`。
+- `create-skill` 默认模板不再生成 metadata。
+- `metadata.version` 只表达跨端框架版本或版本区间适用边界；`metadata.env` 只表达项目强配置或特定环境前提。
+- 通用知识、选型指南、流程方法论默认不写 metadata。
+
+## 验证记录
+
+- `python3 .codex/skills/create-skill/script/quick_validate.py --strict skills/share/hyar-framework-check` 通过。
+- `node .codex/skills/create-doc/validate.mjs docs/skill-system-contract/doc.md` 通过。
+- `node .codex/skills/create-doc/validate-knowlegdge.mjs docs/skill-system-contract/doc.md` 通过。
+- `python3 .codex/skills/create-skill/script/init_skill.py demo-metadata-contract --path /private/tmp/hyar-skill-metadata-test --resources references` 通过。
+- `rg -n "metadata:|version:|env:" /private/tmp/hyar-skill-metadata-test/demo-metadata-contract/SKILL.md` 无命中，确认新模板不默认生成 metadata。
+- `git diff --check` 通过。
+
+---
+
 # RN 拍照页面计划发现记录
 
 ## 当前事实
@@ -224,3 +276,75 @@
 - 将 `skills/flutter` 作为当前仓库的 curated Skill 路径防护。
 - `quick_validate.py` 同时用路径和 `> Curated from ...` 内容识别 curated Skill。
 - 遇到 curated Skill 时统一提示使用 `create-curated-skill`。
+
+---
+
+# rn-create-app Skill 创建与分类迁移发现记录
+
+## 当前事实
+
+- 用户明确要求基于 React Native 官方环境搭建资料，分析 RN 0.74 到 0.85，以及 0.85 之前版本，并比较 Expo 与原生 Android/iOS 模块差异。
+- React Native 官方当前版本页显示最新稳定版本为 0.85；0.85 release blog 给出的新项目命令是 `npx @react-native-community/cli@latest init MyProject --version latest`，并说明 Expo SDK 56 将包含 RN 0.85。
+- RN 0.74 release blog 明确：新架构启用时 Bridgeless 默认、Yoga 3.0、Yarn 3 默认用于 Community CLI 新项目，Android 最低 SDK 提升到 23，并移除新项目中的 Flipper 原生库设置。
+- RN 0.76 New Architecture 官方文章和架构页明确：0.76 起新架构在所有 RN 项目中默认启用；可通过 Android `newArchEnabled=false` 等方式退出。
+- React Native 官方环境页强调：使用 Framework 时不必先安装完整 Android Studio/Xcode 原生环境；如果不用 Framework 或要写自己的 Framework，则本地原生环境是要求。
+- Expo 官方 CNG/Prebuild 文档说明：`create-expo-app` 项目默认可通过 `npx expo prebuild` 生成 `android/` 与 `ios/`，原生修改应优先通过 config plugins 或 native modules 表达；Expo Go 只能使用 Expo Go 运行时内置的原生能力。
+
+## 决策
+
+- Skill 命名为 `rn-create-app`，放在 `skills/react-native/` 分类目录，属于 Hybrid Info Skill。
+- Skill 的核心门禁是“先确认架构再创建”：必须确认 Expo managed/CNG、React Native Community CLI 新应用、已有 Android/iOS 集成、Legacy Architecture 兼容需求、目标 RN 版本和平台范围。
+- 默认推荐路径按官方当前口径选择 Expo Framework 或 RN Community CLI，但不在用户架构不明确时自行决定。
+- 版本分层采用：
+  - RN < 0.74：按旧架构/桥接兼容优先处理，创建前需要确认历史依赖约束。
+  - RN 0.74-0.75：新架构能力增强但不是所有新项目默认启用，需确认 `newArchEnabled`。
+  - RN 0.76-0.84：新架构默认启用，但 0.85 之前仍按对应版本模板和依赖矩阵锁定。
+  - RN 0.85：当前稳定版本，Node 需要符合 0.85 release 要求，Jest preset 迁移到 `@react-native/jest-preset`。
+- 普通 repo-local Skill 采用 `skills/<category>/<skill-name>` 分类目录；React Native 放 `skills/react-native/`，跨端通用放 `skills/share/`，语言专属放 `skills/dart/`、`skills/kotlin/` 等目录，新框架新建 `skills/<framework>/`。
+- `create-skill` 生成器和校验器都执行分类门禁：`--path skills` 必须指定 `--category`，普通 Skill 不允许直接位于 `skills/<skill-name>` 根层级。
+- 单个 Skill 的说明根据 `docs/AGENTS.md` 不写入长期文档系统；修改了 Skill 分类模块规则，因此同步 `skills/AGENTS.md` 与 `docs/skill-system-contract/doc.md`。
+
+## 验证记录
+
+- `python3 .codex/skills/create-skill/script/quick_validate.py --strict skills/react-native/rn-create-app` 通过。
+- `rg -n "禁止直接创建|停止创建|不要用|用户架构不明确|Stop Rule|references/rn-version-architecture" skills/react-native/rn-create-app skills/AGENTS.md` 命中 Skill 门禁与参考资料入口。
+- `node .codex/skills/create-doc/validate.mjs docs/skill-system-contract/doc.md` 通过。
+- `node .codex/skills/create-doc/validate-knowlegdge.mjs docs/skill-system-contract/doc.md` 通过。
+- `python3 .codex/skills/create-skill/script/init_skill.py demo-rn-final --path .temp/create-skill-test-final --category react-native --resources references` 通过，生成到 `.temp/create-skill-test-final/react-native/demo-rn-final`。
+- `python3 .codex/skills/create-skill/script/init_skill.py demo-root-final --path skills` 按预期失败，提示必须指定 `--category`。
+- `python3 .codex/skills/create-skill/script/init_skill.py demo-share-final --path skills --category share` 通过，验证后删除生成的临时 `skills/share/demo-share-final/SKILL.md`。
+- `python3 .codex/skills/create-skill/script/quick_validate.py .temp/create-skill-test/skills/root-skill` 按预期失败，拒绝根层普通 Skill。
+- `python3 .codex/skills/create-skill/script/quick_validate.py skills/flutter/flutter-add-widget-test` 按预期失败，保持 curated Skill 防误改。
+- `git diff --check` 通过。
+
+---
+
+# react-native Skill 精简优化发现记录
+
+## 当前事实
+
+- `skills/react-native/rn-create-app/SKILL.md` 原正文包含较多解释性段落、命令展开和 Good Example，核心门禁可用更短清单表达。
+- `skills/react-native/rn-newarch-modules-create/SKILL.md` 原正文同时描述 Overview、Workflow 和 Good Example，存在与 Stop Rule/Reference Routing 重复的信息。
+- `docs/AGENTS.md` 说明单个 Skill 的说明不需要记录长期文档，只记录整个 Skill 模块和 Agents 模块。
+
+## 决策
+
+- 两个 React Native Skill 保留 frontmatter、When To Invoke、Stop Rule、Workflow、References/Reference Routing、Anti-Patterns。
+- 删除 Good Example 和教程式解释，把详细版本/平台内容交给已有 references 文件按需加载。
+- 本次不修改受治理文档；只在 Planning with Files Zh 中记录任务过程。
+
+---
+
+# hyar-framework-check 单问题提问优化发现记录
+
+## 当前事实
+
+- `skills/share/hyar-framework-check/SKILL.md` 的 `Selection Gate` 原来允许“每次最多问 1-3 个问题”。
+- `Good Example` 原来在同一句里同时询问用户画像和目标平台，容易让 Agent 一次抛出多个问题。
+- 该 Skill 没有独立 validator，使用 create-skill 的 strict 结构校验即可。
+
+## 决策
+
+- 将门禁改成“每次对话只问 1 个问题，回答后再问下一个”。
+- 增加 `Question Template`，固定单问题输出结构，并允许给 2-3 个可选回答帮助用户选择。
+- 本次只修改单个 Skill 说明，不同步长期文档系统。

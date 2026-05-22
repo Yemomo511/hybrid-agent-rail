@@ -13,14 +13,21 @@
       "require": "./dist/index.cjs"
     }
   },
+  "bin": {
+    "hyar": "./bin/hyar.mjs"
+  },
   "files": [
+    "bin",
     "dist",
     "src"
   ],
   "scripts": {
-    "build": "rollup -c"
+    "build": "tsc -p tsconfig.build.json && rollup -c",
+    "build:release": "pnpm run build"
   },
   "dependencies": {
+    "@clack/prompts": "^1.4.0",
+    "cac": "^7.0.0",
     "hyar-adapter": "workspace:*"
   },
   "license": "ISC"

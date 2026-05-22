@@ -420,6 +420,90 @@
 - 验收标准：
   - `python3 .codex/skills/create-skill/script/quick_validate.py .codex/skills/create-skill/reference/good-example` 通过或说明脚本为空。
   - `git diff --check` 通过。
+- 使用中文规范提交，提交信息以 `[AI]` 开头。
+
+---
+
+# create-skill metadata 约束收紧任务计划
+
+## 总目标
+
+删除 `hyar-framework-check` 中不具备真实版本/环境边界的 `metadata.version/env`，并收紧 `create-skill` 规则，避免通用知识和选型类 Skill 被模板诱导写入无意义 metadata。
+
+## 子任务与验收标准
+
+### 子任务 1：修正既有 Skill metadata
+
+- 产物：`skills/share/hyar-framework-check/SKILL.md`
+- 验收标准：
+  - frontmatter 只保留 `name` 和 `description`。
+  - Skill strict 校验通过。
+
+### 子任务 2：收紧 create-skill 模板和说明
+
+- 产物：`.codex/skills/create-skill/SKILL.md`、`.codex/skills/create-skill/script/init_skill.py`、`skills/skill-template.md`
+- 验收标准：
+  - 默认模板不再生成 `metadata`。
+  - 明确 `metadata.version` 只用于跨端框架版本或版本区间约束。
+  - 明确 `metadata.env` 只用于项目强配置或特定环境要求。
+  - 通用知识、选型指南、流程方法论明确不写 metadata。
+
+### 子任务 3：同步文档系统
+
+- 产物：`docs/skill-system-contract/doc.md`、`docs/KNOWLEDGE.md`
+- 验收标准：
+  - 文档记录普通 Skill 默认不写 metadata 的稳定契约。
+  - `docs/KNOWLEDGE.md` 与文档 frontmatter 同步。
+
+### 子任务 4：验证并提交
+
+- 验收标准：
+  - hyar-framework-check strict 校验通过。
+  - create-doc 文档校验通过。
+  - 生成临时 Skill 时 frontmatter 不含 metadata。
+  - `git diff --check` 通过。
+  - 使用中文规范提交，提交信息以 `[AI]` 开头。
+
+---
+
+# hyar-framework-check Skill 创建任务计划
+
+## 总目标
+
+创建一个跨端通用 Hybrid Info Skill，用于在推荐 KMP、React Native、Flutter、uni-app 前强制完成用户画像、目标平台、团队技术栈、原生能力、UI 策略和交付约束确认，防止 Agent 凭印象直接选型。
+
+## 子任务与验收标准
+
+### 子任务 1：创建 Skill 与 references 结构
+
+- 产物：`skills/share/hyar-framework-check/SKILL.md`、`skills/share/hyar-framework-check/references/*`
+- 验收标准：
+  - Skill 位于 `skills/share/` 分类目录。
+  - references 拆分 KMP、React Native、Flutter、uni-app 和决策矩阵。
+  - `SKILL.md` 保持流程和门禁，框架细节放入 references。
+
+### 子任务 2：写入选择门禁和输出契约
+
+- 产物：`skills/share/hyar-framework-check/SKILL.md`
+- 验收标准：
+  - 未确认用户画像、目标平台、团队技术栈、原生能力和 UI 策略前，禁止直接推荐框架。
+  - 每次追问最多 1-3 个问题，并覆盖小白用户的通俗提问方式。
+  - 推荐输出包含首选方案、备选方案、不推荐方案、取舍理由和二次确认问题。
+
+### 子任务 3：同步文档系统
+
+- 产物：`docs/skill-system-contract/doc.md`、`docs/KNOWLEDGE.md`
+- 验收标准：
+  - 文档记录跨端框架选择门禁属于稳定 Skill 契约。
+  - `docs/KNOWLEDGE.md` 与文档 frontmatter 同步。
+
+### 子任务 4：验证并提交
+
+- 验收标准：
+  - `quick_validate.py` default 与 strict 校验通过。
+  - `rg` 能命中选择门禁和场景测试关键词。
+  - create-doc 文档校验通过。
+  - `git diff --check` 通过。
   - 使用中文规范提交，提交信息以 `[AI]` 开头。
 
 ---
@@ -529,3 +613,119 @@
 - 验收标准：
   - 明确 curated Skill 通常包含 `> Curated from ...`。
   - 明确 `create-skill` 不得修改 curated Skill。
+
+---
+
+# rn-create-app Skill 创建与分类迁移任务计划
+
+## 总目标
+
+创建一个 repo-local Hybrid Info Skill，用于在 React Native App 初始化前强制完成架构确认、版本分层、Expo 与原生 CLI 路径选择，并在信息不明确时禁止直接创建项目；同时把普通 repo-local Skill 迁移为 `skills/<category>/<skill-name>` 分类目录规则。
+
+## 子任务与验收标准
+
+### 子任务 1：确认官方版本事实与 Skill 边界
+
+- 产物：`skills/react-native/rn-create-app/SKILL.md`、`skills/react-native/rn-create-app/references/rn-version-architecture.md`
+- 验收标准：
+  - 记录 RN 0.74、0.76、0.85 的关键架构变化。
+  - 明确 0.85 之前版本与 0.85 当前稳定版本的差异。
+  - 明确 Expo、React Native Community CLI、已有原生 App 集成三条初始化路径边界。
+
+### 子任务 2：创建 Skill 主工作流
+
+- 产物：`skills/react-native/rn-create-app/SKILL.md`
+- 验收标准：
+  - frontmatter 能触发创建 RN App、选择 Expo/CLI、判断新旧架构、初始化 Android/iOS 工程等场景。
+  - 工作流第一步必须询问并确认目标架构，无法确认时停止。
+  - 包含 Expo、原生 Android、原生 iOS 模块差异和选择规则。
+  - 包含创建命令、依赖管理、平台验证和失败停止条件。
+
+### 子任务 3：升级 create-skill 分类门禁
+
+- 产物：`.codex/skills/create-skill/SKILL.md`、`.codex/skills/create-skill/script/init_skill.py`、`.codex/skills/create-skill/script/quick_validate.py`
+- 验收标准：
+  - `init_skill.py --path skills` 缺少 `--category` 时失败。
+  - `init_skill.py --path skills --category share` 生成到 `skills/share/<skill-name>`。
+  - `init_skill.py --path <temp> --category react-native` 生成到 `<temp>/react-native/<skill-name>`。
+  - `quick_validate.py` 拒绝普通 Skill 位于 `skills/<skill-name>` 根层级。
+
+### 子任务 4：同步 Skill 目录说明与文档治理判断
+
+- 产物：`skills/AGENTS.md`
+- 验收标准：
+  - `skills/AGENTS.md` 能体现 React Native App 创建 Skill 属于 `skills/react-native/`。
+  - 根据 `docs/AGENTS.md` 判断单个 Skill 说明不写入长期文档系统，如修改模块级规则则同步受治理文档。
+
+### 子任务 5：验证并提交
+
+- 验收标准：
+  - `.codex/skills/create-skill/script/quick_validate.py --strict skills/react-native/rn-create-app` 通过。
+  - `rg` 验证“不确定架构禁止创建”类门禁存在。
+  - `git diff --check` 通过。
+  - 使用中文规范提交，提交信息以 `[AI]` 开头。
+
+---
+
+# react-native Skill 精简优化任务计划
+
+## 总目标
+
+压缩 `skills/react-native` 下已有 Skill 正文，删除教程式和重复描述，只保留触发、停止、执行、参考路由和反模式等必要指令。
+
+## 子任务与验收标准
+
+### 子任务 1：精简 `rn-create-app`
+
+- 产物：`skills/react-native/rn-create-app/SKILL.md`
+- 验收标准：
+  - 保留创建 RN App 前必须确认的初始化路径、架构、版本、平台和包管理器。
+  - 保留 Expo、Community CLI、既有原生 App 集成三条路径的必要分流。
+  - 删除冗长示例和重复解释。
+
+### 子任务 2：精简 `rn-newarch-modules-create`
+
+- 产物：`skills/react-native/rn-newarch-modules-create/SKILL.md`
+- 验收标准：
+  - 保留 RN 版本、模块形态、平台范围、架构目标、JS spec、原生依赖的停止规则。
+  - 保留 Android/iOS/C++ 的 reference 路由和最小验收要求。
+  - 保留 RN `0.74+` 未明确新架构时需要先确认的门禁。
+
+### 子任务 3：验证和文档治理判断
+
+- 验收标准：
+  - 两个 Skill 的 strict 校验通过。
+  - `git diff --check` 通过。
+  - 根据 `docs/AGENTS.md` 判断本次只修改单个 Skill 说明，不进入长期文档系统。
+
+---
+
+# hyar-framework-check 单问题提问优化任务计划
+
+## 总目标
+
+将 `hyar-framework-check` 的信息收集流程从“一次可问多个问题”改为严格单问题循环：每轮只问一个会影响结论的关键问题，用户回答后再继续补齐下一个缺失信息。
+
+## 子任务与验收标准
+
+### 子任务 1：修改 Selection Gate
+
+- 产物：`skills/share/hyar-framework-check/SKILL.md`
+- 验收标准：
+  - 明确每次对话只问 1 个问题。
+  - 删除或替换“每次最多问 1-3 个问题”等批量提问表述。
+
+### 子任务 2：补充单问题模板和示例
+
+- 产物：`skills/share/hyar-framework-check/SKILL.md`
+- 验收标准：
+  - 增加一次只问一个具体问题的模板。
+  - Good Example 不再一次询问多个信息点。
+
+### 子任务 3：验证和文档治理判断
+
+- 验收标准：
+  - strict Skill 校验通过。
+  - 内容检查确认旧批量提问表述不存在。
+  - `git diff --check` 通过。
+  - 根据 `docs/AGENTS.md` 判断本次只修改单个 Skill 说明，不进入长期文档系统。

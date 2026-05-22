@@ -1,9 +1,6 @@
 --- 
 name: <Skill Name>
 description: <完整说明该 Skill 能做什么，以及什么时候应该使用它。请写清楚触发场景、目标文件类型、框架或任务类型。>
-metadata:
-    version: <可选, 填写支持的框架和对应的版本号，如 0.74 >= rn >= 0.68>
-    env: <可选，填写你需要跨端环境, 如配置了Expo>
 ---
 
 ## <Skill Name>
@@ -19,6 +16,13 @@ metadata:
 - <触发场景 1>
 - <触发场景 2>
 - <触发场景 3>
+
+## Metadata Guidance
+
+默认不要写 `metadata`。只有满足以下条件时，才在 frontmatter 中新增对应字段：
+
+- `metadata.version`：当前 Skill 的知识只适用于某个跨端框架的特定版本或版本区间，例如 `React Native >= 0.74`。通用知识、选型指南、流程方法论不要写。
+- `metadata.env`：当前 Skill 要求项目已经开启某个强配置或具备某个特定环境，例如“已启用 React Native New Architecture”或“已配置 Expo CNG”。没有强配置前提不要写。
 
 ## Structuring This Skill
 

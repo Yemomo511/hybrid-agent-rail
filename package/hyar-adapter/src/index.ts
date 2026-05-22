@@ -1,3 +1,20 @@
+export { HyarAdapterService } from './HyarAdapterService';
+export type {
+  HyarAgentPlatform,
+  HyarAdapterServiceOptions,
+  HyarFramework,
+  HyarInjectOptions,
+  HyarInjectResult,
+  HyarOutputSkill,
+  HyarScanError,
+  HyarScanOptions,
+  HyarScanResult,
+  HyarSourceSkill,
+  HyarTargetPlan,
+  HyarWritePlan
+} from './types';
+export { HYAR_AGENT_PLATFORMS, HYAR_FRAMEWORKS } from './types';
+
 export interface HyarAdapterInfo {
   name: string;
   protocol: string;
