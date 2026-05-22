@@ -241,3 +241,291 @@
   - 文档说明调用方式、权限要求、平台限制。
   - `git diff --check` 通过。
   - 提交信息使用中文规范：`[AI]feat: 完成 RN 拍照页面`。
+
+---
+
+# Rollup 配置内置到 package 任务计划
+
+## 总目标
+
+将共享的根目录 `config/rollup.package.config.mjs` 迁移为各 package 内部配置，确保每个 package 可以从自身目录声明、维护和执行 Rollup 构建。
+
+## 子任务与验收标准
+
+### 子任务 1：补充结构验收测试
+
+- 产物：`test/workspace.test.ts`
+- 验收标准：
+  - 测试断言根目录不再存在共享 Rollup package 配置
+  - 测试断言每个 `package/*` 均存在 `rollup.config.mjs`
+  - 测试断言每个 package 的 `build` 脚本使用本地配置
+
+### 子任务 2：迁移 package Rollup 配置
+
+- 产物：`package/hyar-adapter/rollup.config.mjs`、`package/hyar-cli/rollup.config.mjs`、`package/*/package.json`
+- 验收标准：
+  - 两个 package 的构建入口均为 `src/index.ts`
+  - 输出仍为 `dist/index.mjs`、`dist/index.cjs`、`dist/index.d.ts`
+  - workspace 内部依赖仍作为 external 保留
+  - 根共享配置文件被移除
+
+### 子任务 3：同步文档系统
+
+- 产物：`docs/workspace-package-contract/doc.md`
+- 验收标准：
+  - 文档中的 Rollup 构建契约改为 package 本地配置
+  - `source_path` 不再指向已删除的根 `config` 文件
+  - create-doc 文档校验通过
+
+### 子任务 4：验证并提交
+
+- 验收标准：
+  - 红灯测试先因旧结构失败
+  - 迁移后 `pnpm run test:workspace` 通过
+  - `pnpm run build` 通过
+  - `pnpm run test:package-output` 通过
+  - `git diff --check` 通过或明确说明既有无关问题
+  - 使用中文规范提交，提交信息以 `[AI]` 开头
+
+---
+
+# create-doc 文档目录化改造任务计划
+
+## 总目标
+
+将 `create-doc` 的长期文档产物从 `docs/{name}.md` 迁移为 `docs/{name}/doc.md`，同步校验器、Knowledge 索引和现有受治理文档。
+
+## 子任务与验收标准
+
+### 子任务 1：Planning with Files Zh 初始化
+
+- 产物：`.codex/planning/task_plan.md`、`.codex/planning/findings.md`、`.codex/planning/progress.md`
+- 验收标准：
+  - 三个规划文件追加本次任务记录，不覆盖已有历史。
+  - 记录现状事实、子任务验收标准和执行进度。
+
+### 子任务 2：红灯校验设计
+
+- 产物：`.codex/skills/create-doc/__test__/create-doc-layout.test.mjs`
+- 验收标准：
+  - 旧扁平文档路径在新规则下必须失败。
+  - `docs/KNOWLEDGE.md` 若链接旧扁平路径，Knowledge 校验必须失败。
+  - 测试在旧实现上先失败，证明覆盖到行为变化。
+
+### 子任务 3：create-doc 契约与校验器改造
+
+- 产物：`.codex/skills/create-doc/SKILL.md`、`.codex/skills/create-doc/references/TEMPLATE.md`、`.codex/skills/create-doc/validate.mjs`、`.codex/skills/create-doc/validate-knowlegdge.mjs`
+- 验收标准：
+  - Skill 文案、模板和命令示例统一使用 `docs/<name>/doc.md`。
+  - 文档校验器拒绝 `docs/<name>.md`，只接受 `docs/<name>/doc.md`。
+  - Knowledge 校验器要求 Source 链接目标为 `<name>/doc.md`，并与传入文档路径一致。
+
+### 子任务 4：现有文档迁移与索引同步
+
+- 产物：`docs/*/doc.md`、`docs/KNOWLEDGE.md`
+- 验收标准：
+  - 8 个受治理文档全部迁移到对应目录的 `doc.md`。
+  - `docs/KNOWLEDGE.md` 的 8 个 Source 链接全部更新为 `<name>/doc.md`。
+  - 仓库内不再引用旧的 `docs/<name>.md` 路径。
+
+### 子任务 5：文档系统说明同步
+
+- 产物：`docs/AGENTS.md`、`docs/document-system-contract/doc.md`
+- 验收标准：
+  - `docs/AGENTS.md` 说明文档目录名跟随 frontmatter `name`，正文固定为 `doc.md`。
+  - `document-system-contract` 与 `create-doc` Skill 对目录化文档形态描述一致。
+
+### 子任务 6：验证并提交
+
+- 验收标准：
+  - 每个 `docs/*/doc.md` 均通过 `validate.mjs` 和 `validate-knowlegdge.mjs`。
+  - `node .codex/skills/create-doc/validate-knowlegdge.mjs` 通过。
+  - `node --test .codex/skills/create-doc/__test__/create-doc-layout.test.mjs` 通过。
+  - `git diff --check` 通过。
+  - 使用 `[AI]refactor: 将文档系统迁移为目录化结构` 提交。
+
+---
+
+# create-curated-skill metadata 元数据改造计划
+
+## 总目标
+
+将 curated Skill 的可选兼容信息从 frontmatter 顶层 `version`、`env` 迁移到 `metadata.version`、`metadata.env`，并同步模板、示例、校验器与文档契约。
+
+## 子任务与验收标准
+
+### 子任务 1：补充 metadata 校验红灯
+
+- 产物：`.codex/skills/create-curated-skill/__test__/metadata.test.mjs`
+- 验收标准：
+  - 测试覆盖 `metadata.version` 与 `metadata.env` 的合法样例。
+  - 测试覆盖旧版顶层 `version` / `env` 被拒绝。
+
+### 子任务 2：更新 curated Skill 模板和示例
+
+- 产物：`.codex/skills/create-curated-skill/references/curated-skill-template.md`、`.codex/skills/create-curated-skill/references/curated-skill-example.md`
+- 验收标准：
+  - 模板展示 `metadata:` 下的可选 `version`、`env`。
+  - 示例使用 `metadata.version`，不再使用顶层 `version`。
+
+### 子任务 3：改造校验器 frontmatter 解析与字段约束
+
+- 产物：`.codex/skills/create-curated-skill/validate.mjs`
+- 验收标准：
+  - 校验器能解析一层缩进的 `metadata` 对象。
+  - 仅允许 `metadata.version`、`metadata.env`。
+  - 顶层 `version`、`env` 报错。
+
+### 子任务 4：同步文档系统并验证
+
+- 产物：`.codex/skills/create-curated-skill/SKILL.md`、`docs/create-curated-skill-contract/doc.md`
+- 验收标准：
+  - Skill 说明和文档契约均描述 metadata 元数据形态。
+  - `metadata.test.mjs`、示例 validator、文档 validator、`git diff --check` 均通过。
+
+---
+
+# create-skill good-example TurboModule 完善计划
+
+## 总目标
+
+完善 `.codex/skills/create-skill/reference/good-example/SKILL.md`，让它成为符合 Skill Creator 原则的 React Native TurboModule 好例子，并严格贴合 React Native 0.79 官方 Turbo Native Modules 指导链路。
+
+## 子任务与验收标准
+
+### 子任务 1：读取现有 Skill 形态与官方文档
+
+- 产物：上下文事实记录。
+- 验收标准：
+  - 确认 good-example 当前仍是占位模板。
+  - 确认官方 RN 0.79 TurboModule 关键步骤：TS Spec、Codegen、JS 使用、Android/iOS 原生实现与注册。
+
+### 子任务 2：重写 good-example SKILL
+
+- 产物：`.codex/skills/create-skill/reference/good-example/SKILL.md`
+- 验收标准：
+  - frontmatter 使用 `metadata.version` / `metadata.env`。
+  - 正文包含触发时机、工作流、关键文件、平台实现规则、验证命令和 Good Example。
+  - 不保留 `<Skill Name>`、`<Custom Description>` 等模板占位符。
+
+### 子任务 3：同步文档系统
+
+- 产物：`docs/skill-system-contract/doc.md`
+- 验收标准：
+  - 文档说明 `.codex/skills/create-skill/reference/good-example` 是 create-skill 内聚的好例子资源。
+  - 文档校验与 Knowledge 同步校验通过。
+
+### 子任务 4：验证并提交
+
+- 验收标准：
+  - `python3 .codex/skills/create-skill/script/quick_validate.py .codex/skills/create-skill/reference/good-example` 通过或说明脚本为空。
+  - `git diff --check` 通过。
+  - 使用中文规范提交，提交信息以 `[AI]` 开头。
+
+---
+
+# RN TurboModule Skill 中文化计划
+
+## 总目标
+
+将 `.codex/skills/create-skill/reference/good-example/SKILL.md` 中的 RN TurboModule Skill 说明性内容翻译为中文，避免英文说明影响中文 Skill 示例的一致性。
+
+## 子任务与验收标准
+
+### 子任务 1：翻译 Skill 说明内容
+
+- 产物：`.codex/skills/create-skill/reference/good-example/SKILL.md`
+- 验收标准：
+  - frontmatter description、metadata env、章节标题、流程说明、排障说明和好例子均改为中文。
+  - TurboModule、Codegen、Spec、API、路径、命令和代码标识保持原样。
+
+### 子任务 2：验证并提交
+
+- 验收标准：
+  - `quick_validate.py` 通过。
+  - 文档 diff 无尾随空格。
+  - 使用中文规范提交，提交信息以 `[AI]` 开头。
+
+---
+
+# skill-template 基础模板补充计划
+
+## 总目标
+
+保持 `skills/skill-template.md` 的现有基本模板形态，并参考 `.codex/skills/create-skill/script/init_skill.py` 中的 `SKILL_TEMPLATE` 补充 Skill 创建所需的结构指引、资源说明和好例子约束。
+
+## 子任务与验收标准
+
+### 子任务 1：补充模板正文结构
+
+- 产物：`skills/skill-template.md`
+- 验收标准：
+  - 保留原有 frontmatter、`metadata.version/env`、`When To Invoke`、可选 Source/How to use 和自定义描述区域。
+  - 增加 `Overview`、结构选择说明、正文填充提示、可选 Resources 和 Good Example 区域。
+  - 说明内容使用中文，代码路径和目录名保持原样。
+
+### 子任务 2：同步文档系统并验证
+
+- 产物：`docs/skill-system-contract/doc.md`
+- 验收标准：
+  - 文档说明 `skills/skill-template.md` 是保留的基础 Skill 作者模板。
+  - 文档校验和 `git diff --check` 通过。
+
+---
+
+# create-skill 生成与校验标准化实现计划
+
+## 总目标
+
+将 `.codex/skills/create-skill` 的生成器和校验器统一到 `skills/skill-template.md` 标准，确保生成结果是 Skill 文件夹，并且 `Upstream Skill` 只用于 Skill-to-Skill 依赖补充关系。
+
+## 子任务与验收标准
+
+### 子任务 1：改造生成器
+
+- 产物：`.codex/skills/create-skill/script/init_skill.py`
+- 验收标准：
+  - 生成 `<output>/<skill-name>/SKILL.md`。
+  - 不再生成 `agents/openai.yaml`。
+  - 支持可选 `scripts/`、`references/`、`assets/`。
+
+### 子任务 2：实现校验器
+
+- 产物：`.codex/skills/create-skill/script/quick_validate.py`
+- 验收标准：
+  - 默认模式校验结构且允许模板占位符。
+  - `--strict` 模式拒绝占位符。
+  - 校验 frontmatter、文件夹名、资源目录和 `Upstream Skill` 语义。
+
+### 子任务 3：同步说明和文档系统
+
+- 产物：`.codex/skills/create-skill/SKILL.md`、`skills/skill-template.md`、`docs/skill-system-contract/doc.md`
+- 验收标准：
+  - 说明 `Upstream Skill` 不是文档/API/模块来源。
+  - 说明默认校验与 strict 校验使用时机。
+  - 文档系统校验通过。
+
+---
+
+# create-skill curated Skill 防误改计划
+
+## 总目标
+
+补充 `create-skill` 的 curated Skill 防误改约束，确保它不能创建、修改或校验 `skills/flutter/*` 这类严格 curated Skill。
+
+## 子任务与验收标准
+
+### 子任务 1：增加脚本防护
+
+- 产物：`.codex/skills/create-skill/script/init_skill.py`、`.codex/skills/create-skill/script/quick_validate.py`
+- 验收标准：
+  - `init_skill.py --path skills/flutter` 失败，并提示使用 `create-curated-skill`。
+  - `quick_validate.py skills/flutter/<name>` 失败。
+  - `quick_validate.py` 检测到 `> Curated from ...` 失败。
+
+### 子任务 2：同步说明与文档系统
+
+- 产物：`.codex/skills/create-skill/SKILL.md`、`docs/skill-system-contract/doc.md`
+- 验收标准：
+  - 明确 curated Skill 通常包含 `> Curated from ...`。
+  - 明确 `create-skill` 不得修改 curated Skill。

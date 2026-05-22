@@ -28,7 +28,7 @@ Every curated Skill must keep:
 - folder name equal to the Skill name
 - `SKILL.md` as the only required Markdown entrypoint inside the folder
 - frontmatter with `name` and `description`
-- optional `version` and `env` only when they add useful compatibility context
+- optional `metadata.version` and `metadata.env` only when they add useful compatibility context
 - `## <skill-name>`
 - `> Curated from ...`
 - `## Source`

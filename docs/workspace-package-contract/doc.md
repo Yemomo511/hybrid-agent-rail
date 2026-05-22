@@ -3,7 +3,7 @@ name: workspace-package-contract
 description: 说明 pnpm workspace、Rollup package 构建和跨包依赖契约。
 keywords: pnpm workspace, package 构建, Rollup, hyar-cli, hyar-adapter
 doc_type: contract
-source_path: pnpm-workspace.yaml, package.json, package, config/rollup.package.config.mjs
+source_path: pnpm-workspace.yaml, package.json, package
 ---
 # Workspace Package Contract
 
@@ -25,13 +25,13 @@ hyar-cli depends on hyar-adapter through workspace:*
 hyar-example depends on hyar-cli through workspace:*
 ```
 
-package 构建统一使用 `config/rollup.package.config.mjs`。每个 package 以 `src/index.ts` 为入口，输出 ESM、CJS 和 declaration 文件到 `dist/`。workspace 内部依赖应作为 external 保留，由 workspace 协议连接，而不是被 Rollup 打包进下游产物。
+package 构建由各 package 内部的 `rollup.config.mjs` 声明。每个 package 以 `src/index.ts` 为入口，输出 ESM、CJS 和 declaration 文件到 `dist/`。workspace 内部依赖应作为 external 保留，由 workspace 协议连接，而不是被 Rollup 打包进下游产物。
 
 新增 package 时，应同步检查：
 
 1. `pnpm-workspace.yaml` 是否能覆盖该包。
 2. package `exports` 是否提供 ESM/CJS/types 入口。
-3. Rollup external 规则是否仍能正确保留 workspace 内部依赖。
+3. package 内部 `rollup.config.mjs` 是否能正确读取根 `tsconfig.base.json` 并保留 workspace 内部依赖。
 4. `test/package-output.test.ts` 是否需要覆盖新的产物要求。
 
 ## Update When

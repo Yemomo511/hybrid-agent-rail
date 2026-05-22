@@ -1,8 +1,9 @@
 --- 
 name: 精选的 Skill 名称
 description: Skill 介绍
-version: <可选, 填写支持的框架和对应的版本号，如 0.74 >= rn >= 0.68>
-env: <可选，填写你需要跨端环境, 如配置了Expo>
+metadata:
+  version: <可选, 填写支持的框架和对应的版本号，如 0.74 >= rn >= 0.68>
+  env: <可选，填写你需要跨端环境, 如配置了Expo>
 ---
 
 ## <Skill Name>

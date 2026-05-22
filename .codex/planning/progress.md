@@ -53,3 +53,91 @@
 - [x] 拆分页面、权限、设备、拍照链路、测试、文档子任务
 - [x] 为每个子任务补充验收标准
 - [ ] 等待用户确认目标 RN 项目路径和是否进入实现阶段
+
+---
+
+# Rollup 配置内置到 package 进度
+
+- [x] 读取现有 Rollup 配置、package 脚本和文档契约
+- [x] 拆分子任务与验收标准
+- [x] 编写红灯结构测试
+- [x] 迁移 package 本地 Rollup 配置
+- [x] 同步 workspace package 文档契约
+- [x] 运行测试与构建验证
+- [x] 提交变更
+
+---
+
+# create-doc 文档目录化改造进度
+
+- [x] 创建隔离 worktree `codex/create-doc-dir-doc`
+- [x] 确认旧版文档校验基线通过
+- [x] 追加 Planning with Files Zh 任务记录
+- [x] 编写红灯测试并确认失败
+- [x] 改造 create-doc Skill、模板与校验器
+- [x] 迁移 8 个受治理文档到 `docs/<name>/doc.md`
+- [x] 同步 `docs/KNOWLEDGE.md` 和文档系统说明
+- [x] 运行全量文档校验与 diff 检查
+- [x] 提交变更
+
+---
+
+# create-curated-skill metadata 元数据改造进度
+
+- [x] 读取 create-curated-skill 技能、模板、示例和校验器
+- [x] 拆分子任务与验收标准
+- [x] 补充 metadata 校验红灯测试
+- [x] 更新模板、示例和 Skill 契约说明
+- [x] 改造校验器 metadata 解析与字段约束
+- [x] 同步文档系统
+- [x] 运行验证并提交
+
+---
+
+# create-skill good-example TurboModule 完善进度
+
+- [x] 使用 Skill Creator 并读取 create-skill 现状
+- [x] 查阅 React Native 0.79 Turbo Native Modules 官方文档
+- [x] 拆分子任务与验收标准
+- [x] 重写 good-example SKILL
+- [x] 同步文档系统
+- [x] 运行验证并提交
+
+---
+
+# RN TurboModule Skill 中文化进度
+
+- [x] 读取 RN TurboModule good-example Skill
+- [x] 将说明性内容翻译为中文
+- [x] 运行验证并提交
+
+---
+
+# skill-template 基础模板补充进度
+
+- [x] 读取 `skills/skill-template.md`
+- [x] 对照 `init_skill.py` 中的 `SKILL_TEMPLATE`
+- [x] 补充模板结构和资源说明
+- [x] 同步文档系统
+- [x] 运行验证并提交
+
+---
+
+# create-skill 生成与校验标准化进度
+
+- [x] 读取 `skill-template.md`、`init_skill.py`、`quick_validate.py`、create-skill 说明文档
+- [x] 改造 `init_skill.py`
+- [x] 实现 `quick_validate.py`
+- [x] 同步 `Upstream Skill` 模板语义
+- [x] 同步 create-skill 说明和文档系统
+- [x] 运行正反向验证并提交
+
+---
+
+# create-skill curated Skill 防误改进度
+
+- [x] 确认 `skills/flutter/*` curated Skill 包含 `> Curated from ...`
+- [x] 在 `init_skill.py` 增加 curated 路径防护
+- [x] 在 `quick_validate.py` 增加 curated 路径和内容防护
+- [x] 同步 create-skill 说明与文档系统
+- [x] 运行验证并提交

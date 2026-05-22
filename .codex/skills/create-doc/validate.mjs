@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { existsSync, readFileSync } from 'node:fs';
-import { relative, resolve } from 'node:path';
+import { dirname, relative, resolve } from 'node:path';
 
 const DOC_TYPES = new Set([
   'knowledge',
@@ -14,6 +14,8 @@ const DOC_TYPES = new Set([
 
 const REQUIRED_META = ['name', 'description', 'keywords', 'doc_type', 'source_path'];
 const REQUIRED_SECTIONS = ['Purpose', 'Applies To', 'Content', 'Update When'];
+const GOVERNED_DOC_PATTERN = /^docs\/([^/]+)\/doc\.md$/;
+const SYSTEM_DOC_PATHS = new Set(['docs/AGENTS.md', 'docs/KNOWLEDGE.md']);
 const PLACEHOLDER_PATTERNS = [
   /<knowledge-name>/,
   /<knowledge-description>/,
@@ -32,9 +34,17 @@ class DocumentValidator {
     const errors = [];
     const absolutePath = resolve(process.cwd(), filePath);
     const repoRelativePath = relative(process.cwd(), absolutePath);
+    const normalizedPath = repoRelativePath.split('\\').join('/');
 
-    if (!repoRelativePath.startsWith('docs/')) {
-      errors.push(`Document must be under docs/: ${repoRelativePath}`);
+    if (!normalizedPath.startsWith('docs/')) {
+      errors.push(`Document must be under docs/: ${normalizedPath}`);
+    }
+
+    const pathMatch = normalizedPath.match(GOVERNED_DOC_PATTERN);
+    if (SYSTEM_DOC_PATHS.has(normalizedPath)) {
+      errors.push(`System document is not a governed docs document: ${normalizedPath}`);
+    } else if (!pathMatch) {
+      errors.push(`Governed document path must match docs/<name>/doc.md: ${normalizedPath}`);
     }
 
     if (!existsSync(absolutePath)) {
@@ -53,6 +63,7 @@ class DocumentValidator {
 
     const { frontmatter, body } = parsed;
     errors.push(...this.validateMeta(frontmatter));
+    errors.push(...this.validateDocumentPath(normalizedPath, frontmatter));
     errors.push(...this.validateBody(body));
 
     return errors;
@@ -117,6 +128,27 @@ class DocumentValidator {
   }
 
   /**
+   * @description 校验受治理文档路径与 frontmatter name 保持一致。
+   */
+  validateDocumentPath(repoRelativePath, frontmatter) {
+    const errors = [];
+    const pathMatch = repoRelativePath.match(GOVERNED_DOC_PATTERN);
+
+    if (!pathMatch || !frontmatter.name) {
+      return errors;
+    }
+
+    const documentDirectoryName = dirname(repoRelativePath).split('/').pop();
+    if (documentDirectoryName !== frontmatter.name) {
+      errors.push(
+        `Document directory name must match frontmatter name: ${documentDirectoryName} !== ${frontmatter.name}`,
+      );
+    }
+
+    return errors;
+  }
+
+  /**
    * @description 校验正文标题、必需章节和模板占位符。
    */
   validateBody(body) {
@@ -148,7 +180,7 @@ class DocumentValidator {
 }
 
 const printUsage = () => {
-  console.error('Usage: node .codex/skills/create-doc/validate.mjs docs/<document>.md');
+  console.error('Usage: node .codex/skills/create-doc/validate.mjs docs/<name>/doc.md');
 };
 
 const main = () => {

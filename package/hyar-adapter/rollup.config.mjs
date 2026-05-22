@@ -3,8 +3,8 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const packageDir = process.cwd();
+const packageDir = dirname(fileURLToPath(import.meta.url));
+const rootDir = resolve(packageDir, '../..');
 const packageJson = JSON.parse(readFileSync(resolve(packageDir, 'package.json'), 'utf8'));
 const workspacePackagePrefix = ['hyar-'];
 

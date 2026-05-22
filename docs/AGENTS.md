@@ -27,6 +27,10 @@
 - doc_type: 文档类型，用来说明文档属于知识库的哪一类。当前支持 `knowledge | contract | decision | usage | workflow | experience | index`。
 - source_path: 文档对应的权威来源路径。可以是源码目录、Agent 文件、Skill 文件、模板文件或规则文件；没有明确来源时填写 `none`。当 `source_path` 指向的内容发生变化时，需要回看该文档是否需要同步更新。
 
+## Doc Path
+
+受治理文档必须使用目录化结构：`docs/<name>/doc.md`。其中 `<name>` 必须和文档 frontmatter 中的 `name` 保持一致；`docs/KNOWLEDGE.md` 中的 Source 链接必须写为 `<name>/doc.md`。不要再创建 `docs/<name>.md` 形式的受治理文档。
+
 # Document Option
 
 **新增/修改任何文档前, 请假设Agent 本身很强，能够理解绝大多数代码和业务，只是容易忽略细节，同时必须阅读 `Written Rules` 和 `Not Written Rules` 后，仔细反问自己以下内容,这段内容真的有必要进入文档系统吗**

@@ -22,8 +22,13 @@ source_path: skills/AGENTS.md, skills/README.md, .codex/skills, skills
 
 - `create-doc`：创建和校验长期文档。
 - `create-curated-skill`：把外部 Skill 精选为 Hyar 规范下的 Skill 文件夹。
+- `create-skill`：创建 repo-local Skill，并在 `reference/good-example` 内维护可对照的完整好例子。
 
-curated Skill 必须是文件夹形态：
+`create-skill` 的标准产物是一个 Skill 文件夹，至少包含 `SKILL.md`，并且只允许按需补充 `scripts/`、`references/`、`assets/` 三类资源目录。`skills/skill-template.md` 是基础 Skill 作者模板，也是 `create-skill` 生成模板的权威参考。`create-skill` 不得创建、修改或校验 curated Skill。
+
+`Upstream Skill` 只表示当前 Skill 依赖并补充另一个 Skill。普通文档、API 页面、模块路径或参考资料不能写入 `Upstream Skill`，应放入 `references/` 或正文参考说明。
+
+curated Skill 必须是文件夹形态，通常包含 `> Curated from ...`，例如 `skills/flutter/*/SKILL.md`：
 
 ```text
 skills/<category>/<skill-name>/SKILL.md
@@ -31,9 +36,9 @@ skills/<category>/<skill-name>/SKILL.md
 
 文件夹名必须等于 frontmatter `name`。`SKILL.md` 必须保留必选 `Source`，并让 `How to use` 严格遵循 curated 模板，只允许替换发现时机、上游 URL 和 Skill Name。
 
-不要在 `skills/` 根目录保留一次性模板或散落 Markdown 文件。模板和示例应内聚在维护型 Skill 的 `references/` 中。
+不要在 `skills/` 根目录保留一次性模板或散落 Markdown 文件。`skills/skill-template.md` 是保留的基础 Skill 作者模板；其他模板和示例应内聚在维护型 Skill 的 `references/` 或既有 `reference/` 资源目录中。
 
 ## Update When
 - `skills/` 的分类、文件夹结构或注入规则变化。
 - `.codex/skills/` 新增维护型 Skill 或已有维护 Skill 的职责变化。
-- curated Skill 模板、Source 规则或 `How to use` 严格格式变化。
+- curated Skill 模板、curated `Source` 规则、repo-local `Upstream Skill` 规则或 `How to use` 严格格式变化。
