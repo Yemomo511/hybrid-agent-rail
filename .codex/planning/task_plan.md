@@ -697,3 +697,35 @@
   - 两个 Skill 的 strict 校验通过。
   - `git diff --check` 通过。
   - 根据 `docs/AGENTS.md` 判断本次只修改单个 Skill 说明，不进入长期文档系统。
+
+---
+
+# hyar-framework-check 单问题提问优化任务计划
+
+## 总目标
+
+将 `hyar-framework-check` 的信息收集流程从“一次可问多个问题”改为严格单问题循环：每轮只问一个会影响结论的关键问题，用户回答后再继续补齐下一个缺失信息。
+
+## 子任务与验收标准
+
+### 子任务 1：修改 Selection Gate
+
+- 产物：`skills/share/hyar-framework-check/SKILL.md`
+- 验收标准：
+  - 明确每次对话只问 1 个问题。
+  - 删除或替换“每次最多问 1-3 个问题”等批量提问表述。
+
+### 子任务 2：补充单问题模板和示例
+
+- 产物：`skills/share/hyar-framework-check/SKILL.md`
+- 验收标准：
+  - 增加一次只问一个具体问题的模板。
+  - Good Example 不再一次询问多个信息点。
+
+### 子任务 3：验证和文档治理判断
+
+- 验收标准：
+  - strict Skill 校验通过。
+  - 内容检查确认旧批量提问表述不存在。
+  - `git diff --check` 通过。
+  - 根据 `docs/AGENTS.md` 判断本次只修改单个 Skill 说明，不进入长期文档系统。

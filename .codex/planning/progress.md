@@ -198,3 +198,15 @@
 - [x] 记录文档治理判断
 - [x] 运行 Skill 校验与 diff 检查
 - [x] 提交变更
+
+---
+
+# hyar-framework-check 单问题提问优化进度
+
+- [x] 读取 create-skill、记忆规则和 hyar-framework-check 现状
+- [x] 拆分子任务与验收标准
+- [x] 修改 Selection Gate 为单问题循环
+- [x] 增加单问题模板并修正 Good Example
+- [x] 记录文档治理判断
+- [x] 运行 Skill 校验与内容检查
+- [x] 提交变更

@@ -332,3 +332,19 @@
 - 两个 React Native Skill 保留 frontmatter、When To Invoke、Stop Rule、Workflow、References/Reference Routing、Anti-Patterns。
 - 删除 Good Example 和教程式解释，把详细版本/平台内容交给已有 references 文件按需加载。
 - 本次不修改受治理文档；只在 Planning with Files Zh 中记录任务过程。
+
+---
+
+# hyar-framework-check 单问题提问优化发现记录
+
+## 当前事实
+
+- `skills/share/hyar-framework-check/SKILL.md` 的 `Selection Gate` 原来允许“每次最多问 1-3 个问题”。
+- `Good Example` 原来在同一句里同时询问用户画像和目标平台，容易让 Agent 一次抛出多个问题。
+- 该 Skill 没有独立 validator，使用 create-skill 的 strict 结构校验即可。
+
+## 决策
+
+- 将门禁改成“每次对话只问 1 个问题，回答后再问下一个”。
+- 增加 `Question Template`，固定单问题输出结构，并允许给 2-3 个可选回答帮助用户选择。
+- 本次只修改单个 Skill 说明，不同步长期文档系统。
