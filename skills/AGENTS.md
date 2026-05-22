@@ -5,3 +5,5 @@ Hybrid Skills 作为原子化功能，为Agent 提供完成跨端需求的原子
 
 ### Hybrid Info Skill
 为了统一管理，我们将所有的Hybrid 需要补足的信息分为以下部分。
+
+- React Native App 创建类 Skill：负责在创建 RN 应用前确认 Expo / Community CLI / 既有原生 App 集成路径、New Architecture / Legacy Architecture、RN 版本和 Android/iOS 平台范围。用户架构不明确时必须先询问，不能直接创建项目。

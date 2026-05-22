@@ -18,6 +18,8 @@ source_path: skills/AGENTS.md, skills/README.md, .codex/skills, skills
 ## Content
 `skills/` 是 Agent 能力资源目录，承载跨端开发所需的 Workflow Skill 和 Hybrid Info Skill。当前 Flutter 官方 curated Skills 位于 `skills/flutter/<skill-name>/SKILL.md`。
 
+Hybrid Info Skill 可以直接位于 `skills/<skill-name>/SKILL.md`。例如 React Native App 创建类 Skill 负责在创建项目前确认 Expo / Community CLI / 既有原生 App 集成路径、New Architecture / Legacy Architecture、RN 版本和 Android/iOS 平台范围；当用户架构不明确时，必须先询问而不是直接创建项目。
+
 `.codex/skills/` 是仓库维护型 Skill 目录，服务于本仓库自身治理，例如：
 
 - `create-doc`：创建和校验长期文档。

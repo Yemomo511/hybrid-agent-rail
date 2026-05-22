@@ -141,3 +141,18 @@
 - [x] 在 `quick_validate.py` 增加 curated 路径和内容防护
 - [x] 同步 create-skill 说明与文档系统
 - [x] 运行验证并提交
+
+---
+
+# create-react-native-app Skill 创建进度
+
+- [x] 读取 create-skill 与仓库 Skill/文档治理约束
+- [x] 查阅 React Native 与 Expo 官方资料
+- [x] 拆分子任务与验收标准
+- [x] 创建 `skills/create-react-native-app`
+- [x] 编写 RN 版本架构参考资料
+- [x] 编写 Skill 主工作流与禁止条件
+- [x] 同步 `skills/AGENTS.md`
+- [x] 运行 Skill 校验与内容门禁检查
+- [x] 运行 diff 检查
+- [x] 提交变更

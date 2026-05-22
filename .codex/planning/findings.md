@@ -224,3 +224,36 @@
 - 将 `skills/flutter` 作为当前仓库的 curated Skill 路径防护。
 - `quick_validate.py` 同时用路径和 `> Curated from ...` 内容识别 curated Skill。
 - 遇到 curated Skill 时统一提示使用 `create-curated-skill`。
+
+---
+
+# create-react-native-app Skill 创建发现记录
+
+## 当前事实
+
+- 用户明确要求基于 React Native 官方环境搭建资料，分析 RN 0.74 到 0.85，以及 0.85 之前版本，并比较 Expo 与原生 Android/iOS 模块差异。
+- React Native 官方当前版本页显示最新稳定版本为 0.85；0.85 release blog 给出的新项目命令是 `npx @react-native-community/cli@latest init MyProject --version latest`，并说明 Expo SDK 56 将包含 RN 0.85。
+- RN 0.74 release blog 明确：新架构启用时 Bridgeless 默认、Yoga 3.0、Yarn 3 默认用于 Community CLI 新项目，Android 最低 SDK 提升到 23，并移除新项目中的 Flipper 原生库设置。
+- RN 0.76 New Architecture 官方文章和架构页明确：0.76 起新架构在所有 RN 项目中默认启用；可通过 Android `newArchEnabled=false` 等方式退出。
+- React Native 官方环境页强调：使用 Framework 时不必先安装完整 Android Studio/Xcode 原生环境；如果不用 Framework 或要写自己的 Framework，则本地原生环境是要求。
+- Expo 官方 CNG/Prebuild 文档说明：`create-expo-app` 项目默认可通过 `npx expo prebuild` 生成 `android/` 与 `ios/`，原生修改应优先通过 config plugins 或 native modules 表达；Expo Go 只能使用 Expo Go 运行时内置的原生能力。
+
+## 决策
+
+- Skill 命名为 `create-react-native-app`，放在 `skills/` 根目录，属于 Hybrid Info Skill。
+- Skill 的核心门禁是“先确认架构再创建”：必须确认 Expo managed/CNG、React Native Community CLI 新应用、已有 Android/iOS 集成、Legacy Architecture 兼容需求、目标 RN 版本和平台范围。
+- 默认推荐路径按官方当前口径选择 Expo Framework 或 RN Community CLI，但不在用户架构不明确时自行决定。
+- 版本分层采用：
+  - RN < 0.74：按旧架构/桥接兼容优先处理，创建前需要确认历史依赖约束。
+  - RN 0.74-0.75：新架构能力增强但不是所有新项目默认启用，需确认 `newArchEnabled`。
+  - RN 0.76-0.84：新架构默认启用，但 0.85 之前仍按对应版本模板和依赖矩阵锁定。
+  - RN 0.85：当前稳定版本，Node 需要符合 0.85 release 要求，Jest preset 迁移到 `@react-native/jest-preset`。
+- 单个 Skill 的说明根据 `docs/AGENTS.md` 不写入长期文档系统；只补充 `skills/AGENTS.md` 的 Hybrid Info Skill 分类说明。
+
+## 验证记录
+
+- `python3 .codex/skills/create-skill/script/quick_validate.py --strict skills/create-react-native-app` 通过。
+- `rg -n "禁止直接创建|停止创建|不要用|用户架构不明确|Stop Rule|references/rn-version-architecture" skills/create-react-native-app skills/AGENTS.md` 命中 Skill 门禁与参考资料入口。
+- `node .codex/skills/create-doc/validate.mjs docs/skill-system-contract/doc.md` 通过。
+- `node .codex/skills/create-doc/validate-knowlegdge.mjs docs/skill-system-contract/doc.md` 通过。
+- `git diff --check` 通过。
