@@ -1,14 +1,14 @@
 ---
 name: skill-system-contract
-description: 说明 Hyar Skill 资源、维护型 Skill、curated Skill 和选择门禁的组织契约。
-keywords: Skill 系统, curated Skill, .codex/skills, skills/flutter, Agent 能力资源, 框架选择门禁, metadata 约束
+description: 说明 Hyar Skill 资源、维护型 Skill、curated Skill、选择门禁和前置信息复用契约。
+keywords: Skill 系统, curated Skill, .codex/skills, skills/flutter, Agent 能力资源, 框架选择门禁, metadata 约束, ARCH_CONTEXT
 doc_type: contract
 source_path: skills/AGENTS.md, skills/README.md, .codex/skills, skills
 ---
 # Skill System Contract
 
 ## Purpose
-说明当前 Skill 系统的资源边界、文件夹契约和关键选择门禁，避免后续把运行时 Skill、维护型 Skill 和临时模板混在一起。
+说明当前 Skill 系统的资源边界、文件夹契约、关键选择门禁和前置信息复用规则，避免后续把运行时 Skill、维护型 Skill、临时模板和用户环境上下文混在一起。
 
 ## Applies To
 - 当新增或维护 `skills/` 下的 Agent 能力资源时。
@@ -37,6 +37,10 @@ source_path: skills/AGENTS.md, skills/README.md, .codex/skills, skills
 
 `Upstream Skill` 只表示当前 Skill 依赖并补充另一个 Skill。普通文档、API 页面、模块路径或参考资料不能写入 `Upstream Skill`，应放入 `references/` 或正文参考说明。
 
+普通 Skill 如果需要收集前置信息，必须在提问前先读取目标项目根目录 `.hyar/ARCH_CONTEXT.md`；已有同一前置项答案时直接复用，不能重复询问。仍缺信息时，每个前置问题必须提供一个“最佳实践”选项，并给出可执行默认值。默认值遵循：最小化 > 最大化；最新技术 > 老技术；通用技术 > 小范围技术。
+
+`skills/share/arch-context-collect/SKILL.md` 负责在用户回答任一 Skill 前置问题后，将问题描述、前置项名称、用户回答、适用 Skill 和更新时间写入 `.hyar/ARCH_CONTEXT.md`。同一个环境变量或前置项的问题描述只存储一份；后续回答只更新答案、更新时间或追加适用 Skill。
+
 curated Skill 必须是文件夹形态，通常包含 `> Curated from ...`，例如 `skills/flutter/*/SKILL.md`：
 
 ```text
@@ -50,6 +54,7 @@ skills/<category>/<skill-name>/SKILL.md
 ## Update When
 - `skills/` 的分类、文件夹结构或注入规则变化。
 - 跨端框架选择门禁、框架官方资料来源或推荐输出契约变化。
+- 普通 Skill 的前置信息提问、最佳实践选项或 `.hyar/ARCH_CONTEXT.md` 记录契约变化。
 - 普通 Skill 的 metadata 使用约束变化。
 - `.codex/skills/` 新增维护型 Skill 或已有维护 Skill 的职责变化。
 - curated Skill 模板、curated `Source` 规则、repo-local `Upstream Skill` 规则或 `How to use` 严格格式变化。

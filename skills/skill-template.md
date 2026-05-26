@@ -24,6 +24,15 @@ description: <完整说明该 Skill 能做什么，以及什么时候应该使�
 - `metadata.version`：当前 Skill 的知识只适用于某个跨端框架的特定版本或版本区间，例如 `React Native >= 0.74`。通用知识、选型指南、流程方法论不要写。
 - `metadata.env`：当前 Skill 要求项目已经开启某个强配置或具备某个特定环境，例如“已启用 React Native New Architecture”或“已配置 Expo CNG”。没有强配置前提不要写。
 
+## Pre-Question Best Practice
+
+当该 Skill 需要收集前置信息或询问用户时：
+
+1. 先读取项目根目录 `.hyar/ARCH_CONTEXT.md`；已有同一前置项答案时直接复用，不重复询问。
+2. 仍缺信息时，每次只问最小必要问题，并提供一个标记为“最佳实践”的可选项。
+3. “最佳实践”选项必须给出可执行默认值；默认值遵循：最小化 > 最大化，最新技术 > 老技术，通用技术 > 小范围技术。
+4. 用户回答后，使用 `arch-context-collect` 将问题描述、前置项名称、用户回答、适用 Skill 和更新时间写入 `.hyar/ARCH_CONTEXT.md`。
+
 ## Structuring This Skill
 
 <选择最适合该 Skill 的结构，完成后删除不适用的结构说明。>
