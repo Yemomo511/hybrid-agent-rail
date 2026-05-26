@@ -10,6 +10,8 @@
 | 已有复杂 `NavigationContainer`、custom linking parser、custom navigator | React Navigation | 代码化导航树和自定义状态控制更直接 |
 | 需要 URL 即路由、分享链接、页面级错误隔离、Web 刷新保持页面 | Expo Router | 文件路径天然对应 URL，并生成路由类型 |
 | 仅移动端、导航层强依赖业务状态和运行时动态 screen 列表 | React Navigation | Dynamic API 和自定义 navigator 更灵活 |
+| 需要平台原生 tabs 或 Web 自定义 tabs 同时存在 | Expo Router | 用平台文件在 native 和 web 拆实现，URL 语义保持一致 |
+| 需要复杂自定义转场、手写 navigation state 或 custom router | React Navigation | 直接控制 navigator 和 state，成本更可控 |
 
 ## Use Expo Router When
 
@@ -32,6 +34,19 @@ Expo Router 内部使用 React Navigation 能力，但业务代码不应同时�
 - 让 Expo Router 管理根入口和 `NavigationContainer`。
 - 自定义 navigator 通过 Expo Router layout 或 `withLayoutContext` 接入。
 - 旧 React Navigation 页面先拆成独立 screen 文件，再逐步搬入 `app`/`src/app`。
+
+## Navigator Mapping
+
+| 需求 | Expo Router | React Navigation |
+| --- | --- | --- |
+| 栈式推进 | `_layout.tsx` 返回 `Stack` | `createNativeStackNavigator` 或 `createStackNavigator` |
+| 底部 Tabs | `(tabs)/_layout.tsx` 返回 `Tabs` | `createBottomTabNavigator` |
+| 原生 Tabs | `NativeTabs` + 平台文件 | Native bottom tabs 或平台自定义 |
+| 抽屉 | `expo-router/drawer` 的 `Drawer` | `createDrawerNavigator` |
+| 无导航共享 UI | `Slot` | 普通 React 组件包裹 screen |
+| URL/deep link | 文件路径天然生成 | 手写 `linking` config |
+| route params | `useLocalSearchParams` | `route.params` / `useRoute` |
+| 命令式跳转 | `useRouter` + path | `navigation` object + route name |
 
 ## Decision Output
 

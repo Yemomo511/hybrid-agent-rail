@@ -2,64 +2,96 @@
 
 ## Mental Model
 
-React Navigation 是代码化导航库。你显式创建 navigator，注册 screen，配置 linking、headers、tabs、drawer 和 navigation state。
+React Navigation = explicit navigation tree. 你创建 navigator，注册 screen，配置 state、linking、headers、gestures 和 platform behavior。
 
 ## Core Concepts
 
-- `NavigationContainer`：根容器，负责保存导航状态、linking、theme、ref 和事件。Expo Router 项目通常不要手写它。
-- Navigator：`createNativeStackNavigator`、`createBottomTabNavigator`、`createDrawerNavigator` 等，负责转场和 UI。
-- Screen：navigator 中的页面注册项，名称通常是业务 route name。
-- Group：为一组 screen 共享 options、权限或条件展示。
-- Route object：包含 `name`、`key`、`params`。
-- Navigation object：提供 `navigate`、`push`、`goBack`、`setOptions` 等操作。
-- Hooks：`useNavigation`、`useRoute`、`useFocusEffect`、`useIsFocused`、`useNavigationState`。
+- `NavigationContainer`: 根容器，保存 navigation state、linking、theme、ref、事件。Expo Router 项目通常不要手写。
+- Navigator: `createNativeStackNavigator`、`createStackNavigator`、`createBottomTabNavigator`、`createDrawerNavigator`。
+- Screen: route name + component + options。
+- Group: 一组 screen 的共享 options、权限或条件。
+- Navigation object: `navigate`、`push`、`goBack`、`setOptions`。
+- Route object: `name`、`key`、`params`。
+- Hooks: `useNavigation`、`useRoute`、`useFocusEffect`、`useIsFocused`、`useNavigationState`。
 
-## React Navigation 7 Default
+## API Style
 
-React Navigation 7 推荐 static configuration：
+- React Navigation 7 默认优先 static configuration: `createXNavigator({ screens, groups, screenOptions })` + `createStaticNavigation(Root)`.
+- React Navigation 5/6 和大量历史项目使用 dynamic API: `<Navigator><Screen /></Navigator>`.
+- 新项目优先 static；已有项目优先延续当前 API，除非升级目标明确是类型、linking 或结构统一。
 
-- 用 `createXNavigator({ screens, groups, screenOptions })` 声明导航树。
-- 用 `createStaticNavigation(RootStack)` 生成根导航组件。
-- static config 可自动生成更好的 TypeScript 类型和 linking 配置。
-- 动态 screen 列表、强运行时配置或历史代码仍可使用 dynamic API。
+## Stack vs Native Stack
 
-## Dynamic API
+| Navigator | 何时使用 | Tradeoff |
+| --- | --- | --- |
+| `@react-navigation/native-stack` | 默认移动端 Stack、性能优先、需要 iOS large title/form sheet/native transition | 原生能力强，定制边界受平台限制 |
+| `@react-navigation/stack` | 需要高度自定义 transition/header/gesture，或历史项目已使用 | JS 实现更灵活，性能和平台原生行为不如 native-stack |
 
-React Navigation 5/6 项目通常使用 JSX 形式：
+实践：
 
-- `<NavigationContainer>`
-- `<Stack.Navigator>`
-- `<Stack.Screen name="Home" component={HomeScreen} />`
+- 新移动端 App 默认 `native-stack`。
+- 只有自定义转场/头部强依赖时选择 JS stack。
+- Stack 嵌 Tabs 时常隐藏 `HomeTabs` 这一层 header。
 
-维护旧项目时优先保持现有 API。只有在升级到 7 且目标是减少类型和 linking 样板时，再评估迁移 static config。
+## Bottom Tabs
+
+- 包：`@react-navigation/bottom-tabs`。
+- Route 懒加载，初次 focus 才 mount。
+- 常用 options: `tabBarLabel`、`tabBarIcon`、`tabBarBadge`、`tabBarStyle`、`tabBarPosition`、`tabBarHideOnKeyboard`。
+- 自定义 tab bar 时不要在 `tabBar` 组件里用 `useNavigation`; 使用传入的 `navigation` prop。
+- 大屏 sidebar 可用 `tabBarPosition: 'left' | 'right'`，移动端默认 bottom。
+
+## Drawer
+
+- 包：`@react-navigation/drawer`。
+- 依赖：`react-native-gesture-handler`、`react-native-reanimated`、`react-native-worklets`。
+- 用途：侧边菜单、管理后台、平板多栏目、低频全局入口。
+- 若只需要抽屉交互但不接入 navigation state，考虑直接使用 drawer layout 库，而不是 drawer navigator。
+- 常用动作：`DrawerActions.openDrawer()`、`closeDrawer()`、`toggleDrawer()`。
+
+## Nesting Navigators
+
+嵌套就是把一个 navigator 当作另一个 navigator 的 screen。
+
+规则：
+
+- 每个 navigator 有自己的 history、options、params 和 events。
+- 父 navigator 不会自动知道子 screen options；需要显式桥接 header/title。
+- route params 不会自动穿透多层 navigator。
+- 避免“每个目录/页面一个 navigator”；只有需要独立 history 或 UI chrome 时嵌套。
+
+常见结构：
+
+```text
+RootStack
+  AuthStack
+  MainTabs
+    HomeStack
+    SettingsStack
+  ModalStack
+```
 
 ## Installation Notes
 
-先安装核心包：
-
-- `@react-navigation/native`
-
-多数 navigator 还需要：
-
-- `react-native-screens`
-- `react-native-safe-area-context`
-
-Expo 项目使用 `npx expo install` 安装 RN 原生依赖，以匹配 Expo SDK。Community CLI 项目按现有包管理器安装，并在 iOS 执行 pod install。
-
-Android 若使用 `react-native-screens`，检查 `MainActivity.kt` / `MainActivity.java` 是否需要配置 fragment factory。若 Android predictive back 与当前 React Navigation 版本冲突，按官方文档关闭对应 callback。
+- 核心包：`@react-navigation/native`。
+- 常见依赖：`react-native-screens`、`react-native-safe-area-context`。
+- Expo 项目用 `npx expo install` 匹配 SDK。
+- Community CLI 按 lockfile 包管理器安装，iOS 运行 pod install。
+- Drawer/JS Stack 额外依赖 gesture/reanimated/masked-view 时按目标 navigator 文档补。
 
 ## Linking
 
-React Navigation 的 deep link 不是文件系统自动生成的，需要显式配置：
+React Navigation deep link 需要显式配置：
 
-- `prefixes`：scheme、universal link domain。
-- `screens`：route name 到 path 的映射。
-- `parse` / `stringify`：参数转换。
-- 嵌套 navigator 需要嵌套 linking 配置。
+- `prefixes`: scheme、universal link domain。
+- `screens`: route name 到 path 的映射。
+- `parse` / `stringify`: 参数转换。
+- 嵌套 navigator 需要嵌套 linking config。
 
-## Validation
+## Source Links
 
-- 根导航能渲染并跳转到目标 screen。
-- TypeScript 能识别 route name 和 params。
-- Android back、iOS swipe back、tab/drawer 行为符合产品预期。
-- deep link 可冷启动并进入目标 screen。
+- Stack navigator: https://reactnavigation.org/docs/stack-navigator/
+- Native stack navigator: https://reactnavigation.org/docs/native-stack-navigator/
+- Bottom tabs navigator: https://reactnavigation.org/docs/bottom-tab-navigator/
+- Drawer navigator: https://reactnavigation.org/docs/drawer-navigator/
+- Nesting navigators: https://reactnavigation.org/docs/nesting-navigators/
