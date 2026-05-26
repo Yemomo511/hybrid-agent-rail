@@ -56,3 +56,9 @@
   - description: 记录 Flutter 官方 Skills 在 Hybrid Agent Rail 中的精选目录、来源和维护边界。
   - keywords: Flutter 官方 Skill, flutter/skills, skills/flutter, Flutter 精选 Skill, curated Skill
   - doc_type: contract
+
+- [Expo Curated Skills](expo-curated-skills/doc.md)
+  - name: expo-curated-skills
+  - description: 记录 Expo 官方 Skills 在 React Native 目录中的精选来源和维护边界。
+  - keywords: Expo 官方 Skill, expo/skills, skills/react-native, Expo 精选 Skill, curated Skill
+  - doc_type: contract

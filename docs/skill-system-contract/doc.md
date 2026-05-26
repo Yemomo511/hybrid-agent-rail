@@ -22,7 +22,7 @@ source_path: skills/AGENTS.md, skills/README.md, .codex/skills, skills
 
 跨端框架选择类 Skill 位于 `skills/share/hyar-framework-check/SKILL.md`，用于在推荐 KMP、React Native、Flutter、uni-app 前确认用户画像、目标平台、团队技术栈、原生能力和 UI 策略。该类选择门禁不完整时，Agent 必须继续询问，不能直接推荐框架；框架理念和选择依据必须来自 Skill 的 `references/` 官方资料摘要，而不是凭通用印象判断。
 
-当前 Flutter 官方 curated Skills 位于 `skills/flutter/<skill-name>/SKILL.md`，继续由 `create-curated-skill` 维护。
+当前 Flutter 官方 curated Skills 位于 `skills/flutter/<skill-name>/SKILL.md`，Expo 官方 curated Skills 位于 `skills/react-native/<skill-name>/SKILL.md`，继续由 `create-curated-skill` 维护。
 
 `.codex/skills/` 是仓库维护型 Skill 目录，服务于本仓库自身治理，例如：
 
