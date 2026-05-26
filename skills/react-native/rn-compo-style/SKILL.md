@@ -15,16 +15,6 @@ description: 编写、重构或审查 React Native 组件样式时使用。适�
 - 用户提到 `style`、`StyleSheet.create`、样式数组、布局、颜色、Text/Image/View 样式或平台差异。
 - 代码中出现大量 JSX 内联样式，需要改成可维护的样式命名。
 
-## Stop Rule
-
-缺少以下信息时先读取项目事实；仍无法确认时再问：
-
-1. RN 版本：需要知道是否可使用当前版本支持的样式字段，例如 experimental 样式。
-2. 组件边界：要改的是单个组件、页面局部、共享组件还是设计系统组件。
-3. 现有约定：是否已有主题 token、颜色常量、spacing 常量、`StyleSheet` 命名风格或平台分支写法。
-4. 动态来源：哪些样式真的依赖 props、state、平台、尺寸、主题或动画。
-5. 平台范围：Android、iOS、双端，是否涉及 Web 思维迁移或负 margin、触摸区域等差异。
-
 ## Workflow
 
 1. 读取当前文件和邻近组件，确认 import、样式命名、主题常量和组件拆分方式。
