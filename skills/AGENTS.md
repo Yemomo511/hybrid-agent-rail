@@ -12,7 +12,7 @@ Hybrid Skills 作为原子化功能，为Agent 提供完成跨端需求的原子
 ### Hybrid Info Skill
 为了统一管理，我们将所有的Hybrid 需要补足的信息分为以下部分。
 
-- `skills/react-native/`：React Native 专属 Skill，例如 `rn-create-app` 负责在创建 RN 应用前确认 Expo / Community CLI / 既有原生 App 集成路径、New Architecture / Legacy Architecture、RN 版本和 Android/iOS 平台范围；`rn-newarch-modules-create` 负责在 RN New Architecture 下按版本选择 TurboModule 创建方式，并覆盖 Android、iOS、C++ 三条实现路径；`rn-test` 负责按项目事实选择静态分析、Jest 单元/mock、集成、组件、快照和 E2E 测试方案，并指导工具缺失时的补齐与验收；`rn-compo-style` 负责指导 RN 组件样式组织，优先使用 `StyleSheet.create` 和样式名引用，处理样式数组、动态样式和平台差异。用户架构、RN 版本、平台范围、测试目标或组件样式边界不明确时必须先询问，不能直接创建项目、模块、测试配置或大规模样式重构。
+- `skills/react-native/`：React Native 专属 Skill，例如 `rn-create-app` 负责在创建 RN 应用前确认 Expo / Community CLI / 既有原生 App 集成路径、New Architecture / Legacy Architecture、RN 版本和 Android/iOS 平台范围；`rn-router` 负责在 RN 导航需求中判断 Expo Router / React Navigation 选型、核心概念、deep link/Web/typed routes 和新老版本迁移姿势；`rn-newarch-modules-create` 负责在 RN New Architecture 下按版本选择 TurboModule 创建方式，并覆盖 Android、iOS、C++ 三条实现路径；`rn-test` 负责按项目事实选择静态分析、Jest 单元/mock、集成、组件、快照和 E2E 测试方案，并指导工具缺失时的补齐与验收；`rn-compo-style` 负责指导 RN 组件样式组织，优先使用 `StyleSheet.create` 和样式名引用，处理样式数组、动态样式和平台差异。用户架构、RN 版本、平台范围、导航约束、测试目标或组件样式边界不明确时必须先询问，不能直接创建项目、模块、导航结构、测试配置或大规模样式重构。
 - `skills/share/`：跨端通用知识、通用流程或不绑定单个跨端框架的 Skill。
 - `skills/<language>/`：语言专属 Skill，例如 `dart`、`kotlin`、`swift`、`java`。
 - `skills/<framework>/`：新增单独框架时建立对应框架目录；不要把普通 Skill 直接放在 `skills/` 根目录。

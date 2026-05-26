@@ -18,7 +18,7 @@ source_path: skills/AGENTS.md, skills/README.md, .codex/skills, skills
 ## Content
 `skills/` 是 Agent 能力资源目录，承载跨端开发所需的 Workflow Skill 和 Hybrid Info Skill。普通 repo-local Skill 必须位于 `skills/<category>/<skill-name>/SKILL.md`，不能直接放在 `skills/<skill-name>/SKILL.md`。
 
-分类目录按能力归属决定：React Native 专属 Skill 放在 `skills/react-native/`；跨端通用知识放在 `skills/share/`；语言专属 Skill 放在 `skills/dart/`、`skills/kotlin/` 等语言目录；新的单独框架在 `skills/<framework>/` 下建立目录。React Native App 创建类 Skill 位于 `skills/react-native/rn-create-app/SKILL.md`，用于在创建项目前确认 Expo / Community CLI / 既有原生 App 集成路径、New Architecture / Legacy Architecture、RN 版本和 Android/iOS 平台范围；当用户架构不明确时，必须先询问而不是直接创建项目。
+分类目录按能力归属决定：React Native 专属 Skill 放在 `skills/react-native/`；跨端通用知识放在 `skills/share/`；语言专属 Skill 放在 `skills/dart/`、`skills/kotlin/` 等语言目录；新的单独框架在 `skills/<framework>/` 下建立目录。React Native App 创建类 Skill 位于 `skills/react-native/rn-create-app/SKILL.md`，用于在创建项目前确认 Expo / Community CLI / 既有原生 App 集成路径、New Architecture / Legacy Architecture、RN 版本和 Android/iOS 平台范围；React Native 导航类 Skill 位于 `skills/react-native/rn-router/SKILL.md`，用于在导航需求中判断 Expo Router / React Navigation 选型、deep link/Web/typed routes 和新老版本迁移姿势；当用户架构或导航约束不明确时，必须先询问而不是直接创建项目或改导航结构。
 
 跨端框架选择类 Skill 位于 `skills/share/hyar-framework-check/SKILL.md`，用于在推荐 KMP、React Native、Flutter、uni-app 前确认用户画像、目标平台、团队技术栈、原生能力和 UI 策略。该类选择门禁不完整时，Agent 必须继续询问，不能直接推荐框架；框架理念和选择依据必须来自 Skill 的 `references/` 官方资料摘要，而不是凭通用印象判断。
 
