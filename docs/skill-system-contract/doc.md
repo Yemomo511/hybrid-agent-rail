@@ -29,8 +29,9 @@ source_path: skills/AGENTS.md, skills/README.md, .codex/skills, skills
 - `create-doc`：创建和校验长期文档。
 - `create-curated-skill`：把外部 Skill 精选为 Hyar 规范下的 Skill 文件夹。
 - `create-skill`：创建 repo-local Skill，并在 `reference/good-example` 内维护可对照的完整好例子。
+- `skill-test`：隔离评测待测 Skill，通过 `coco` 运行测试提示词，并生成 `.test/test-report/<skill-name>/<timestamp>/report.md` 证据报告。
 
-`create-skill` 的标准产物是一个分类目录下的 Skill 文件夹，至少包含 `SKILL.md`，并且只允许按需补充 `scripts/`、`references/`、`assets/` 三类资源目录。`skills/skill-template.md` 是基础 Skill 作者模板，也是 `create-skill` 生成模板的权威参考。`create-skill` 不得创建、修改或校验 curated Skill。
+`create-skill` 的标准产物是一个分类目录下的 Skill 文件夹，至少包含 `SKILL.md`，并且只允许按需补充 `scripts/`、`references/`、`assets/` 三类资源目录；维护型 Skill 如需自测，可以补充 `__test__/`。`skills/skill-template.md` 是基础 Skill 作者模板，也是 `create-skill` 生成模板的权威参考。`create-skill` 不得创建、修改或校验 curated Skill。
 
 普通 Skill 默认不写 `metadata`。只有当 Skill 知识只适用于某个跨端框架的特定版本或版本区间时，才写 `metadata.version`；只有当 Skill 要求项目已经开启某个强配置或具备某个特定环境时，才写 `metadata.env`。通用知识、选型指南和流程方法论不应为了补足描述而写 metadata。
 

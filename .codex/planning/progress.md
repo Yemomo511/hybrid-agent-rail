@@ -210,3 +210,16 @@
 - [x] 记录文档治理判断
 - [x] 运行 Skill 校验与内容检查
 - [x] 提交变更
+
+---
+
+# Skill Test 维护型 Skill 落地进度
+
+- [x] 创建隔离 worktree `codex/skill-test`
+- [x] 读取 PRD、create-skill、create-doc、文档系统和测试契约
+- [x] 拆分子任务与验收标准
+- [x] 编写 runner 红灯自测并确认失败
+- [x] 实现 `skill-test` runner
+- [x] 编写 `skill-test` Skill 说明
+- [x] 同步文档系统
+- [x] 运行验证并提交

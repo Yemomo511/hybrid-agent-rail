@@ -729,3 +729,55 @@
   - 内容检查确认旧批量提问表述不存在。
   - `git diff --check` 通过。
   - 根据 `docs/AGENTS.md` 判断本次只修改单个 Skill 说明，不进入长期文档系统。
+
+---
+
+# Skill Test 维护型 Skill 落地任务计划
+
+## 总目标
+
+实现 `.codex/skills/skill-test/`，用于隔离评测待测 Skill，调用 `coco` 执行测试提示词，并在 `.test/test-report/<skill-name>/<timestamp>/report.md` 生成结构化证据报告。
+
+## 子任务与验收标准
+
+### 子任务 1：补充 runner 红灯自测
+
+- 产物：`.codex/skills/skill-test/__test__/runner.test.py`
+- 验收标准：
+  - 测试覆盖 Skill 路径解析、默认 prompt 覆盖类型、报告路径格式、fake coco 调用和退出状态记录。
+  - 在 runner 尚未实现时测试失败，证明测试能捕获缺失能力。
+
+### 子任务 2：实现 Skill Test runner
+
+- 产物：`.codex/skills/skill-test/scripts/run_skill_test.py`
+- 验收标准：
+  - 支持 `--skill`、`--cwd` 和可重复 `--prompt "<type>::<content>"`。
+  - 未传 prompt 时基于待测 `SKILL.md` 自动生成 3-5 个候选 prompt，并覆盖问题解答、简单操作和复杂操作。
+  - 将待测 Skill 复制到 `.test/skill-test-work/<skill-name>/<timestamp>/testpath/<skill-name>/SKILL.md`。
+  - 按 `cd {path}` 后执行 `coco "{prompt}"` 的协议记录实际 cwd、完整 prompt、退出状态和关键输出摘要。
+  - 生成 `.test/test-report/<skill-name>/<timestamp>/report.md` 报告骨架。
+
+### 子任务 3：编写 `skill-test` Skill 说明
+
+- 产物：`.codex/skills/skill-test/SKILL.md`
+- 验收标准：
+  - frontmatter 能触发 Skill 评测、coco 证据报告和修改建议场景。
+  - 正文明确隔离规则、测试覆盖、观察优先级、评分机制和不直接修改待测 Skill。
+  - 通过 create-skill 结构校验。
+
+### 子任务 4：同步文档系统
+
+- 产物：`docs/skill-system-contract/doc.md`、`docs/test-validation-contract/doc.md`
+- 验收标准：
+  - Skill 系统契约记录 `skill-test` 属于 `.codex/skills/` 维护型 Skill。
+  - 测试契约记录报告路径、runner 自测命令和 fake coco 隔离原则。
+  - 两个文档及 Knowledge 同步校验通过。
+
+### 子任务 5：验证并提交
+
+- 验收标准：
+  - `python3 .codex/skills/skill-test/__test__/runner.test.py` 通过。
+  - `python3 .codex/skills/create-skill/script/quick_validate.py .codex/skills/skill-test` 通过。
+  - 文档校验命令全部通过。
+  - `git diff --check` 通过。
+  - 使用中文规范提交：`[AI]feat: 增加 Skill Test 维护技能`。
