@@ -10,11 +10,11 @@ Hybrid Skills 作为原子化功能，为Agent 提供完成跨端需求的原子
 - 设计`Stop Rule`这种门禁时，除了初始化相关 Skill 以外。请假设已经完成了一个基本的跨端项目，跨端的一些基本前置知识不需要考虑，如RN 版本，平台范围等。
 - 经验/理念 > 技术/细节实现。不要在 Skill 中描述**常规技术**的细节，如查看 xxx 文件获取 xxx 信息，只需要简洁的说明即可。
 ``` markdown
-##Good Example
+## Good Example
 1. 查看项目已有导航栈
 2. 使用Stack 路由添加新页面
 
-##Bad Example
+## Bad Example
 1. 在项目的 App.tsx 中查看 Stack Router， 获取项目已有的导航栈
 2. 使用 Stack.Screen 添加新的页面，需要在 `Stack.Navigator` 中定义新的路由。路由应该包含名称和地址
 ``` 
