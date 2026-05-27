@@ -1,4 +1,4 @@
---- 
+---
 name: 精选的 Skill 名称
 description: Skill 介绍
 metadata:

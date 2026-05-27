@@ -32,11 +32,11 @@ metadata:
 
 每个前置问题都必须提供“最佳实践”选项。默认值按最小化、最新技术、通用技术排序：
 
-- 初始化路径：最佳实践默认使用 React Native Community CLI 新项目；如果需求明确可由 Expo managed/CNG 覆盖，再切换 Expo。
-- 架构目标：最佳实践默认 New Architecture；只有旧 SDK、旧模块或历史版本兼容要求明确时才选 Legacy。
-- 目标版本：最佳实践默认最新稳定 React Native 版本；只有已有项目或依赖矩阵要求时才锁历史版本。
-- 平台范围：最佳实践默认 Android + iOS 双端最小可运行 App；真机能力仅在用户需求涉及硬件、账号、推送或平台 SDK 时纳入。
-- 包管理器：最佳实践默认 `yarn`，遵循 RN 项目约定；已有 lockfile 或 Expo 模板命令时跟随项目事实。
+- 初始化路径：默认使用 React Native Community CLI 新项目；如果需求明确可由 Expo managed/CNG 覆盖，再切换 Expo。
+- 架构目标：默认 New Architecture；只有旧 SDK、旧模块或历史版本兼容要求明确时才选 Legacy。
+- 目标版本：默认最新稳定 React Native 版本；只有已有项目或依赖矩阵要求时才锁历史版本。
+- 平台范围：默认 Android + iOS 双端最小可运行 App；真机能力仅在用户需求涉及硬件、账号、推送或平台 SDK 时纳入。
+- 包管理器：默认 `yarn`，遵循 RN 项目约定；已有 lockfile 或 Expo 模板命令时跟随项目事实。
 
 用户回答任一前置问题后，使用 `arch-context-collect` 记录问题描述、前置项名称、用户回答、适用 Skill 和更新时间。
 

@@ -1,6 +1,6 @@
 ---
-name: rn-compo-style
 description: 编写、重构或审查 React Native 组件样式时使用。适用于处理 style prop、StyleSheet.create、样式数组、动态样式、平台样式差异、组件内联样式坏味道、Text/Image/View 样式组织、布局样式复用和样式可维护性问题；缺少 RN 版本、目标组件边界或现有样式约定时必须先读取项目事实或询问。
+name: rn-compo-style
 ---
 
 ## Rn Compo Style

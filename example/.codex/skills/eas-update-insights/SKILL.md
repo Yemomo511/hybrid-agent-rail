@@ -1,6 +1,6 @@
 ---
-name: eas-update-insights
 description: "Check the health of published EAS Updates: crash rates, install/launch counts, unique users, payload size, and the split between embedded and OTA users per channel."
+name: eas-update-insights
 ---
 
 ## eas-update-insights

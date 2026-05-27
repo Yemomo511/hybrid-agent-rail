@@ -1,6 +1,6 @@
 ---
-name: rn-test
 description: 为 React Native 项目设计、补充或修复测试时使用。适用于静态分析、Jest 单元测试、mock、集成测试、React Native Testing Library 组件测试、快照测试、Detox/Appium/Maestro E2E 测试、测试工具缺失处理、测试命令和验收链路梳理等场景；缺少 RN 版本、测试目标、平台范围或本地/CI 验收要求时必须先询问。
+name: rn-test
 ---
 
 ## Rn Test

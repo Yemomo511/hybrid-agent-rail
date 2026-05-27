@@ -27,14 +27,23 @@ name: rn-newarch-modules-create
 
 ## Stop Rule
 
-缺少以下信息时先问，不要实现：
+缺少以下信息时先读取项目根目录 `.hyar/ARCH_CONTEXT.md`；已有同一前置项答案时直接复用。仍缺信息时先问，不要实现：
 
-1. RN 版本：精确版本或版本范围，至少要能判断是否属于 `0.82+`、`0.76-0.81`、`0.74-0.75`、`0.68-0.73`。
-2. 模块形态：App 内模块，还是独立 npm library。
-3. 平台范围：Android、iOS、双端，或需要纯 C++ 跨端复用。
-4. 架构目标：New Architecture only，还是必须兼容 Legacy Architecture。
-5. JS spec：TypeScript 还是 Flow；模块名、方法签名、同步/异步/Promise/Event 需求是否已明确。
-6. 原生依赖：是否接入已有 Android/iOS SDK、C++ 库、系统 API、线程/生命周期要求。
+1. 平台范围：Android、iOS、双端，或需要纯 C++ 跨端复用。
+2. 架构目标：New Architecture only，还是必须兼容 Legacy Architecture。
+3. JS spec：TypeScript 还是 Flow；模块名、方法签名、同步/异步/Promise/Event 需求是否已明确。
+4. 原生依赖：是否接入已有 Android/iOS SDK、C++ 库、系统 API、线程/生命周期要求。
+
+## Pre-Question Best Practice
+
+每个前置问题都必须提供“最佳实践”选项。默认值按最小化、最新技术、通用技术排序：
+
+1. 平台范围：默认 Android + iOS 双端原生实现；只有性能复用或已有 C++ SDK 时才选 C++。
+2. 架构目标：默认 New Architecture only；Legacy 兼容必须有明确业务或版本原因。
+3. JS spec：默认 TypeScript、`TurboModuleRegistry.getEnforcing`、最小方法集；事件、同步方法和复杂对象只在需求明确时增加。
+4. 原生依赖：默认无额外原生依赖，先打通 Codegen 和注册链路；外部 SDK、线程和生命周期要求需单独确认。
+
+用户回答任一前置问题后，使用 `arch-context-collect` 记录问题描述、前置项名称、用户回答、适用 Skill 和更新时间。
 
 ## Workflow
 

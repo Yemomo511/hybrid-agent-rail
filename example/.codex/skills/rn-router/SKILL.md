@@ -1,6 +1,6 @@
 ---
-name: rn-router
 description: 为 React Native 项目设计、选择或迁移导航方案时使用。适用于 Expo Router、React Navigation、Stack/Tab/Drawer、deep link、typed routes、web routing、导航迁移、Expo SDK 52-56 或 React Navigation 5/6/7 使用差异判断。
+name: rn-router
 ---
 
 ## Rn Router
