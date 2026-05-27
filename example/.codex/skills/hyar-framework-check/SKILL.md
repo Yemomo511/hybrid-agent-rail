@@ -7,7 +7,7 @@ name: hyar-framework-check
 
 ## Overview
 
-基于用户需求，选择合适的跨端框架，并向用户提出问题。OK
+基于用户需求，选择合适的跨端框架，并向用户提出问题。
 
 ## When To Invoke
 
