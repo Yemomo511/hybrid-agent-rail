@@ -348,3 +348,33 @@
 - 将门禁改成“每次对话只问 1 个问题，回答后再问下一个”。
 - 增加 `Question Template`，固定单问题输出结构，并允许给 2-3 个可选回答帮助用户选择。
 - 本次只修改单个 Skill 说明，不同步长期文档系统。
+
+---
+
+# Skill Test 维护型 Skill 落地发现记录
+
+## 当前事实
+
+- 用户给出的 PRD 明确 `Skill Test` 最终落成仓库维护型 Skill：`.codex/skills/skill-test/`。
+- PRD 明确报告输出到项目目录 `.test/test-report/<skill-name>/<timestamp>/report.md`，并要求记录实际 cwd、完整 prompt、退出状态和关键输出摘要。
+- 当前机器存在 `coco`：`/Users/bytedance/.local/bin/coco`。
+- 当前主工作区已有用户侧改动：`README.md` 修改和未跟踪 `CONTEXT.md`；本次实现使用隔离 worktree，避免触碰这些改动。
+
+## 决策
+
+- `skill-test` 放在 `.codex/skills/`，不放入运行时 `skills/`，避免被 Adapter 当作目标项目能力资源扫描。
+- runner 使用 Python 标准库实现，不新增 npm 或 Python 依赖。
+- runner 默认生成 5 个 prompt；当用户显式传入 `--prompt` 时，以传入内容为准，并要求格式为 `<type>::<content>`。
+- 自测通过 fake coco 脚本验证命令调用和报告记录，不依赖真实 coco。
+- `quick_validate.py` 允许 `__test__/` 作为 Skill 自测目录，避免维护型 Skill 的自测和结构校验互相冲突。
+
+## 验证记录
+
+- 红灯阶段 `python3 .codex/skills/skill-test/__test__/runner.test.py` 失败，原因是 runner 文件不存在。
+- `python3 .codex/skills/skill-test/__test__/runner.test.py` 通过，fake coco 验证默认 5 个 prompt、隔离路径、报告路径和失败退出状态记录。
+- `python3 .codex/skills/create-skill/script/quick_validate.py .codex/skills/skill-test` 通过。
+- `node .codex/skills/create-doc/validate.mjs docs/skill-system-contract/doc.md` 通过。
+- `node .codex/skills/create-doc/validate-knowlegdge.mjs docs/skill-system-contract/doc.md` 通过。
+- `node .codex/skills/create-doc/validate.mjs docs/test-validation-contract/doc.md` 通过。
+- `node .codex/skills/create-doc/validate-knowlegdge.mjs docs/test-validation-contract/doc.md` 通过。
+- `git diff --check` 通过。

@@ -13,7 +13,7 @@ from pathlib import Path
 
 ALLOWED_FRONTMATTER = {"name", "description", "metadata"}
 ALLOWED_METADATA = {"version", "env"}
-ALLOWED_RESOURCE_DIRS = {"scripts", "references", "assets"}
+ALLOWED_RESOURCE_DIRS = {"scripts", "references", "assets", "__test__"}
 DISALLOWED_RESOURCE_DIRS = {"script", "reference", "asset"}
 CURATED_SKILL_PATH_PARTS = [("skills", "flutter")]
 PLACEHOLDER_PATTERNS = [

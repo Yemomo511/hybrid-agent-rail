@@ -25,13 +25,25 @@ name: rn-create-app
 
 ## Stop Rule
 
-缺少以下信息时先问，不要创建：
+缺少以下信息时先读取项目根目录 `.hyar/ARCH_CONTEXT.md`；已有同一前置项答案时直接复用。仍缺信息时先问，不要创建：
 
 1. 初始化路径：Expo managed/CNG、React Native Community CLI 新项目、还是已有 Android/iOS 原生 App 集成 RN。
 2. 架构目标：New Architecture、Legacy Architecture，或“必须兼容某个旧 RN/旧原生模块”。
 3. 目标版本：最新稳定版、指定版本，还是历史兼容版本。
 4. 平台范围：Android、iOS、双端，是否需要真机能力或只需模拟器。
 5. 包管理器：RN 项目默认使用 `yarn`，除非目标模板或用户明确要求 `npm`、`pnpm` 或 Expo 默认命令。
+
+## Pre-Question Best Practice
+
+每个前置问题都必须提供“最佳实践”选项。默认值按最小化、最新技术、通用技术排序：
+
+- 初始化路径：默认使用 React Native Community CLI 新项目；如果需求明确可由 Expo managed/CNG 覆盖，再切换 Expo。
+- 架构目标：默认 New Architecture；只有旧 SDK、旧模块或历史版本兼容要求明确时才选 Legacy。
+- 目标版本：默认最新稳定 React Native 版本；只有已有项目或依赖矩阵要求时才锁历史版本。
+- 平台范围：默认 Android + iOS 双端最小可运行 App；真机能力仅在用户需求涉及硬件、账号、推送或平台 SDK 时纳入。
+- 包管理器：默认 `yarn`，遵循 RN 项目约定；已有 lockfile 或 Expo 模板命令时跟随项目事实。
+
+用户回答任一前置问题后，使用 `arch-context-collect` 记录问题描述、前置项名称、用户回答、适用 Skill 和更新时间。
 
 ## Workflow
 

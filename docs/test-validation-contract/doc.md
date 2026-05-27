@@ -33,6 +33,18 @@ check:package-code -> test:workspace -> build -> test:package-output -> test:smo
 
 文档和 Skill 变更不一定需要触发完整 package 构建，但必须运行对应治理 Skill 的 validator，并至少执行 `git diff --check`。如果变更触及 package 源码，应先跑 `pnpm run check:package-code`；如果变更触及 workspace、包导出、测试脚本或 example 消费链路，应跑完整 `pnpm test`。
 
+仓库维护型 Skill 的真实 Agent 表现可通过 `skill-test` 验证。运行入口是：
+
+```text
+python3 .codex/skills/skill-test/scripts/run_skill_test.py --skill <skill-dir-or-SKILL.md> --cwd <target-project-cwd>
+```
+
+`skill-test` 会把待测 Skill 复制到 `.test/skill-test-work/<skill-name>/<timestamp>/testpath/<skill-name>/SKILL.md`，按 `cd {path}` 后执行 `coco "{prompt}"` 的协议运行测试 Agent，并将结构化报告写入 `.test/test-report/<skill-name>/<timestamp>/report.md`。runner 自测使用 fake coco 隔离外部 Agent，命令是：
+
+```text
+python3 .codex/skills/skill-test/__test__/runner.test.py
+```
+
 当前环境中 `pnpm test` 可能在 Jest 配置阶段报 `Module ts-jest in the transform option was not found`。遇到该错误时，应先核查 pnpm 安装状态、Jest 解析方式和本地 `node_modules/.bin`，不要把它误判为业务测试失败。
 
 ## Update When

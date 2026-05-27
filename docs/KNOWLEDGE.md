@@ -29,8 +29,8 @@
 
 - [Skill System Contract](skill-system-contract/doc.md)
   - name: skill-system-contract
-  - description: 说明 Hyar Skill 资源、维护型 Skill、curated Skill 和选择门禁的组织契约。
-  - keywords: Skill 系统, curated Skill, .codex/skills, skills/flutter, Agent 能力资源, 框架选择门禁, metadata 约束
+  - description: 说明 Hyar Skill 资源、维护型 Skill、curated Skill、选择门禁和前置信息复用契约。
+  - keywords: Skill 系统, curated Skill, .codex/skills, skills/flutter, Agent 能力资源, 框架选择门禁, metadata 约束, ARCH_CONTEXT
   - doc_type: contract
 
 - [Test Validation Contract](test-validation-contract/doc.md)
@@ -55,4 +55,10 @@
   - name: flutter-curated-skills
   - description: 记录 Flutter 官方 Skills 在 Hybrid Agent Rail 中的精选目录、来源和维护边界。
   - keywords: Flutter 官方 Skill, flutter/skills, skills/flutter, Flutter 精选 Skill, curated Skill
+  - doc_type: contract
+
+- [Expo Curated Skills](expo-curated-skills/doc.md)
+  - name: expo-curated-skills
+  - description: 记录 Expo 官方 Skills 在 React Native 目录中的精选来源和维护边界。
+  - keywords: Expo 官方 Skill, expo/skills, skills/react-native, Expo 精选 Skill, curated Skill
   - doc_type: contract
